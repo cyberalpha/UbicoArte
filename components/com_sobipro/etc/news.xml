@@ -5,128 +5,129 @@
 		<title>Club News</title>
 		<description>SobiPro Club of Sigsiu.NET</description>
 		<link>http://sobipro.sigsiu.net/news</link>
-		<lastBuildDate>Wed, 17 Apr 2013 00:37:53 +0000</lastBuildDate>
+		<lastBuildDate>Sun, 27 Oct 2013 16:45:31 +0000</lastBuildDate>
 		<generator>SobiPro Club of Sigsiu.NET</generator>
 		<language>en-gb</language>
 		<item>
-			<title>SobiPro 1.1 Beta2 has been released</title>
-			<link>http://sobipro.sigsiu.net/news/133-sobipro-11-beta2-has-been-released</link>
-			<guid>http://sobipro.sigsiu.net/news/133-sobipro-11-beta2-has-been-released</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-SobiPro.png" alt="SobiPro 1.1.0 Beta2 released" align="left" title="SobiPro 1.1.0 Beta2 released" />
-<p>We are happy to announce the release of SobiPro 1.1 Beta2 today.</p>
+			<title>SP-GeoMap Module for SobiPro 1.1 available</title>
+			<link>http://sobipro.sigsiu.net/news/149-sp-geomap-module-for-sobipro-11-available</link>
+			<guid>http://sobipro.sigsiu.net/news/149-sp-geomap-module-for-sobipro-11-available</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Module.png" border="0" alt="SP-GeoMap Module for SobiPro 1.1 available" title="SP-GeoMap Module for SobiPro 1.1 available" align="left" />
+SP-GeoMap Module for SobiPro 1.1 available.<br/>
+This new version is SobiPro 1.1 compliant and there are a lot of new features as well as languages added.<br/>
 
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Sun, 14 Apr 2013 23:00:00 +0000</pubDate>
+			<pubDate>Sat, 26 Oct 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>SobiPro 1.1 Beta has been released</title>
-			<link>http://sobipro.sigsiu.net/news/131-sobipro-11-beta-has-been-released</link>
-			<guid>http://sobipro.sigsiu.net/news/131-sobipro-11-beta-has-been-released</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-SobiPro.png" alt="SobiPro 1.1.0 beta released" align="left" title="SobiPro 1.1.0 beta released" />
-<p>
-    The <a href="http://www.Sigsiu.NET">Sigsiu.NET</a> team is happy to announce the availability of SobiPro 1.1 Beta.
-</p>
+			<title>SobiPro 1.1.3 published</title>
+			<link>http://sobipro.sigsiu.net/news/148-sobipro-113-published</link>
+			<guid>http://sobipro.sigsiu.net/news/148-sobipro-113-published</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-SobiPro.png" alt="SobiPro 1.1.3 has been released" align="left" title="SobiPro 1.1.3 has been released" />
+<p>We just released SobiPro 1.1.3 stable!<br/>
+This new version includes a history of all changes of an entry with a comparison tool and version management!</p>
+]]></description>
+			<author>noreply@sigsiu.net (Sigrid Suski)</author>
+			<category>Club News</category>
+			<pubDate>Sun, 20 Oct 2013 23:00:00 +0000</pubDate>
+		</item>
+		<item>
+			<title>Profile Field for SobiPro 1.1 available</title>
+			<link>http://sobipro.sigsiu.net/news/146-profile-field-for-sobipro-11-available</link>
+			<guid>http://sobipro.sigsiu.net/news/146-profile-field-for-sobipro-11-available</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Field.png" border="0" alt="Profile Field for SobiPro 1.1 available" title="Profile Field for SobiPro 1.1 available" align="left" />
+Profile Field for SobiPro 1.1 available.<br/>
+This new version is SobiPro 1.1 compliant. Additionally there are several new languages added.<br/>
 
 ]]></description>
-			<author>noreply@sigsiu.net (Radek Suski)</author>
+			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Sat, 30 Mar 2013 15:34:21 +0000</pubDate>
+			<pubDate>Mon, 23 Sep 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Template for Sortable Tables released</title>
-			<link>http://sobipro.sigsiu.net/news/129-template-for-sortable-tables-released</link>
-			<guid>http://sobipro.sigsiu.net/news/129-template-for-sortable-tables-released</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Template.png" alt="Demo Template for Sortable Tables released" align="left" title="Demo Template for Sortable Tables released" />
-<span class="highlight">SobiSort</span> is a SobiPro template which allows you to easily create a products directory which lists the items in a sortable table. It should give an idea what can be made with SobiPro.
+			<title>Applications for SobiPro 1.1 available in Repository</title>
+			<link>http://sobipro.sigsiu.net/news/145-applications-for-sobipro-11-available-in-repository</link>
+			<guid>http://sobipro.sigsiu.net/news/145-applications-for-sobipro-11-available-in-repository</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-SobiPro.png" border="0" alt="Applications for SobiPro 1.1 now available in Repository" title="Applications for SobiPro 1.1 now available in Repository" align="left" />
+Applications for SobiPro 1.1 are now available in Sigsiu.NET Repository.<br/>
+<br/>
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Thu, 27 Sep 2012 23:00:00 +0000</pubDate>
+			<pubDate>Sat, 31 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Profile Field updated</title>
-			<link>http://sobipro.sigsiu.net/news/128-profile-field-updated</link>
-			<guid>http://sobipro.sigsiu.net/news/128-profile-field-updated</guid>
-			<description><![CDATA[<p><img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Application.png" border="0" alt="Profile Field for SobiPro updated" title="Profile Field for SobiPro updated" align="left" /></p>
-<p>New version of Profile Field for SobiPro available for download and in Sigsiu.NET Repository.</p>
-<p>This is a bug fix release to solve a problem with the Contact Form field. Additionally this version has several new languages added.</p>
+			<title>Contact Form Field for SobiPro 1.1 available</title>
+			<link>http://sobipro.sigsiu.net/news/144-contact-form-field-for-sobipro-11-available</link>
+			<guid>http://sobipro.sigsiu.net/news/144-contact-form-field-for-sobipro-11-available</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Field.png" border="0" alt="Contact Form Field for SobiPro 1.1 available" title="Contact Form Field for SobiPro 1.1 available" align="left" />
+Contact Form Field for SobiPro 1.1 available.<br/>
+This new version is SobiPro 1.1 compliant. Additionally there are several new languages added.<br/>
+
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Wed, 29 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Fri, 30 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Japanese Language available</title>
-			<link>http://sobipro.sigsiu.net/news/127-japanese-language-available</link>
-			<guid>http://sobipro.sigsiu.net/news/127-japanese-language-available</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Japanese Language available!" title="Japanese Language available!" />
-<p>Japanese Language Package for SobiPro is available to download and in Repository.<br />
-Now SobiPro can be used in <strong>28 different languages!</strong></p>
+			<title>Czech, Finnish and Italian Languages available for SobiPro 1.1</title>
+			<link>http://sobipro.sigsiu.net/news/143-czech-finnish-and-italian-languages-available-for-sobipro-11</link>
+			<guid>http://sobipro.sigsiu.net/news/143-czech-finnish-and-italian-languages-available-for-sobipro-11</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Czech, Finnish and Italian Languages available for SobiPro 1.1" title="Czech, Finnish and Italian Languages available for SobiPro 1.1" />
+<p>Czech, Finnish and Italian Languages for SobiPro 1.1 are now available to download in the Download Directory.</p>
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Tue, 14 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Sun, 25 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Vietnamese Language available</title>
-			<link>http://sobipro.sigsiu.net/news/126-vietnamese-language-available</link>
-			<guid>http://sobipro.sigsiu.net/news/126-vietnamese-language-available</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Vietnamese Language available!" title="Vietnamese Language available!" />
-<p>Vietnamese Language Package for SobiPro is available to download and in Repository.<br />
-Now SobiPro can be used in <strong>27 different languages!</strong></p>
+			<title>SobiPro 1.1.2 has been released</title>
+			<link>http://sobipro.sigsiu.net/news/142-sobipro-112-has-been-released</link>
+			<guid>http://sobipro.sigsiu.net/news/142-sobipro-112-has-been-released</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-SobiPro.png" alt="SobiPro 1.1.2 has been released" align="left" title="SobiPro 1.1.2 has been released" />
+<p>We just released SobiPro 1.1.2 stable!<br/>
+This is a maintenance release with some features added, like Joomla! cache is now supported.</p>
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Fri, 10 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Wed, 21 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Language packages updated</title>
-			<link>http://sobipro.sigsiu.net/news/125-language-packages-updated</link>
-			<guid>http://sobipro.sigsiu.net/news/125-language-packages-updated</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Language packages updated!" title="Language packages updated!" />
-<p>We updated several language packages for SobiPro. Thanks to our Translation Teams.</p>
+			<title>German, Polish and Spanish Languages available for SobiPro 1.1</title>
+			<link>http://sobipro.sigsiu.net/news/141-german-polish-and-spanish-languages-available-for-sobipro-11</link>
+			<guid>http://sobipro.sigsiu.net/news/141-german-polish-and-spanish-languages-available-for-sobipro-11</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="German, Polish and Spanish Languages available for SobiPro 1.1" title="German, Polish and Spanish Languages available for SobiPro 1.1" />
+<p>German, Polish and Spanish Languages for SobiPro 1.1 are now available to download in the Download Directory.</p>
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Thu, 09 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Tue, 20 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Ukrainian Language available</title>
-			<link>http://sobipro.sigsiu.net/news/124-ukrainian-language-available</link>
-			<guid>http://sobipro.sigsiu.net/news/124-ukrainian-language-available</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Ukrainian Language available!" title="Ukrainian Language available!" />
-<p>Ukrainian Language Package for SobiPro is available to download and in Repository.<br />
-Now SobiPro can be used in <strong>26 different languages!</strong></p>
+			<title>French, Russian and Swedish Languages available for SobiPro 1.1</title>
+			<link>http://sobipro.sigsiu.net/news/140-french-russian-and-swedish-languages-available-for-sobipro-11</link>
+			<guid>http://sobipro.sigsiu.net/news/140-french-russian-and-swedish-languages-available-for-sobipro-11</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="French, Russian and Swedish Languages available for SobiPro 1.1" title="French, Russian and Swedish Languages available for SobiPro 1.1" />
+<p>French, Russian and Swedish Languages for SobiPro 1.1 are now available to download in the Download Directory.</p>
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Wed, 08 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Mon, 19 Aug 2013 23:00:00 +0000</pubDate>
 		</item>
 		<item>
-			<title>Czech Language available</title>
-			<link>http://sobipro.sigsiu.net/news/123-czech-language-available</link>
-			<guid>http://sobipro.sigsiu.net/news/123-czech-language-available</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Czech Language available!" title="Czech Language available!" />
-<p>Czech Language Package for SobiPro is available to download and in Repository.<br />
-Now SobiPro can be used in <strong>25 different languages!</strong></p>
+			<title>Review and Rating App for SobiPro 1.1 published</title>
+			<link>http://sobipro.sigsiu.net/news/139-review-and-rating-app-for-sobipro-11-published</link>
+			<guid>http://sobipro.sigsiu.net/news/139-review-and-rating-app-for-sobipro-11-published</guid>
+			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Application.png" border="0" alt="Review and Rating App for SobiPro 1.1 available" title="Review and Rating App for SobiPro 1.1 available" align="left" />
+A new Review and Rating application is available to download.<br/>
+This new version is SobiPro 1.1 compliant and has additional features implemented, several new languages added and a lot of bugs fixed.<br/>
+
 ]]></description>
 			<author>noreply@sigsiu.net (Sigrid Suski)</author>
 			<category>Club News</category>
-			<pubDate>Tue, 07 Aug 2012 23:00:00 +0000</pubDate>
-		</item>
-		<item>
-			<title>Hungarian Language available</title>
-			<link>http://sobipro.sigsiu.net/news/122-hungarian-language-available</link>
-			<guid>http://sobipro.sigsiu.net/news/122-hungarian-language-available</guid>
-			<description><![CDATA[<img src="http://sobipro.sigsiu.net/images/stories/sobipro/Downloadicon-Language.png" align="left" alt="Hungarian Language available!" title="Hungarian Language available!" />
-<p>Hungarian Language Package for SobiPro is available to download and in Repository.<br />
-Now SobiPro can be used in <strong>24 different languages!</strong></p>
-]]></description>
-			<author>noreply@sigsiu.net (Sigrid Suski)</author>
-			<category>Club News</category>
-			<pubDate>Mon, 06 Aug 2012 23:00:00 +0000</pubDate>
+			<pubDate>Tue, 30 Jul 2013 23:00:00 +0000</pubDate>
 		</item>
 	</channel>
 </rss>
