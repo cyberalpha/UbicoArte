@@ -17,9 +17,6 @@ class AkeebaViewConfig extends FOFViewHtml
 {
 	public function onAdd($tpl = null)
 	{
-		
-		// Add references to scripts and CSS
-		AkeebaHelperIncludes::includeMedia(AKEEBA_PRO);
 		$media_folder = JURI::base().'../media/com_akeeba/';
 
 		// Get a JSON representation of GUI data

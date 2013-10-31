@@ -1,0 +1,42 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 80%;
+}
+table {
+	font-size: 100%;
+	width: 100%;
+}
+th {
+	height: 90px;
+	text-align: center;
+	vertical-align: bottom;
+}
+td {
+	vertical-align: middle;
+}
+tr.odd {
+	background-color: #f8f8f8;
+}
+tr.even {
+	background-color: #fefefe;
+}
+div.vert {
+	text-align: center;
+	vertical-align: middle;
+	width: 20px;
+	margin: 0;
+	white-space: nowrap;
+	-webkit-transform: rotate(-90deg); 
+	-moz-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	/* TODO: add filter for IE */
+}
+span.type {
+	color: #666;
+	font-size: 0.8em;
+}
+.link {
+	cursor: pointer;
+	display: block;
+	text-align: center;
+}

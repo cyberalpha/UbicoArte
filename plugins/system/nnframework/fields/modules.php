@@ -4,7 +4,7 @@
  * Displays an article id field with a button
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -36,10 +36,10 @@ class JFormFieldNN_Modules extends JFormField
 
 		// load the list of modules
 		$query = $db->getQuery(true);
-		$query->select('m.id, m.title, m.position, m.module, m.published')
-			->from('#__modules AS m')
-			->where('m.client_id = 0')
-			->order('m.position, m.title, m.ordering, m.id');
+		$query->select('m.id, m.title, m.position, m.module, m.published');
+		$query->from('#__modules AS m');
+		$query->where('m.client_id = 0');
+		$query->order('m.position, m.title, m.ordering, m.id');
 		$db->setQuery($query);
 		$modules = $db->loadObjectList();
 
@@ -106,7 +106,7 @@ class JFormFieldNN_Modules extends JFormField
 			return preg_replace('#>\[\[\:(.*?)\:\]\]#si', ' style="\1">', $html);
 		} else {
 			require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-			return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple, 'style="max-width:360px"');
+			return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple, 'style="max-width:360px"');
 		}
 	}
 

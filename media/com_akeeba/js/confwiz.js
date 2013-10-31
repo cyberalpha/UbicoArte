@@ -8,6 +8,16 @@
  * @version $Id: confwiz.js 527 2011-03-31 14:47:36Z nikosdion $
  **/
 
+/**
+ * Setup (required for Joomla! 3)
+ */
+if(typeof(akeeba) == 'undefined') {
+	var akeeba = {};
+}
+if(typeof(akeeba.jQuery) == 'undefined') {
+	akeeba.jQuery = jQuery.noConflict();
+}
+
 var akeeba_confwiz_exectimes_table = [30,25,20,14,7,5,3];
 var akeeba_confwiz_blocksizes_table = [240, 200, 160, 80, 40, 16, 4, 2, 1];
 
@@ -19,7 +29,10 @@ function akeeba_confwiz_boot()
 	(function($){
 		// Initialization
 		akeeba_confwiz_exectimes_table = [30,25,20,14,7,5,3];
-		akeeba_confwiz_blocksizes_table = [240, 200, 160, 80, 40, 16, 4, 2, 1];
+		// Part sizes to check. Given in number of 128Kb chunks, i.e.
+		// 480 = 60Mb, 400 = 50Mb, 240 = 30Mb, 200 = 25Mb, 160 = 20Mb,
+		// 80 = 10Mb, 40 = 5Mb, 16 = 2Mb, 4 = 512Kb, 2 = 256Kb, 1 = 128Kb
+		akeeba_confwiz_blocksizes_table = [480, 400, 240, 200, 160, 80, 40, 16, 4, 2, 1];
 		
 		// Show GUI
 		$('#backup-progress-pane').css('display','block');
@@ -46,8 +59,8 @@ function akeeba_confwiz_tryajax()
 			function() {
 				// Successful AJAX call!
 				akeeba_use_iframe = false;
-				$('#step-ajax').removeClass('step-active');
-				$('#step-ajax').addClass('step-complete');
+				$('#step-ajax').removeClass('label-info');
+				$('#step-ajax').addClass('label-success');
 				akeeba_confwiz_minexec();
 			},
 			function() {
@@ -60,8 +73,8 @@ function akeeba_confwiz_tryajax()
 					{ act: 'ping' },
 					function() {
 						// Successful IFRAME call
-						$('#step-ajax').removeClass('step-active');
-						$('#step-ajax').addClass('step-complete');
+						$('#step-ajax').removeClass('label-info');
+						$('#step-ajax').addClass('label-success');
 						akeeba_confwiz_minexec();
 					},
 					function() {
@@ -95,7 +108,7 @@ function akeeba_confwiz_minexec(seconds, repetition)
 		start_timeout_bar((2 * seconds + 5) * 1000,100);
 		var substepText = akeeba_translations['UI-MINEXECTRY'].replace('%s', seconds.toFixed(1));
 		$('#backup-substep').text( substepText );
-		$('#step-minexec').addClass('step-active');
+		$('#step-minexec').addClass('label-info');
 		doAjax(
 			{act: 'minexec', 'seconds': seconds},
 			function(msg) {
@@ -142,8 +155,8 @@ function akeeba_confwiz_apply_minexec(seconds)
 		doAjax(
 			{act: 'applyminexec', 'iframes': iframe_opt, 'minexec': seconds},
 			function(msg) {
-				$('#step-minexec').removeClass('step-active');
-				$('#step-minexec').addClass('step-complete');
+				$('#step-minexec').removeClass('label-info');
+				$('#step-minexec').addClass('label-success');
 				
 				akeeba_confwiz_directories();
 			},
@@ -168,13 +181,13 @@ function akeeba_confwiz_directories()
 		reset_timeout_bar();
 		start_timeout_bar(10000,100);
 		$('#backup-substep').text( '' );
-		$('#step-directory').addClass('step-active');
+		$('#step-directory').addClass('label-info');
 		doAjax(
 			{act: 'directories'},
 			function(msg) {
 				if(msg) {
-					$('#step-directory').removeClass('step-active');
-					$('#step-directory').addClass('step-complete');
+					$('#step-directory').removeClass('label-info');
+					$('#step-directory').addClass('label-success');
 					akeeba_confwiz_database();
 				} else {
 					$('#backup-progress-pane').css('display','none');
@@ -201,13 +214,13 @@ function akeeba_confwiz_database()
 		reset_timeout_bar();
 		start_timeout_bar(30000,50);
 		$('#backup-substep').text( '' );
-		$('#step-dbopt').addClass('step-active');
+		$('#step-dbopt').addClass('label-info');
 		doAjax(
 			{act: 'database'},
 			function(msg) {
 				if(msg) {
-					$('#step-dbopt').removeClass('step-active');
-					$('#step-dbopt').addClass('step-complete');
+					$('#step-dbopt').removeClass('label-info');
+					$('#step-dbopt').addClass('label-success');
 					akeeba_confwiz_maxexec();
 				} else {
 					$('#backup-progress-pane').css('display','none');
@@ -243,7 +256,7 @@ function akeeba_confwiz_maxexec()
 		reset_timeout_bar();
 		start_timeout_bar((exec_time * 1.2)*1000, 80);
 		
-		$('#step-maxexec').addClass('step-active');
+		$('#step-maxexec').addClass('label-info');
 		var substepText = akeeba_translations['UI-MINEXECTRY'].replace('%s', exec_time.toFixed(0));
 		$('#backup-substep').text( substepText );
 		
@@ -276,8 +289,8 @@ function akeeba_confwiz_apply_maxexec(seconds)
 		doAjax(
 			{act: 'applymaxexec', 'seconds': seconds},
 			function() {
-				$('#step-maxexec').removeClass('step-active');
-				$('#step-maxexec').addClass('step-complete');
+				$('#step-maxexec').removeClass('label-info');
+				$('#step-maxexec').addClass('label-success');
 				akeeba_confwiz_partsize();
 			},
 			function() {
@@ -310,15 +323,15 @@ function akeeba_confwiz_partsize()
 		var substepText = akeeba_translations['UI-PARTSIZE'].replace('%s', part_size.toFixed(3));
 		$('#backup-substep').text( substepText );
 		
-		$('#step-splitsize').addClass('step-current');
+		$('#step-splitsize').addClass('label-info');
 		
 		doAjax(
 			{act: 'partsize', blocks: block_size},
 			function(msg) {
 				if(msg) {
 					// We are done
-					$('#step-splitsize').removeClass('step-current');
-					$('#step-splitsize').addClass('step-complete');
+					$('#step-splitsize').removeClass('label-info');
+					$('#step-splitsize').addClass('label-success');
 					akeeba_confwiz_done();
 				} else {
 					// Let's try the next (lower) value

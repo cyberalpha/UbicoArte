@@ -536,9 +536,15 @@ abstract class JModuleHelper
 					foreach ($cacheparams->modeparams AS $key => $value) {
 						// Use int filter for id/catid to clean out spamy slugs
 						if (isset($uri[$key])) {
-							$safeuri->$key = JRequest::_cleanVar($uri[$key], 0,$value);
+							if(version_compare(JVERSION, '3.0')){
+								$noHtmlFilter = JFilterInput::getInstance();
+								$safeuri->$key = $noHtmlFilter->clean($uri[$key], $value);
+							} else {
+								$safeuri->$key = JRequest::_cleanVar($uri[$key], 0,$value);
+							}
 						}
-					} }
+					} 
+				}
 				$secureid = md5(serialize(array($safeuri, $cacheparams->method, $moduleparams)));
 				$ret = $cache->get(array($cacheparams->class, $cacheparams->method), $cacheparams->methodparams, $module->id. $view_levels.$secureid, $wrkarounds, $wrkaroundoptions);
 				break;

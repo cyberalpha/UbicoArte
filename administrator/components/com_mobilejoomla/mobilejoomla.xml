@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+	<name>Mobile Joomla!</name>
+	<version>1.2.3</version>
+	<author>Mobile Joomla!</author>
+	<copyright>(C) 2008-2013 Kuneri Ltd.</copyright>
+	<creationDate>January 2013</creationDate>
+	<authorEmail>hello@mobilejoomla.com</authorEmail>
+	<authorUrl>http://www.mobilejoomla.com</authorUrl>
+	<license>GNU/GPL v2 - http://www.gnu.org/licenses/gpl-2.0.html</license>
+	<description></description>
+	<scriptfile>install.script.php</scriptfile>
+	<files>
+		<filename>index.html</filename>
+	</files>
+	<administration>
+		<menu img="components/com_mobilejoomla/images/mj16x16.gif">MobileJoomla</menu>
+		<languages>
+			<language tag="en-GB">en-GB.com_mobilejoomla.ini</language>
+			<language tag="en-GB">en-GB.com_mobilejoomla.sys.ini</language>
+			<language tag="en-GB">en-GB.com_mobilejoomla.menu.ini</language>
+		</languages>
+		<files>
+			<filename>mobilejoomla.html.php</filename>
+			<filename>mobilejoomla.php</filename>
+			<filename>admin.mobilejoomla.php</filename>
+			<filename>CHANGELOG.php</filename>
+			<filename>defconfig.php</filename>
+			<filename>index.html</filename>
+			<filename>LICENSE.PHP</filename>
+			<filename>uninstall.mobilejoomla.php</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<folder>admin_tpl</folder>
+			<folder>classes</folder>
+			<folder>css</folder>
+			<folder>images</folder>
+			<folder>js</folder>
+			<folder>markup</folder>
+			<folder>override</folder>
+			<folder>packages</folder>
+			<folder>scientia</folder>
+		</files>
+	</administration>
+	<updateservers>
+		<server type="collection">http://www.mobilejoomla.com/updates/list.xml</server>
+		<server type="extension" priority="2" name="Mobile Joomla Updates">http://www.mobilejoomla.com/updates/com_mobilejoomla.xml</server>
+	</updateservers>
+</extension>

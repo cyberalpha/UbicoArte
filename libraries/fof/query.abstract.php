@@ -123,7 +123,15 @@ abstract class FOFQueryAbstract
 		static $classNames = array();
 		
 		// Make sure you have a db object
-		if(!($db instanceof JDatabase)) {
+		$isDb = false;
+		if(class_exists('JDatabase')) {
+			$isDb = $isDb || ($db instanceof JDatabase);
+		}
+		if(class_exists('JDatabaseDriver')) {
+			$isDb = $isDb || ($db instanceof JDatabaseDriver);
+		}
+		
+		if(!$isDb) {
 			$db = JFactory::getDBO();
 		}
 		
@@ -180,12 +188,12 @@ abstract class FOFQueryAbstract
 	/**
 	 * Class constructor.
 	 *
-	 * @param   JDatabase  $db  The database connector resource.
+	 * @param   JDatabase|JDatabaseDriver  $db  The database connector resource.
 	 *
 	 * @return  FOFQueryAbstract
 	 * @since   11.1
 	 */
-	public function __construct(JDatabase $db = null)
+	public function __construct($db = null)
 	{
 		$this->db = $db;
 	}
@@ -510,7 +518,15 @@ abstract class FOFQueryAbstract
 	 */
 	public function escape($text, $extra = false)
 	{
-		if (!($this->db instanceof JDatabase)) {
+		$isDb = false;
+		if(class_exists('JDatabase')) {
+			$isDb = $isDb || ($this->db instanceof JDatabase);
+		}
+		if(class_exists('JDatabaseDriver')) {
+			$isDb = $isDb || ($this->db instanceof JDatabaseDriver);
+		}
+		
+		if (!$isDb) {
 			throw new Exception('Invalid database object');
 		}
 
@@ -682,7 +698,15 @@ abstract class FOFQueryAbstract
 	 */
 	public function nullDate($quoted = true)
 	{
-		if (!($this->db instanceof JDatabase)) {
+		$isDb = false;
+		if(class_exists('JDatabase')) {
+			$isDb = $isDb || ($this->db instanceof JDatabase);
+		}
+		if(class_exists('JDatabaseDriver')) {
+			$isDb = $isDb || ($this->db instanceof JDatabaseDriver);
+		}
+		
+		if (!$isDb) {
 			throw new Exception('Invalid database object');
 		}
 
@@ -745,7 +769,15 @@ abstract class FOFQueryAbstract
 	 */
 	public function quote($text, $escape = true)
 	{
-		if (!($this->db instanceof JDatabase)) {
+		$isDb = false;
+		if(class_exists('JDatabase')) {
+			$isDb = $isDb || ($this->db instanceof JDatabase);
+		}
+		if(class_exists('JDatabaseDriver')) {
+			$isDb = $isDb || ($this->db instanceof JDatabaseDriver);
+		}
+		
+		if (!$isDb) {
 			throw new Exception('Invalid database object');
 		}
 
@@ -765,7 +797,15 @@ abstract class FOFQueryAbstract
 	 */
 	public function quoteName($name)
 	{
-		if (!($this->db instanceof JDatabase)) {
+		$isDb = false;
+		if(class_exists('JDatabase')) {
+			$isDb = $isDb || ($this->db instanceof JDatabase);
+		}
+		if(class_exists('JDatabaseDriver')) {
+			$isDb = $isDb || ($this->db instanceof JDatabaseDriver);
+		}
+		
+		if (!$isDb) {
 			throw new Exception('Invalid database object');
 		}
 

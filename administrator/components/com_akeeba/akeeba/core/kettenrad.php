@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * This is Akeeba Engine's heart. Kettenrad is reponsible for launching the
@@ -108,6 +108,10 @@ final class AECoreKettenrad extends AEAbstractPart
 
 		// Log step start number
 		AEUtilLogger::WriteLog(_AE_LOG_DEBUG,'====== Starting Step number '.$stepCounter.' ======');
+		if(defined('AKEEBADEBUG')) {
+			$root = AEPlatform::getInstance()->get_site_root();
+			AEUtilLogger::WriteLog(_AE_LOG_DEBUG,'Site root: '.$root);
+		}
 
 		$timer = AEFactory::getTimer();
 		$finished = false;

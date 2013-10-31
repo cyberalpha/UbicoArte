@@ -19,12 +19,8 @@ class AkeebaViewConfwiz extends FOFViewHtml
 	{
 		$aeconfig = AEFactory::getConfiguration();
 				
-		// Add references to CSS and JS files
-		AkeebaHelperIncludes::includeMedia(false);
-		
 		// Load the Configuration Wizard Javascript file
-		$document = JFactory::getDocument();
-		$document->addScript( JURI::base().'../media/com_akeeba/js/confwiz.js' );
+		AkeebaStrapper::addJSfile('media://com_akeeba/js/confwiz.js');
 
 		// Add live help
 		AkeebaHelperIncludes::addHelp('confwiz');

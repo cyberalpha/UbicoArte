@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available Akeeba Subsriptons levels
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -47,15 +47,15 @@ class JFormFieldNN_AkeebaSubs extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getLevels()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__akeebasubs_levels AS l')
-			->where('l.enabled > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__akeebasubs_levels AS l');
+		$query->where('l.enabled > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -64,10 +64,10 @@ class JFormFieldNN_AkeebaSubs extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('l.akeebasubs_level_id as id, l.title AS name, l.enabled as published')
-			->from('#__akeebasubs_levels AS l')
-			->where('l.enabled > -1')
-			->order('l.title, l.akeebasubs_level_id');
+		$query->select('l.akeebasubs_level_id as id, l.title AS name, l.enabled as published');
+		$query->from('#__akeebasubs_levels AS l');
+		$query->where('l.enabled > -1');
+		$query->order('l.title, l.akeebasubs_level_id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

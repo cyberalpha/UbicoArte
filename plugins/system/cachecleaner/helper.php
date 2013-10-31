@@ -3,7 +3,7 @@
  * Plugin Helper File
  *
  * @package         Cache Cleaner
- * @version         3.1.4
+ * @version         3.1.2
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -41,6 +41,21 @@ class plgSystemCacheCleanerHelper
 			JFactory::getApplication()->enqueueMessage($msg, ($error ? 'error' : 'message'));
 		}
 	}
+
+	function purgeCache(&$params)
+	{
+		$cache = JFactory::getCache();
+		$cache->gc();
+
+		if ($params->purge_updates) {
+			$this->purgeUpdateCache();
+		}
+
+		$msg = JText::_('CC_CACHE_PURGED');
+
+		return array(1, $msg, 0);
+	}
+
 
 	function cleanCache(&$params, $type = 'clean', $show_size = 0)
 	{
@@ -88,9 +103,6 @@ class plgSystemCacheCleanerHelper
 		}
 
 
-
-		
-
 		$error = 0;
 		if (!$final_state) {
 			$msg = JText::_('CC_NOT_ALL_CACHE_COULD_BE_REMOVED');
@@ -108,23 +120,9 @@ class plgSystemCacheCleanerHelper
 			$msg .= ' (' . $size . ')';
 		}
 
+
 		return array($final_state, $msg, $error);
 	}
-
-	function purgeCache(&$params)
-	{
-		$cache = JFactory::getCache();
-		$cache->gc();
-
-		if ($params->purge_updates) {
-			$this->purgeUpdateCache();
-		}
-
-		$msg = JText::_('CC_CACHE_PURGED');
-
-		return array(1, $msg, 0);
-	}
-
 
 	function emptyFolder($path, $show_size = 0, $ignore_folders = array())
 	{
@@ -196,8 +194,8 @@ class plgSystemCacheCleanerHelper
 		if ($db->execute()) {
 			// Reset the last update check timestamp
 			$query = $db->getQuery(true);
-			$query->update('#__update_sites')
-				->set('last_check_timestamp = ' . $db->quote(0));
+			$query->update($db->qn('#__update_sites'));
+			$query->set($db->qn('last_check_timestamp') . ' = ' . $db->q(0));
 			$db->setQuery($query);
 			$db->execute();
 		}

@@ -713,6 +713,6 @@ class JView extends JObject
 /** 
  * Joomla 3.0 compatible
  */
-if (!class_exists('JViewLegacy'))  {
+if (!class_exists('JViewLegacy', false))  {
 	class JViewLegacy extends JView {}
 }

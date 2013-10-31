@@ -290,10 +290,17 @@ class AkeebaModelConfwiz extends FOFModel
 		if ($ftpOptions['enabled'] == 1) {
 			// Connect the FTP client
 			jimport('joomla.client.ftp');
-			$ftp = &JFTP::getInstance(
-				$ftpOptions['host'], $ftpOptions['port'], null,
-				$ftpOptions['user'], $ftpOptions['pass']
-			);
+			if(version_compare(JVERSION,'3.0','ge')) {
+				$ftp = JClientFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array(),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			} else {
+				$ftp = JFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array(),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			}
 		}
 
 		if(@chmod($path, $mode))
@@ -376,7 +383,11 @@ class AkeebaModelConfwiz extends FOFModel
 	private function directories()
 	{
 		$timer = AEFactory::getTimer();
-		$model = JModel::getInstance('Confwiz','AkeebaModel');
+		if(interface_exists('JModel')) {
+			$model = JModelLegacy::getInstance('Confwiz','AkeebaModel');
+		} else {
+			$model = JModel::getInstance('Confwiz','AkeebaModel');
+		}
 		$result = $model->autofixDirectories();
 		$timer->enforce_min_exec_time(false);
 		return $result;
@@ -389,7 +400,11 @@ class AkeebaModelConfwiz extends FOFModel
 	private function database()
 	{
 		$timer = AEFactory::getTimer();
-		$model = JModel::getInstance('Confwiz','AkeebaModel');
+		if(interface_exists('JModel')) {
+			$model = JModelLegacy::getInstance('Confwiz','AkeebaModel');
+		} else {
+			$model = JModel::getInstance('Confwiz','AkeebaModel');
+		}
 		$model->analyzeDatabase();
 		$timer->enforce_min_exec_time(false);
 		return true;
@@ -403,7 +418,11 @@ class AkeebaModelConfwiz extends FOFModel
 	{
 		$seconds = FOFInput::getInt('seconds', 30, $this->input);
 		$timer = AEFactory::getTimer();
-		$model = JModel::getInstance('Confwiz','AkeebaModel');
+		if(interface_exists('JModel')) {
+			$model = JModelLegacy::getInstance('Confwiz','AkeebaModel');
+		} else {
+			$model = JModel::getInstance('Confwiz','AkeebaModel');
+		}
 		$result = $model->doNothing($seconds);
 		$timer->enforce_min_exec_time(false);
 		return $result;
@@ -445,7 +464,11 @@ class AkeebaModelConfwiz extends FOFModel
 		$timer = AEFactory::getTimer();
 		$blocks = FOFInput::getInt('blocks', 1, $this->input);
 		
-		$model = JModel::getInstance('Confwiz','AkeebaModel');
+		if(interface_exists('JModel')) {
+			$model = JModelLegacy::getInstance('Confwiz','AkeebaModel');
+		} else {
+			$model = JModel::getInstance('Confwiz','AkeebaModel');
+		}
 		$result = $model->createTempFile($blocks);
 
 		if($result) {

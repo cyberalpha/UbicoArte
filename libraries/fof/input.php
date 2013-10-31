@@ -27,7 +27,7 @@ class FOFInput
 			$var = JRequest::getVar($name, $default, $input, $type, $mask);
 		} elseif (isset($input[$name]) && $input[$name] !== null) {
 			// Get the variable from the input hash and clean it
-			$var = JRequest::_cleanVar($input[$name], $mask, $type);
+			$var = self::_cleanVar($input[$name], $mask, $type);
 
 			// Handle magic quotes compatability
 			if (get_magic_quotes_gpc() && ($var != $default)) {
@@ -36,7 +36,7 @@ class FOFInput
 		}
 		elseif ($default !== null) {
 			// Clean the default value
-			$var = JRequest::_cleanVar($default, $mask, $type);
+			$var = self::_cleanVar($default, $mask, $type);
 		}
 		else {
 			$var = $default;
@@ -144,5 +144,43 @@ class FOFInput
 	{
 		$value = is_array($value) ? array_map(array('FOFInput', '_stripSlashesRecursive'), $value) : stripslashes($value);
 		return $value;
+	}
+	
+	protected static function _cleanVar($var, $mask = 0, $type = null)
+	{
+		if(is_array($var)) {
+			$temp = array();
+			foreach($var as $k => $v) {
+				$temp[$k] = self::_cleanVar($v, $mask);
+			}
+			return $temp;
+		}
+		
+		// If the no trim flag is not set, trim the variable
+		if (!($mask & 1) && is_string($var))
+		{
+			$var = trim($var);
+		}
+
+		// Now we handle input filtering
+		if ($mask & 2)
+		{
+			// If the allow raw flag is set, do not modify the variable
+			$var = $var;
+		}
+		elseif ($mask & 4)
+		{
+			// If the allow HTML flag is set, apply a safe HTML filter to the variable
+			$safeHtmlFilter = JFilterInput::getInstance(null, null, 1, 1);
+			$var = $safeHtmlFilter->clean($var, $type);
+		}
+		else
+		{
+			// Since no allow flags were set, we will apply the most strict filter to the variable
+			// $tags, $attr, $tag_method, $attr_method, $xss_auto use defaults.
+			$noHtmlFilter = JFilterInput::getInstance();
+			$var = $noHtmlFilter->clean($var, $type);
+		}
+		return $var;
 	}
 }

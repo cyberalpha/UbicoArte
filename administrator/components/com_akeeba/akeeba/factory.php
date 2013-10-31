@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 // Define the log levels
 if(!defined('_AE_LOG_NONE'))
@@ -341,12 +341,24 @@ class AEFactory {
 // Make sure the class autoloader is loaded
 if(defined('AKEEBAROOT')) {
 	require_once AKEEBAROOT.DIRECTORY_SEPARATOR.'autoloader.php';
+	require_once AKEEBAROOT.DIRECTORY_SEPARATOR.'platform'.DIRECTORY_SEPARATOR.'platform.php';
 } else {
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'autoloader.php';
+	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'platform'.DIRECTORY_SEPARATOR.'platform.php';
 }
 
-// register the autoloader
-AEPlatform::getInstance()->register_autoloader();
+// Try to register AEAutoloader with SPL, or fall back to making use of JLoader
+// Obviously, performance is better with SPL, but not all systems support it.
+if( function_exists('spl_autoload_register') ) {
+	// Joomla! is using its own autoloader function which has to be registered first...
+	if(function_exists('__autoload')) spl_autoload_register('__autoload');
+	// ...and then register ourselves.
+	spl_autoload_register('AEAutoloader');
+} else {
+	// Guys, it's 2011 at the time of this writing. If you have a host which
+	// doesn't support SPL yet, SWITCH HOSTS!
+	throw new Exception('Akeeba Backup REQUIRES the SPL extension to be loaded and activated',500);
+}
 
 // Define and register the timeout trap
 function AkeebaTimeoutTrap()

@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: DateTime
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -41,7 +41,7 @@ class NNFrameworkAssignmentsDateTime
 
 	function passSeasons(&$parent, &$params, $selection = array(), $assignment = 'all')
 	{
-		$season = self::getSeason($parent->date, $params->hemisphere);
+		$season = NNFrameworkAssignmentsDateTime::getSeason($parent->date, $params->hemisphere);
 		return $parent->passSimple($season, $selection, $assignment);
 	}
 

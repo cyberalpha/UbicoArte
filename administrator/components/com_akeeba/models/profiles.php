@@ -15,6 +15,14 @@ defined('_JEXEC') or die();
  */
 class AkeebaModelProfiles extends FOFModel
 {
+	
+	public function __construct($config = array()) {
+		parent::__construct($config);
+		// This fixes an issue where sometimes no profiles are shown
+		$this->setState('configuration', '');
+		$this->setState('filter', '');
+	}
+	
 	/**
 	 * Returns the entry for the profile whose ID is loaded in the model
 	 *
@@ -35,7 +43,7 @@ class AkeebaModelProfiles extends FOFModel
 	{
 		return $this->getItemList($overrideLimits);
 	}
-
+	
 	/**
 	 * Tries to copy the profile whose ID is set in the model to a new record
 	 *
@@ -90,10 +98,10 @@ class AkeebaModelProfiles extends FOFModel
 		
 		$db = $this->getDBO();
 		$query = $db->getQuery(true)
-			->select($db->nq('id'))
-			->from($db->nq('#__ak_profiles'));
+			->select($db->qn('id'))
+			->from($db->qn('#__ak_profiles'));
 		$db->setQuery($query);
-		$profiles = $db->loadResultArray();
+		$profiles = $db->loadColumn();
 
 		$engines = array();
 		foreach($profiles as $profileID) {

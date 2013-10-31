@@ -25,9 +25,6 @@ class FOFViewHtml extends FOFView
 	/** @var array Permissions map */
 	protected $perms = null;
 
-	/** @var bool Set to true to render a toolbar in the front-end */
-	protected $frontendToolbar = false;
-
 	/**
 	 * Class constructor
 	 *
@@ -65,10 +62,6 @@ class FOFViewHtml extends FOFView
 		}
 		$this->assign('aclperms', $perms);
 		$this->perms = $perms;
-
-		if(array_key_exists('frontendToolbar', $this->config)) {
-			$this->frontendToolbar = $this->config['frontendToolbar'];
-		}
 	}
 
 	/**
@@ -98,38 +91,55 @@ class FOFViewHtml extends FOFView
 		$toolbar->perms = $this->perms;
 		$toolbar->renderToolbar(FOFInput::getCmd('view','cpanel',$this->input), $task, $this->input);
 
-		//if i'm not the admin and i have some buttons or a title to show, let's render them before the layout
-		//Framework will only create the HTML structure, 3rd part developers will have to add CSS to correctly style it
-		$isAdmin = version_compare(JVERSION, '1.6.0', 'ge') ? (!JFactory::$application ? false : JFactory::getApplication()->isAdmin()) : JFactory::getApplication()->isAdmin();
-		if(!$isAdmin && $this->frontendToolbar)
-		{
-			$title = JFactory::getApplication()->get('JComponentTitle');
-			$bar = JToolBar::getInstance('toolbar');
-			if($bar->getItems() || $title)
-			{
-				$html[] = '<div id="FOFHeaderHolder">';
-
-				if($title) $html[] = $title;
-
-				if($bar->getItems())
-				{
-					//load toolbar language files
-					$jlang = JFactory::getLanguage();
-					$jlang->load('joomla', JPATH_ADMINISTRATOR);
-
-					$html[] = $bar->render();
-				}
-
-				$html[] = '<div style="clear:both"></div>';
-				$html[] = '</div>';
-				$html = implode("\n", $html);
-				$html = str_replace('href="#"', '', $html);
-				echo $html;
+		// Show the view
+		$this->preRender();
+		parent::display($tpl);
+		$this->postRender();
+	}
+	
+	/**
+	 * Renders the link bar (submenu) using Joomla!'s default JSubMenuHelper::addEntry method (which doesn't work under Joomla! 3.x and the Isis template)
+	 */
+	private function renderLinkbar()
+	{
+		// Do not render a submenu unless we are in the the admin area
+		list($isCli, $isAdmin) = FOFDispatcher::isCliAdmin();
+		if(!$isAdmin) return;
+		$toolbar = FOFToolbar::getAnInstance(FOFInput::getCmd('option','com_foobar',$this->input), $this->config);
+		$links = $toolbar->getLinks();
+		if(!empty($links)) {
+			foreach($links as $link) {
+				JSubMenuHelper::addEntry($link['name'], $link['link'], $link['active']);
 			}
 		}
-
-		// Show the view
-		parent::display($tpl);
+	}
+	
+	/**
+	 * Runs before rendering the view template, echoing HTML to put before the view template's generated HTML
+	 */
+	protected function preRender()
+	{
+		$renderer = $this->getRenderer();
+		if(!($renderer instanceof FOFRenderAbstract)) {
+			$this->renderLinkbar();
+		} else {
+			$view = FOFInput::getCmd('view','cpanel',$this->input);
+			$task = $this->getModel()->getState('task','browse');
+			$renderer->preRender($view, $task, $this->input, $this->config);
+		}
+	}
+	
+	/**
+	 * Runs after rendering the view template, echoing HTML to put after the view template's generated HTML
+	 */
+	protected function postRender()
+	{
+		$renderer = $this->getRenderer();
+		if($renderer instanceof FOFRenderAbstract) {
+			$view = FOFInput::getCmd('view','cpanel',$this->input);
+			$task = $this->getModel()->getState('task','browse');
+			$renderer->postRender($view, $task, $this->input, $this->config);
+		}
 	}
 
 	protected function onBrowse($tpl = null)
@@ -185,5 +195,45 @@ class FOFViewHtml extends FOFView
 	{
 		// All I need is to read the record
 		return $this->onAdd();
+	}
+	
+	protected function hasAjaxOrderingSupport()
+	{
+		if(version_compare(JVERSION, '3.0', 'lt')) {
+			return false;
+		}
+		
+		$model = $this->getModel();
+		
+		if(!method_exists($model, 'getTable')) {
+			return false;
+		}
+		
+		$table = $this->getModel()->getTable();
+		
+		if(!method_exists($table, 'getColumnAlias') || !method_exists($table, 'getTableFields')) {
+			return false;
+		}
+		
+		$orderingColumn = $table->getColumnAlias('ordering');
+		$fields = $table->getTableFields();
+		if(!array_key_exists($orderingColumn, $fields)) {
+			return false;
+		}
+		
+		$listOrder	= $this->escape($model->getState('filter_order', null, 'cmd'));
+		$listDirn	= $this->escape($model->getState('filter_order_Dir', 'ASC', 'cmd'));
+		$saveOrder	= $listOrder == $orderingColumn;
+		
+		if ($saveOrder)
+		{
+			$saveOrderingUrl = 'index.php?option='.$this->config['option'].'&view='.$this->config['view'].'&task=saveorder&format=json';
+			JHtml::_('sortablelist.sortable', 'itemsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+		}
+		
+		return array(
+			'saveOrder'			=> $saveOrder,
+			'orderingColumn'	=> $orderingColumn
+		);
 	}
 }

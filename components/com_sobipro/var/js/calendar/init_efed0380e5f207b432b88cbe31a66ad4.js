@@ -16,7 +16,7 @@
  * $Author: Radek Suski $
  * File location: components/com_sobipro/lib/js/calendar/init.js $
  */
- // Created at Thu Jan 31 22:29:17 ART 2013 by Sobi Pro Component
+ // Created at Wed Oct 30 18:11:04 ART 2013 by Sobi Pro Component
 function SPCalendar( id, bid, format )
 {
 	if( !format ) {

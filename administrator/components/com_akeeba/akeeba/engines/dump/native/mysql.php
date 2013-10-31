@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * A generic MySQL database dump class, using Joomla!'s JDatabase class for handling the connection.
@@ -49,12 +49,17 @@ class AEDumpNativeMysql extends AEAbstractDump
 		$db->setQuery( $sql );
 		$db->query();
 		// Try to enforce SQL_BIG_SELECTS option
-		$db->setQuery('SET OPTION SQL_BIG_SELECTS=1');
-		$db->query();
-
+		try {
+			$db->setQuery('SET OPTION SQL_BIG_SELECTS=1');
+			$db->query();
+		} catch(Exception $e) {
+			// Do nothing; some versions of MySQL don't allow you to use the BIG_SELECTS option.
+		}
+		
+		$db->resetErrors();
 	}
 
-/**
+	/**
 	 * Performs one more step of dumping database data
 	 * @return type 
 	 */

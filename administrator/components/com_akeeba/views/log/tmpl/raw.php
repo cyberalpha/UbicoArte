@@ -8,6 +8,8 @@
  */
 
 defined('_JEXEC') or die();
+
+JHtml::_('behavior.framework');
 ?>
 <script language="javascript" type="text/javascript">
 // Disable right-click

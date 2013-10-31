@@ -28,9 +28,6 @@ class AkeebaViewBuadmin extends FOFViewHtml
 	
 	public function onEdit($tpl = null)
 	{
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JURI::base().'../media/com_akeeba/theme/akeebaui.css?'.AKEEBAMEDIATAG);
-
 		$model = $this->getModel();
 		$id = $model->getId();
 		$record = AEPlatform::getInstance()->get_statistics($id);
@@ -51,12 +48,13 @@ class AkeebaViewBuadmin extends FOFViewHtml
 
 		// Add custom submenus
 		if(AKEEBA_PRO) {
-			JSubMenuHelper::addEntry(
+			$toolbar = FOFToolbar::getAnInstance(FOFInput::getCmd('option','com_foobar',$this->input), $this->config);
+			$toolbar->appendLink(
 				JText::_('BUADMIN_LABEL_BACKUPS'),
 				JURI::base().'index.php?option=com_akeeba&view=buadmin&task=browse',
 				($task == 'default')
 			);
-			JSubMenuHelper::addEntry(
+			$toolbar->appendLink(
 				JText::_('BUADMIN_LABEL_SRP'),
 				JURI::base().'index.php?option=com_akeeba&view=buadmin&task=restorepoint',
 				($task == 'restorepoint')
@@ -65,7 +63,7 @@ class AkeebaViewBuadmin extends FOFViewHtml
 
 		if(AKEEBA_PRO && ($task == 'default'))
 		{
-			$bar = & JToolBar::getInstance('toolbar');
+			$bar = JToolBar::getInstance('toolbar');
 			$bar->appendButton( 'Link', 'restore', JText::_('DISCOVER'), 'index.php?option=com_akeeba&view=discover' );
 			JToolBarHelper::publish('restore', JText::_('STATS_LABEL_RESTORE'));
 		}
@@ -104,7 +102,6 @@ ENDSCRIPT;
 
 		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($js);				
-		$document->addStyleSheet(JURI::base().'../media/com_akeeba/theme/akeebaui.css?'.AKEEBAMEDIATAG);
 
 		$hash = 'akeebabuadmin';
 
@@ -140,7 +137,12 @@ ENDSCRIPT;
 		$this->assignRef( 'pagination',	$model->getPagination($filters)); // Pagination object
 
 		// Add live help
-		AkeebaHelperIncludes::addHelp('buadmin');
+		if($task == 'restorepoint') {
+			$this->setLayout('restorepoint');
+			AkeebaHelperIncludes::addHelp('restorepoint');
+		} else {
+			AkeebaHelperIncludes::addHelp('buadmin');
+		}
 		
 		return true;
 	}

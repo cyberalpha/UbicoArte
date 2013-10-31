@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<extension type="module" version="2.5.0">
+	<name>Plan route with GMaps</name>
+	<author>Bart Eversdijk</author>
+	<creationDate>May 2012</creationDate>
+	<copyright>(C) 2012 Bart Eversdijk. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>bart@eversdijk.com</authorEmail>
+	<authorUrl>www.eversdijk.com</authorUrl>
+	<version>2.5.0</version>
+	<description>This module shows an interface to plan a route with a predefined destination.</description>
+	<files>
+		<filename module="mod_planroute">mod_planroute.php</filename>
+		<filename>gmapsloader.php</filename>
+		<filename>index.html</filename>
+		<folder>assets</folder>
+	</files>
+    	<updateservers>
+	    <server type="extension" name="Mod Plan Route - updates">http://www.eversdijk.com/updates/mod_planroute_upd.xml</server>
+	</updateservers>
+
+	<config>
+	       <fields name="params">
+		   <fieldset name="basic">
+			<field name="headertxt" type="text" size="50" default="Give your address and we plan you a route to us" label="Header text" description="Enter an introduction text here, which shall be displayed in the module" />
+			<field name="addresstxt" type="text" size="50" default="Your address here" label="Address text" description="Enter a text here to request the to give his/here addresss" />
+			<field name="citytxt" type="text" size="50" default="Your city here" label="City text" description="Enter a text here to request the to give his/here city" />
+			<field name="countrytxt" type="text" size="50" default="Nederland" label="Country" description="Enter the default (your) country here" />
+			<field name="showcountry" type="radio" default="1" label="Show country field" description="Show or hide country text box">
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
+			</field>
+			<field name="translate" type="radio" default="0" label="Use language files" description="Do you want to use the Joomla!-language files to translate all text strings (can be used for multi language sites). Enter your text strings in the template language file.">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="@spacer" type="spacer" default="" label="" description="" />
+			<field name="buttontxt" type="text" size="50" default="Plan route now" label="Button text" description="Enter the text which should appear on the button" />
+			<field name="showbutton" type="radio" default="1" label="Show plan route button" description="Show or hide the plan route button">
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
+			</field>
+			<field name="buttonrevtxt" type="text" size="50" default="Plan way back" label="Button text" description="Enter the text which should appear on the way back button" />
+			<field name="showrevbutton" type="radio" default="0" label="Show way back button" description="Show or hide the plan way back route button">
+				<option value="1">JSHOW</option>
+				<option value="0">JHIDE</option>
+			</field>
+			<field name="inputboxwidth" type="text" size="10" default="175" label="Inputbox width (px)" description="Enter the size of the input boxes here in px (!!!)" />
+			<field name="warntxt" type="text" size="50" default="Please enter a valid depature location!" label="Warning text" description="Enter a text here to warn the requestor about a wrong deparature address" />
+			<field name="@spacer" type="spacer" default="" label="" description="" />
+			<field name="desttxt" type="text" size="50" default="Plan route to/from:" label="Destination text" description="Enter an destination introduction text here, which shall be displayed in the module ONLY when destination can be selected" />
+			<field name="destination" type="textarea" rows="10" cols="50" default="Markt, Waalre, Nederland (blokhut)" label="Destination" description="Enter the destination, here in gmaps style, this can be a GPS location or a writen address. To have multiple destinations, enter each destination on a new line. To apply a label to a destination, seperate label from destination with a '|' (label goes first)" />
+			<field name="googleurl" type="text" size="50" default="google.com" label="Google base url" description="Enter the Google base URL here, this can be used to localise the Google guidings in your own language i.e. google.nl will give Dutch guidings. (default: 'google.com')" />
+			<field name="@spacer" type="spacer" default="" label="" description="" />
+			<field name="target" type="list" default="_blank" label="Open map in" description="Select where to open the map-direction page">
+			    <option value="_blank">New window/tab (_blank)</option>
+			    <option value="_self">Same window and frame (_self)</option>
+			    <option value="_top">Same window, new page (_top)</option>
+			    <option value="_parent">Parent frame (_parent)</option>
+			    <option value="lightbox">Light box overlay</option>
+			    <option value="popup">Pop Up window</option>
+			</field>
+			<field name="mapwidth" type="text" size="10" default="800" label="Map Display Width" description="Enter the width of the map size here (only usefull for lightbox and popup target)" />
+			<field name="mapheight" type="text" size="10" default="640" label="Map Display Height" description="Enter the height of the map size here (only usefull for lightbox and popup target)" />
+
+		</fieldset>
+		<fieldset name="advanced">
+		    <field name="moduleclass_sfx" type="text" default="" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+		    <field name="cache" type="list" default="1" label="COM_MODULES_FIELD_CACHING_LABEL" description="COM_MODULES_FIELD_CACHING_DESC">
+			    <option value="1">JGLOBAL_USE_GLOBAL</option>
+			    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+		    </field>
+		    <field name="cache_time" type="text" default="900" label="COM_MODULES_FIELD_CACHE_TIME_LABEL" description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+		</fieldset>
+	    </fields>
+	</config>
+</extension>

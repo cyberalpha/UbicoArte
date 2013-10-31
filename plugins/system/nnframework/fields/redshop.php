@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available RedShop categories / products
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -46,15 +46,15 @@ class JFormFieldNN_RedShop extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__redshop_category AS c')
-			->where('c.published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__redshop_category AS c');
+		$query->where('c.published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -65,11 +65,11 @@ class JFormFieldNN_RedShop extends JFormField
 		$show_ignore = $this->def('show_ignore');
 
 		$query = $this->db->getQuery(true);
-		$query->select('c.category_id as id, x.category_parent_id AS parent_id, c.category_name AS title, c.published')
-			->from('#__redshop_category AS c')
-			->join('LEFT', '#__redshop_category_xref AS x ON x.category_child_id = c.category_id')
-			->where('c.published > -1')
-			->order('c.ordering, c.category_name');
+		$query->select('c.category_id as id, x.category_parent_id AS parent_id, c.category_name AS title, c.published');
+		$query->from('#__redshop_category AS c');
+		$query->join('LEFT', '#__redshop_category_xref AS x ON x.category_child_id = c.category_id');
+		$query->where('c.published > -1');
+		$query->order('c.ordering, c.category_name');
 		$this->db->setQuery($query);
 		$items = $this->db->loadObjectList();
 
@@ -110,9 +110,9 @@ class JFormFieldNN_RedShop extends JFormField
 	function getProducts()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__redshop_product AS p')
-			->where('p.published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__redshop_product AS p');
+		$query->where('p.published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -121,12 +121,12 @@ class JFormFieldNN_RedShop extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('p.product_id as id, p.product_name AS name, p.product_number as number, c.category_name AS cat, p.published')
-			->from('#__redshop_product AS p')
-			->join('LEFT', '#__redshop_product_category_xref AS x ON x.product_id = p.product_id')
-			->join('LEFT', '#__redshop_category AS c ON c.category_id = x.category_id')
-			->where('p.published > -1')
-			->order('p.product_name, p.product_number');
+		$query->select('p.product_id as id, p.product_name AS name, p.product_number as number, c.category_name AS cat, p.published');
+		$query->from('#__redshop_product AS p');
+		$query->join('LEFT', '#__redshop_product_category_xref AS x ON x.product_id = p.product_id');
+		$query->join('LEFT', '#__redshop_category AS c ON c.category_id = x.category_id');
+		$query->where('p.published > -1');
+		$query->order('p.product_name, p.product_number');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

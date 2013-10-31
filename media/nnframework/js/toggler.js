@@ -3,7 +3,7 @@
  * Adds slide in and out functionality to elements based on an elements value
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -33,6 +33,8 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 
 		initialize: function()
 		{
+			var self = this;
+
 			this.togglers = document.getElements('.nntoggler');
 			if (!this.togglers.length) {
 				return;
@@ -40,7 +42,10 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 
 			nnScripts.overlay.open(0.2);
 
-			this.initTogglers();
+			( function()
+			{
+				self.initTogglers();
+			} ).delay(250);
 		},
 
 		initTogglers: function()
@@ -113,6 +118,9 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 				self.toggleByID(toggler.id, 1);
 			});
 
+			// set all divs in the form to auto height
+			this.autoHeightDivs();
+
 			( function()
 			{
 				document.body.setStyle('cursor', '');
@@ -129,19 +137,12 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 			toggler.getParent().setStyle('height', 'auto');
 		},
 
-		autoHeightDivs: function(toggler)
+		autoHeightDivs: function()
 		{
-			if (typeof( toggler ) == "undefined") {
-				return;
-			}
-
-			// set all parent divs of the toggler to auto height
-			var el = toggler.getParent();
-			while (typeof( el ) !== "undefined" && !el.hasClass('col') && !el.hasClass('fltrt')) {
-				if (el.get('tag') == 'div'
-					&& el.getStyle('height') != 'auto'
-					&& el.getStyle('height') != '0px'
-					&& !el.hasClass('notoggle')
+			// set all divs in the form to auto height
+			$each(document.getElements('div.col div, div.fltrt div'), function(el)
+			{
+				if (el.getStyle('height') != '0px'
 					&& !el.hasClass('input')
 					&& !el.hasClass('nn_hr')
 					&& !el.hasClass('textarea_handle')
@@ -152,8 +153,7 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 					) {
 					el.setStyle('height', 'auto');
 				}
-				el = el.getParent();
-			}
+			});
 		},
 
 		toggle: function(el_name)
@@ -162,6 +162,7 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 			for (var i = 0; i < this.elements[el_name].togglers.length; i++) {
 				this.toggleByID(this.elements[el_name].togglers[i]);
 			}
+			this.autoHeightDivs();
 		},
 
 		toggleByID: function(id, nofx)
@@ -171,7 +172,6 @@ if (typeof( window['nnToggler'] ) == "undefined") {
 			}
 
 			var toggler = this.togglers[id];
-			this.autoHeightDivs(toggler);
 
 			var show = this.isShow(toggler);
 

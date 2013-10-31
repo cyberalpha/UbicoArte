@@ -22,8 +22,6 @@ class AkeebaViewPostsetup extends FOFViewHtml
 		$this->_setConfWizStatus();
 		$this->assign('showsrp', $this->isMySQL());
 
-		AkeebaHelperIncludes::includeMedia(false);
-		
 		return true;
 	}
 	
@@ -37,18 +35,18 @@ class AkeebaViewPostsetup extends FOFViewHtml
 		$db = JFactory::getDBO();
 		
 		$query = $db->getQuery(true)
-			->select($db->nq('enabled'))
-			->from($db->nq('#__extensions'))
-			->where($db->nq('element').' = '.$db->q('oneclickaction'))
-			->where($db->nq('folder').' = '.$db->q('system'));
+			->select($db->qn('enabled'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('element').' = '.$db->q('oneclickaction'))
+			->where($db->qn('folder').' = '.$db->q('system'));
 		$db->setQuery($query);
 		$enabledOCA = $db->loadResult();
 		
 		$query = $db->getQuery(true)
-			->select($db->nq('enabled'))
-			->from($db->nq('#__extensions'))
-			->where($db->nq('element').' = '.$db->q('akeebaupdatecheck'))
-			->where($db->nq('folder').' = '.$db->q('system'));
+			->select($db->qn('enabled'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('element').' = '.$db->q('akeebaupdatecheck'))
+			->where($db->qn('folder').' = '.$db->q('system'));
 		$db->setQuery($query);
 		$enabledAUC = $db->loadResult();
 		
@@ -70,10 +68,10 @@ class AkeebaViewPostsetup extends FOFViewHtml
 		$db = JFactory::getDBO();
 		
 		$query = $db->getQuery(true)
-			->select($db->nq('enabled'))
-			->from($db->nq('#__extensions'))
-			->where($db->nq('element').' = '.$db->q('srp'))
-			->where($db->nq('folder').' = '.$db->q('system'));
+			->select($db->qn('enabled'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('element').' = '.$db->q('srp'))
+			->where($db->qn('folder').' = '.$db->q('system'));
 		$db->setQuery($query);
 		$enableSRP = $db->loadResult();
 		
@@ -92,21 +90,27 @@ class AkeebaViewPostsetup extends FOFViewHtml
 	{
 		static $enableconfwiz;
 		
+		$component = JComponentHelper::getComponent( 'com_akeeba' );
+		if(is_object($component->params) && ($component->params instanceof JRegistry)) {
+			$params = $component->params;
+		} else {
+			$params = new JParameter($component->params);
+		}
+		
 		if(empty($enableconfwiz)) {
-			$component = JComponentHelper::getComponent( 'com_akeeba' );
-			if(is_object($component->params) && ($component->params instanceof JRegistry)) {
-				$params = $component->params;
-			} else {
-				$params = new JParameter($component->params);
-			}
 			$lv = $params->get( 'lastversion', '' );
-			$minStability = $params->get( 'minstability', 'stable' );
 			
 			$enableconfwiz = empty($lv);
 		}
 		
+		$minStability = $params->get( 'minstability', 'stable' );
+		$acceptlicense = $params->get( 'acceptlicense', '0' );
+		$acceptsupport = $params->get( 'acceptsupport', '0' );
+		
 		$this->assign('enableconfwiz', $enableconfwiz);
 		$this->assign('minstability', $minStability);
+		$this->assign('acceptlicense', $acceptlicense);
+		$this->assign('acceptsupport', $acceptsupport);
 		return $enableconfwiz;
 	}
 	

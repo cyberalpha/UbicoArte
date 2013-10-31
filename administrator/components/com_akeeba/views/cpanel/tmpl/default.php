@@ -16,9 +16,8 @@ AEPlatform::getInstance()->load_version_defines();
 $lang = JFactory::getLanguage();
 $icons_root = JURI::base().'components/com_akeeba/assets/images/';
 
-jimport('joomla.html.pane');
-JHTML::_('behavior.mootools');
-$pane = JPane::getInstance('Sliders');
+JHTML::_('behavior.framework');
+JHtml::_('behavior.modal');
 
 $script = <<<ENDSCRIPT
 window.addEvent( 'domready' ,  function() {
@@ -27,8 +26,10 @@ window.addEvent( 'domready' ,  function() {
 
 function showChangelog()
 {
+	var akeebaChangelogElement = $('akeeba-changelog').clone();
+	
     SqueezeBox.fromElement(
-        $('akeeba-changelog'), {
+        akeebaChangelogElement, {
             handler: 'adopt',
             size: {
                 x: 550,
@@ -52,8 +53,6 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 	endif;
 ?>
 
-<div id="akeeba-container" style="width:100%">
-
 <?php if(!$this->fixedpermissions): ?>
 <div style="margin: 1em; padding: 1em; background: #ffff00; border: thick solid red; color: black; font-size: 14pt;" id="notfixedperms">
 	<h1 style="margin: 1em 0; color: red; font-size: 22pt;"><?php echo JText::_('AKEEBA_CPANEL_WARN_WARNING') ?></h1>
@@ -73,7 +72,7 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 	<p><?php echo JText::_('AKEEBA_CPANEL_WARN_JQ_L1B'); ?></p>
 	<p><?php echo JText::_('AKEEBA_CPANEL_WARN_JQ_L2'); ?></p>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 	if(typeof akeeba.jQuery == 'function')
 	{
 		if(typeof akeeba.jQuery.ui == 'object')
@@ -84,150 +83,177 @@ JFactory::getDocument()->addScriptDeclaration($script,'text/javascript');
 	}
 </script>
 
+<?php if(!version_compare(PHP_VERSION, '5.3.0', 'ge') && AEUtilComconfig::getValue('displayphpwarning', 1)): ?>
+<div class="alert">
+	<a class="close" data-dismiss="alert" href="#">×</a>
+	<p><strong><?php echo JText::_('COM_AKEEBA_CONFIG_LBL_OUTDATEDPHP_HEADER') ?></strong><br/>
+	<?php echo JText::_('COM_AKEEBA_CONFIG_LBL_OUTDATEDPHP_BODY') ?>
+	</p>
+	
+	<p>
+		<a class="btn btn-small btn-primary" href="index.php?option=com_akeeba&view=cpanel&task=disablephpwarning&<?php echo JFactory::getSession()->getFormToken() ?>=1">
+			<?php echo JText::_('COM_AKEEBA_CONFIG_LBL_OUTDATEDPHP_BUTTON'); ?>
+		</a>
+	</p>
+</div>
+<?php endif; ?>
+	
 <?php if($this->needsdlid): ?>
-<div class="aklargewarning">
+<div class="alert">
 	<?php echo JText::sprintf('COM_AKEEBA_LBL_CPANEL_NEEDSDLID','https://www.akeebabackup.com/instructions/1435-akeeba-backup-download-id.html'); ?>
 </div>
 <?php endif; ?>
 
-<div id="cpanel">
-	<div class="ak_cpanel_modules" id="ak_cpanel_modules">
+<div id="cpanel" class="row-fluid">
+	<div class="span8">
+		<form action="index.php" method="post" name="adminForm" id="adminForm" class="akeeba-formstyle-reset form-inline">
+			<input type="hidden" name="option" value="com_akeeba" />
+			<input type="hidden" name="view" value="cpanel" />
+			<input type="hidden" name="task" value="switchprofile" />
+			<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken()?>" value="1" />
+			<label>
+				<?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?>
+			</label>
+			<?php echo JHTML::_('select.genericlist', $this->profilelist, 'profileid', 'onchange="document.forms.adminForm.submit()"', 'value', 'text', $this->profileid); ?>
+			<button class="btn" onclick="this.form.submit(); return false;">
+				<i class="icon-retweet"></i>
+				<?php echo JText::_('CPANEL_PROFILE_BUTTON'); ?>
+			</button>
+		</form>
 	
-		<fieldset>
-			<legend><?php echo JText::_('CPANEL_LABEL_STATUSSUMMARY')?></legend>
-			<div>
-				<?php echo $this->statuscell ?>
+		<h3><?php echo JText::_('CPANEL_HEADER_BASICOPS'); ?></h3>
 
-				<?php $quirks = AEUtilQuirks::get_quirks(); ?>
-				<?php if(!empty($quirks)): ?>
-				<h4 class="ui-widget-header ui-corner-tl">
-					<?php echo JText::_('CPANEL_LABEL_STATUSDETAILS'); ?>
-				</h4>
-				<div class="ui-widget-content ui-corner-br">
-					<?php echo $this->detailscell ?>
-				</div>
-				<?php endif; ?>
+		<?php foreach($this->icondefs['operations'] as $icon): ?>
+		<div class="icon">
+			<a href="<?php echo 'index.php?option=com_akeeba'.
+				(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
+				(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
+			<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
+			<span><?php echo $icon['label']; ?></span>
+			</a>
+		</div>
+		<?php endforeach; ?>
 
-				<?php if(!defined('AKEEBA_PRO')) { $show_donation = 1; } else { $show_donation = (AKEEBA_PRO != 1); } ?>
-				<p class="ak_version">
-					<?php echo JText::_('AKEEBA').' '.($show_donation?'Core':'Professional ').' '.AKEEBA_VERSION.' ('.AKEEBA_DATE.')' ?>
-				</p>
-				<!-- CHANGELOG :: BEGIN -->
-				<a href="#" id="btnchangelog">CHANGELOG</a>
-				<div style="display:none;">
-					<div id="akeeba-changelog">
-						<?php
-						require_once dirname(__FILE__).'/coloriser.php';
-						echo AkeebaChangelogColoriser::colorise(JPATH_COMPONENT_ADMINISTRATOR.'/CHANGELOG.php');
-						?>
-					</div>
-				</div>
-				<!-- CHANGELOG :: END -->
-				<?php if($show_donation): ?>
-				<div style="text-align: center;">
-					<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-						<input type="hidden" name="cmd" value="_s-xclick">
-						<input type="hidden" name="hosted_button_id" value="10903325">
-						<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." style="border: none !important;">
-						<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-					</form>
-				</div>
-				<?php endif; ?>
-			</div>
-		</fieldset>
+		<div class="icon">
+			<a href="index.php?option=com_akeeba&view=schedule">
+				<div class="ak-icon ak-icon-schedule">&nbsp;</div>
+				<span><?php echo JText::_('AKEEBA_SCHEDULE'); ?></span>
+			</a>
+		</div>
+		
+		<div class="icon">
+			<?php if(version_compare(JVERSION, '3.0', 'lt')): ?>
+			<a href="index.php?option=com_config&view=component&component=com_akeeba&path=&tmpl=component"
+				class="modal"
+				rel="{handler: 'iframe', size: {x: 660, y: 500}}">
+				<div class="ak-icon ak-icon-componentparams">&nbsp;</div>
+				<span><?php echo JText::_('CPANEL_LABEL_COMPONENTCONFIG'); ?></span>
+			</a>
+			<?php else: ?>
+			<a href="index.php?option=com_config&view=component&component=com_akeeba&path=&return=<?php echo base64_encode(JURI::getInstance()->toString()) ?>">
+				<div class="ak-icon ak-icon-componentparams">&nbsp;</div>
+				<span><?php echo JText::_('CPANEL_LABEL_COMPONENTCONFIG'); ?></span>
+			</a>
+			<?php endif; ?>
+		</div>
 
-		<fieldset>
-			<legend><?php echo JText::_('BACKUP_STATS') ?></legend>
-			<div><?php echo $this->statscell ?></div>
-		</fieldset>
-
-	</div>
-
-	<div class="ak_cpanel_main_container">
-		<fieldset>
-			<form action="index.php" method="post" name="adminForm" id="adminForm" class="akeeba-formstyle-reset">
-				<input type="hidden" name="option" value="com_akeeba" />
-				<input type="hidden" name="view" value="cpanel" />
-				<input type="hidden" name="task" value="switchprofile" />
-				<input type="hidden" name="<?php echo JFactory::getSession()->getToken()?>" value="1" />
-				<p>
-					<?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?>
-					<?php echo JHTML::_('select.genericlist', $this->profilelist, 'profileid', 'onchange="document.forms.adminForm.submit()"', 'value', 'text', $this->profileid); ?>
-					<button onclick="this.form.submit(); return false;"><?php echo JText::_('CPANEL_PROFILE_BUTTON'); ?></button>
-				</p>
-			</form>
-		</fieldset>
-	
-		<fieldset>
-			<legend><?php echo JText::_('CPANEL_HEADER_BASICOPS'); ?></legend>
-			<?php foreach($this->icondefs['operations'] as $icon): ?>
-			<div class="icon">
-				<a href="<?php echo 'index.php?option=com_akeeba'.
-					(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
-					(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
-				<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
-				<span><?php echo $icon['label']; ?></span>
-				</a>
-			</div>
-			<?php endforeach; ?>
-			
-			<div class="icon">
-				<a href="index.php?option=com_config&view=component&component=com_akeeba&path=&tmpl=component"
-					class="modal"
-					rel="{handler: 'iframe', size: {x: 660, y: 500}}">
-					<div class="ak-icon ak-icon-componentparams">&nbsp;</div>
-					<span><?php echo JText::_('CPANEL_LABEL_COMPONENTCONFIG'); ?></span>
-				</a>
-			</div>
-
-			<?php echo LiveUpdate::getIcon(); ?>			
-		</fieldset>
+		<?php echo LiveUpdate::getIcon(); ?>
+		
+		<div class="ak_clr"></div>
 
 		<?php if(!empty($this->icondefs['inclusion'])): ?>
-		<fieldset>
-			<legend><?php echo JText::_('CPANEL_HEADER_INCLUSION'); ?></legend>
-			<?php foreach($this->icondefs['inclusion'] as $icon): ?>
-			<div class="icon">
-				<a href="<?php echo 'index.php?option=com_akeeba'.
-					(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
-					(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
-				<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
-				<span><?php echo $icon['label']; ?></span>
-				</a>
-			</div>
-			<?php endforeach; ?>
-		</fieldset>
+		<h3><?php echo JText::_('CPANEL_HEADER_INCLUSION'); ?></h3>
+		<?php foreach($this->icondefs['inclusion'] as $icon): ?>
+		<div class="icon">
+			<a href="<?php echo 'index.php?option=com_akeeba'.
+				(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
+				(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
+			<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
+			<span><?php echo $icon['label']; ?></span>
+			</a>
+		</div>
+		<?php endforeach; ?>
+		<div class="ak_clr"></div>
 		<?php endif; ?>
 
-		<fieldset>
-			<legend><?php echo JText::_('CPANEL_HEADER_EXCLUSION'); ?></legend>
-			<?php foreach($this->icondefs['exclusion'] as $icon): ?>
-			<div class="icon">
-				<a href="<?php echo 'index.php?option=com_akeeba'.
-					(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
-					(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
-				<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
-				<span><?php echo $icon['label']; ?></span>
-				</a>
+		<h3><?php echo JText::_('CPANEL_HEADER_EXCLUSION'); ?></h3>
+		<?php foreach($this->icondefs['exclusion'] as $icon): ?>
+		<div class="icon">
+			<a href="<?php echo 'index.php?option=com_akeeba'.
+				(is_null($icon['view']) ? '' : '&amp;view='.$icon['view']).
+				(is_null($icon['task']) ? '' : '&amp;task='.$icon['task']); ?>">
+			<div class="ak-icon ak-icon-<?php echo $icon['icon'] ?>">&nbsp;</div>
+			<span><?php echo $icon['label']; ?></span>
+			</a>
+		</div>
+		<?php endforeach; ?>
+		<div class="ak_clr"></div>
+
+	</div>
+	
+	<div class="span4">
+	
+		<h3><?php echo JText::_('CPANEL_LABEL_STATUSSUMMARY')?></h3>
+		<div>
+			<?php echo $this->statuscell ?>
+
+			<?php $quirks = AEUtilQuirks::get_quirks(); ?>
+			<?php if(!empty($quirks)): ?>
+			<h4 class="ui-widget-header ui-corner-tl">
+				<?php echo JText::_('CPANEL_LABEL_STATUSDETAILS'); ?>
+			</h4>
+			<div class="ui-widget-content ui-corner-br">
+				<?php echo $this->detailscell ?>
 			</div>
-			<?php endforeach; ?>
-		</fieldset>
+			<?php endif; ?>
+
+			<?php if(!defined('AKEEBA_PRO')) { $show_donation = 1; } else { $show_donation = (AKEEBA_PRO != 1); } ?>
+			<p class="ak_version">
+				<?php echo JText::_('AKEEBA').' '.($show_donation?'Core':'Professional ').' '.AKEEBA_VERSION.' ('.AKEEBA_DATE.')' ?>
+			</p>
+			<!-- CHANGELOG :: BEGIN -->
+			<?php if($show_donation): ?>
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+				<input type="hidden" name="cmd" value="_s-xclick" />
+				<input type="hidden" name="hosted_button_id" value="10903325" />
+				<a href="#" id="btnchangelog" class="btn btn-info">CHANGELOG</a>
+				<input type="submit" class="btn btn-inverse" value="Donate via PayPal" />
+				<!--<input class="btn" type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online." style="border: none !important; width: 92px; height 26px;" />-->
+				<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			</form>
+			<?php else: ?>
+			<a href="#" id="btnchangelog" class="btn btn-info btn-mini">CHANGELOG</a>
+			<?php endif; ?>
+			<div style="display:none;">
+				<div id="akeeba-changelog">
+					<?php
+					require_once dirname(__FILE__).'/coloriser.php';
+					echo AkeebaChangelogColoriser::colorise(JPATH_COMPONENT_ADMINISTRATOR.'/CHANGELOG.php');
+					?>
+				</div>
+			</div>
+			<!-- CHANGELOG :: END -->
+
+		</div>
+
+		<h3><?php echo JText::_('BACKUP_STATS') ?></h3>
+		<div><?php echo $this->statscell ?></div>
 
 	</div>
 </div>
 
-<div class="ak_clr"></div>
-
-<p style="height: 6em">
-	<?php echo JText::sprintf('COPYRIGHT', date('Y')); ?><br/>
-	<?php echo JText::_('LICENSE'); ?>
-	<?php if(AKEEBA_PRO != 1): ?>
-	<br/>If you use Akeeba Backup Core, please post a rating and a review at the <a href="http://extensions.joomla.org/extensions/access-a-security/site-security/backup/1606">Joomla! Extensions Directory</a>.
-	<?php endif; ?>	
-	<br/><br/>
-	<strong><?php echo JText::_('TRANSLATION_CREDITS')?></strong>: 
-	<em><?php echo JText::_('TRANSLATION_LANGUAGE') ?></em> &bull;
-	<a href="<?php echo JText::_('TRANSLATION_AUTHOR_URL') ?>"><?php echo JText::_('TRANSLATION_AUTHOR') ?></a>
-</p>
-
+<div class="row-fluid footer">
+	<div class="span12">
+		<p style="height: 6em">
+			<?php echo JText::sprintf('COPYRIGHT', date('Y')); ?><br/>
+			<?php echo JText::_('LICENSE'); ?>
+			<?php if(AKEEBA_PRO != 1): ?>
+			<br/>If you use Akeeba Backup Core, please post a rating and a review at the <a href="http://extensions.joomla.org/extensions/access-a-security/site-security/backup/1606">Joomla! Extensions Directory</a>.
+			<?php endif; ?>	
+			<br/><br/>
+			<strong><?php echo JText::_('TRANSLATION_CREDITS')?></strong>: 
+			<em><?php echo JText::_('TRANSLATION_LANGUAGE') ?></em> &bull;
+			<a href="<?php echo JText::_('TRANSLATION_AUTHOR_URL') ?>"><?php echo JText::_('TRANSLATION_AUTHOR') ?></a>
+		</p>
+	</div>
 </div>

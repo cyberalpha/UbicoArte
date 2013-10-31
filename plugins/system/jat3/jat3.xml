@@ -6,12 +6,12 @@
 	method="upgrade">
 	<name>JA T3 Framework</name>
 	<author>www.JoomlArt.com</author>
-	<creationDate>March 2013</creationDate>
+	<creationDate>13 Sep 2013</creationDate>
 	<copyright>Copyright (C), J.O.O.M Solutions Co., Ltd. All Rights Reserved.</copyright>
 	<license>license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>webmaster@joomlart.com</authorEmail>
 	<authorUrl>http://www.joomlart.com</authorUrl>
-	<version>2.6.1</version>
+	<version>2.6.8</version>
 	<scriptfile>install.php</scriptfile>
 	<updateservers>
 	    <server type="collection">http://update.joomlart.com/service/tracking/list.xml</server>

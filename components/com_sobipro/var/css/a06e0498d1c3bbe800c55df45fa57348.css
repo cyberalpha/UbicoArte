@@ -1,0 +1,601 @@
+
+/* Created at: Wed Oct 30 19:12:45 ART 2013 */
+
+/**  
+========
+File: /media/sobipro/css/sobipro.css
+========
+*/
+/**
+ * @version: $Id: sobipro.css 551 2011-01-11 14:34:26Z Radek Suski $
+ * @package: SobiPro Library
+ * ===================================================
+ * @author
+ * Name: Sigrid Suski & Radek Suski, Sigsiu.NET GmbH
+ * Email: sobi[at]sigsiu.net
+ * Url: http://www.Sigsiu.NET
+ * ===================================================
+ * @copyright Copyright (C) 2006 - 2011 Sigsiu.NET GmbH (http://www.sigsiu.net). All rights reserved.
+ * @license see http://www.gnu.org/licenses/lgpl.html GNU/LGPL Version 3.
+ * You can use, redistribute this file and/or modify it under the terms of the GNU Lesser General Public License version 3
+ * ===================================================
+ * $Date: 2011-01-11 15:34:26 +0100 (Tue, 11 Jan 2011) $
+ * $Revision: 551 $
+ * $Author: Radek Suski $
+ * File location: components/com_sobipro/media/css/sobipro.css $
+ */
+
+div#SobiPro {
+	margin-bottom: 10px;
+}
+
+div#sobiProFooter, div#sobiProFooter a {
+	font-size: 9px;
+	color: #999999;
+	padding-top: 10px;
+	text-decoration: none;
+
+}
+/**  
+========
+File: /media/sobipro/css/tree.css
+========
+*/
+/**
+ * @version: $Id: tree.css 717 2011-02-02 19:49:02Z Radek Suski $
+ * @package: SobiPro Library
+ * ===================================================
+ * @author
+ * Name: Sigrid Suski & Radek Suski, Sigsiu.NET GmbH
+ * Email: sobi[at]sigsiu.net
+ * Url: http://www.Sigsiu.NET
+ * ===================================================
+ * @copyright Copyright (C) 2006 - 2011 Sigsiu.NET GmbH (http://www.sigsiu.net). All rights reserved.
+ * @license see http://www.gnu.org/licenses/lgpl.html GNU/LGPL Version 3.
+ * You can use, redistribute this file and/or modify it under the terms of the GNU Lesser General Public License version 3
+ * ===================================================
+ * $Date: 2011-02-02 20:49:02 +0100 (Wed, 02 Feb 2011) $
+ * $Revision: 717 $
+ * $Author: Radek Suski $
+ * $HeadURL: https://svn.suski.eu/SobiPro/Component/trunk/Site/media/css/adm/tree.css $
+ */ /* Styles for SigsiuTree */
+	/* -------------------------------------------------------- */
+.sigsiuTree {
+	font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	white-space: nowrap;
+	overflow: auto;
+}
+
+.sigsiuTree img {
+	border: 0px;
+	vertical-align: middle;
+	float: none;
+	margin: 0;	
+}
+
+.sigsiuTree a {
+	color: #333;
+	text-decoration: none;
+	font-weight: normal;
+}
+
+.sigsiuTree a.node,.sigsiuTree a.nodeSel {
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+
+.sigsiuTree a.node:hover,.sigsiuTree a.nodeSel:hover {
+	color: #333333;
+	text-decoration: underline;
+}
+
+.sigsiuTree a.nodeSel {
+	background-color: #c0d2ec;
+}
+
+.sigsiuTree .clip {
+	overflow: hidden;
+}
+
+div.sigsiuTree a,.sigsiuTree a,a.treeNode:hover,a.treeNode,a.treeNode:visited
+	{
+	color: #333333 !important;
+	text-decoration: none !important;
+	font-weight: normal !important;
+}
+
+a.treeNode:active,a.treeNode:focus {
+	color: #333333;
+	text-decoration: none;
+	font-weight: normal;
+	background-color: #c0d2ec;
+}
+/**  
+========
+File: /components/com_sobipro/usr/templates/default/css/default.css
+========
+*/
+/**
+ * @version: $Id: default.css 2138 2012-01-10 10:07:47Z Radek Suski $
+ * @package: SobiPro Library
+ * ===================================================
+ * @author
+ * Name: Sigrid Suski & Radek Suski, Sigsiu.NET GmbH
+ * Email: sobi[at]sigsiu.net
+ * Url: http://www.Sigsiu.NET
+ * ===================================================
+ * @copyright Copyright (C) 2006 - 2012 Sigsiu.NET GmbH (http://www.sigsiu.net). All rights reserved.
+ * @license see http://www.gnu.org/licenses/lgpl.html GNU/LGPL Version 3.
+ * You can use, redistribute this file and/or modify it under the terms of the GNU Lesser General Public License version 3
+ * ===================================================
+ * $Date: 2012-01-10 11:07:47 +0100 (Tue, 10 Jan 2012) $
+ * $Revision: 2138 $
+ * $Author: Radek Suski $
+ * File location: components/com_sobipro/usr/templates/default/css/default.css $
+ */
+span.spEntriesListEditLink a,
+span.spEntryEditLink a {
+	display:block;
+	float: right;
+	width: 80px;
+	border-style:solid;
+	text-align: center;
+	padding: 4px;
+	font-size: 12px;
+	border: 1px solid silver;
+}
+
+span.spEntryEditLink a:active,
+span.spEntryEditLink a:focus,
+span.spEntryEditLink a:hover,
+span.spEntryEditLink a,
+span.spEntriesListEditLink a:active,
+span.spEntriesListEditLink a:focus,
+span.spEntriesListEditLink a:hover,
+span.spEntriesListEditLink a {
+	text-decoration: none!important;
+	background: none!important;
+}
+
+select.spAlphaMenuSwitch {
+	border: 1px solid #ccc
+}
+
+div#SobiPro {
+	width: 95%;
+	/* float:left; */
+}
+
+div.sigsiuTree {
+	text-align: left!important;
+}
+div.SPDetailEntry {
+}
+
+div.spCatListCell {
+	padding: 5px;
+	float: left;
+	margin: 2px;
+}
+
+img.spFieldsData {
+	margin: 5px;
+}
+
+div.spEntriesListContainer {
+	height: 100%;
+}
+
+div.spEntriesListCell {
+	margin: 2px 0 0 3px;
+	padding: 10px;
+    border: solid #FFFFFF;
+	border-width: 5px 0px 0px 0px;
+	float: left;
+	position: relative;
+	background-color: #FBFBFB;
+}
+
+span.spEntriesListTitle {
+	font-size: 20px;
+	margin-bottom: 10px;
+	margin-top: 5px;
+	display: block;
+	font-weight: bold;
+	border: solid #CCCCCC;
+	padding-bottom: 8px;
+	padding-left: 3px;
+	border-width: 0px 0px 1px 0px;
+}
+
+div.spEntriesListRow {
+	clear:both;
+	margin-top: 1px;
+}
+
+div.spEntryCats {
+	font-size: 10px;
+	overflow: hidden;
+	height: 20px;
+	margin-top: 5px;
+}
+
+div.spSectionDesc {
+	padding: 5px;
+}
+
+/**
+ * Style of the submenu toolbar from khepri admin template
+ * Author: Andy Miller
+ */
+
+div.spTopMenu {
+	background:none repeat scroll 0 0 #F6F6F6;
+	margin-bottom:10px;
+}
+
+div.SPt, div.SPb {
+	height:6px;
+	margin:0;
+	overflow:hidden;
+	padding:0;
+}
+
+div.SPm {
+	border-left:1px solid #CCCCCC;
+	border-right:1px solid #CCCCCC;
+	padding:0 8px;
+}
+
+ul.spTopMenu {
+	list-style:none outside none;
+	margin:0!important;
+	padding:0;
+}
+
+ul.spTopMenu li {
+	float:left;
+	padding:0;
+	font-size: 12px;
+	border-right:1px solid #CCCCCC;
+	color:#0B55C4;
+	font-weight:bold;
+	height:12px;
+	line-height:12px;
+	padding:0 15px!important;
+	list-style-type: none;
+	line-height: 12px!important;
+    background-image: none; /*because often defined :-(*/
+}
+ul.spTopMenu li a:link,
+ul.spTopMenu li a:visited,
+ul.spTopMenu li a:hover,
+ul.spTopMenu li a:focus,
+ul.spTopMenu li a:active {
+	text-decoration: none;
+	font-weight: normal;
+	background:#F6F6F6;
+}
+
+div.spTopMenu div.SPb {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_border.png") repeat-x scroll 0 100% transparent;
+}
+
+div.spTopMenu div.SPb div.SPb {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_crn_br_dark.png") no-repeat scroll 100% 0 transparent;
+}
+
+div.spTopMenu div.SPb div.SPb div.SPb {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_crn_bl_dark.png") no-repeat scroll 0 0 transparent;
+}
+
+div.spTopMenu div.SPt {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_border.png") repeat-x scroll 0 0 transparent;
+}
+
+div.spTopMenu div.SPt div.SPt {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_crn_tr_dark.png") no-repeat scroll 100% 0 transparent;
+}
+
+div.spTopMenu div.SPt div.SPt div.SPt {
+	background:url("http://localhost/Direccionarte/media/sobipro/styles/j_crn_tl_dark.png") no-repeat scroll 0 0 transparent;
+}
+
+/**
+ * ^^^ Style of the submenu toolbar from khepri admin template
+ */
+
+span.spCatListSubCats {
+	font-size: 10px;
+}
+
+div.spCatsListTitle {
+	padding-top: 2px;
+}
+
+div.spCatsListTitle a {
+	font-weight: bold;
+}
+
+div.spCatsListIntrotext {
+
+}
+
+div.spCatListIcon {
+	float: left;
+	margin-right: 8px;
+}
+div.spCatListIcon img {
+  border: none;
+}
+
+div.spPaymentHeader {
+	margin: 1px;
+	background-color: #EEEEEE;
+	float: left;
+	padding: 2px;
+	padding-left: 5px;
+}
+
+div.spPaymentPosition {
+	margin: 1px;
+	background-color: #f7f7f7;
+	float: left;
+	padding: 2px;
+	padding-left: 5px;
+}
+div.spPaymentExpl {
+	font-size: 15px;
+	font-weight: bold;
+	margin: 3px;
+}
+div.spPaymentDiscount,
+div.spPaymentSum {
+	font-weight: bold;
+	margin: 3px;
+}
+
+div.spPaymentSumPosition {
+	margin: 1px;
+	background-color: #f7f7f7;
+	float: left;
+	padding: 2px;
+	padding-left: 5px;
+}
+div.spPaymentSumDesc {
+	margin: 1px;
+	background-color: #EEEEEE;
+	float: left;
+	padding: 2px;
+	padding-left: 5px;
+}
+
+div.spPaymentPreview button {
+	margin: 5px;
+}
+
+a.spDisabled:hover {
+	text-decoration: none;
+}
+
+div.spAlphaMenu {
+	width:100%;
+	text-align:center!important;
+}
+
+div.spAlphaMenu span {
+	font-weight: normal;
+	font-size: 14px;
+	color: #868686;
+}
+div.spAlphaMenu a {
+	font-weight: bold;
+	text-decoration: none!important;
+}
+
+span.spAlphaLetterSelected  a {
+	color: #551A8B;
+	font-size: 16px;
+	font-style: italic;
+}
+
+/**  
+========
+File: /components/com_sobipro/usr/templates/default/css/edit.css
+========
+*/
+/**
+ * @version: $Id: edit.css 804 2011-02-15 13:05:29Z Radek Suski $
+ * @package: SobiPro Library
+ * ===================================================
+ * @author
+ * Name: Sigrid Suski & Radek Suski, Sigsiu.NET GmbH
+ * Email: sobi[at]sigsiu.net
+ * Url: http://www.Sigsiu.NET
+ * ===================================================
+ * @copyright Copyright (C) 2006 - 2011 Sigsiu.NET GmbH (http://www.sigsiu.net). All rights reserved.
+ * @license see http://www.gnu.org/licenses/lgpl.html GNU/LGPL Version 3.
+ * You can use, redistribute this file and/or modify it under the terms of the GNU Lesser General Public License version 3
+ * ===================================================
+ * $Date: 2011-02-15 14:05:29 +0100 (Tue, 15 Feb 2011) $
+ * $Revision: 804 $
+ * $Author: Radek Suski $
+ * File location: components/com_sobipro/usr/templates/default/css/edit.css $
+ */
+div.spFormRowOdd, 
+div.spFormRowEven {
+    margin-top: 5px;
+    padding: 12px 3px 12px 10px;
+    clear: both;
+    width: 98%;
+    display: inline-block;
+}
+div.spFormRowOdd {
+	background-color: #f7f7f7;
+}
+div.spFormRowEven {
+	background-color: #EEEEEE;
+}
+div.spFormRowLeft {
+	float:left; 
+	width: 150px;
+}
+div.spFormRowLeft label {
+	font-size: 15px;
+}
+
+div.spFormRowRight {
+	float:left;
+}
+div.spFieldUrl label, 
+div.spFieldUrlLabel label { 
+	display: block;
+	float: left;
+	min-width: 76px;
+}
+
+div.spFieldEmailLabel label, 
+div.spFieldEmail label {	
+	display: block;
+	float: left;
+	min-width: 78px;
+}
+
+div.spFieldUrl select, 
+div.spFieldUrlLabel select {
+	min-width: 35px;
+}
+
+#spEntryForm input,
+#spEntryForm textarea,
+#spEntryForm select,
+#spEntryForm button {
+	border: 1px solid #ccc;
+	padding: 3px;
+}
+
+form#spEntryForm .required {
+	border: 1px solid red
+}
+
+#spEntryForm input[type=checkbox],
+#spEntryForm input[type=radio]  {
+	border-style:none!important;
+}
+
+div.required {
+	padding: 5px;
+}
+
+div.spFormRowFooter {
+	margin-top: 5px;
+    padding: 12px 10px 12px 3px;
+    clear: both;
+    width: 98%;
+	display: inline-block;
+}
+
+div.spFormRowFooter div {
+	float:right;
+}
+div.spFormRowFooter input {
+	margin: 5px;
+}
+div.spFormPaymentInfo {
+	margin-bottom: 10px;
+	margin-left: 15px;
+	font-size: 13px;
+	font-weight: bold;
+}
+div.button2-left {
+	display:none;
+}
+
+#selectedCats {
+	width: 270px; 
+	height: 210px; 
+	font-weight: bold; 
+	font-size: 10px; 
+	overflow: hidden; 
+	border-style: none;
+}
+
+div#SpTreeCont {
+	width: 280px; 
+	height: 320px; 
+	float: left; 
+	margin: 10px;
+	overflow: scroll;
+}
+
+div#SpSelectedCatsCont {
+	width: 250px; 
+	min-height: 300px; 
+	float: left;
+}
+
+div#SpTreeAddButtonCont,
+div#SpTreeDelButtonCont {
+	float:left; 
+    margin-bottom: 4px;
+}
+div#SpTreeSaveButtonCont {
+    width: 15%; 
+    float: right; 
+    text-align: center;
+}
+
+div#SpTreeSaveButtonCont button {
+/*    display:none; */
+}
+
+div#SpTreeButtonsCont {
+	min-height: 10px; 
+    margin: 15px 0 15px 0;
+}
+
+button#SPSaveCats,
+button#SpTreeAddButton,
+button#SpTreeDelButton {
+	text-align: center; 
+	width: 170px; 
+	font-size: 12px; 
+	border: 1px solid silver;
+}
+button#SPSaveCats {
+    width: 80px; 
+}
+
+/*
+ * SimpleModal OSX Style Modal Dialog
+ * http://www.ericmmartin.com/projects/simplemodal/
+ * http://code.google.com/p/simplemodal/
+ *
+ * Copyright (c) 2010 Eric Martin - http://ericmmartin.com
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Revision: $Id: edit.css 804 2011-02-15 13:05:29Z Radek Suski $
+ *
+ */
+
+#osx-modal-content, #osx-modal-data {display:none;}
+
+/* Overlay */
+#osx-overlay {background-color:#000; cursor:wait;}
+
+/* Container */
+#osx-container {background-color:#eee; color:#000; font: 16px "Lucida Grande",Arial,sans-serif; padding-bottom:4px; width:600px; -moz-border-radius-bottomleft:6px; -webkit-border-bottom-left-radius:6px; -moz-border-radius-bottomright:6px; -webkit-border-bottom-right-radius:6px; border-radius:0 0 6px 6px; -moz-box-shadow:0 0 64px #000; -webkit-box-shadow:0 0 64px #000;}
+#osx-container a {color:#ddd;}
+#osx-container #osx-modal-title {color:#000; background-color:#ddd; border-bottom:1px solid #ccc; padding:6px 8px; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close {display:none; position:absolute; right:0; top:0;}
+#osx-container .close a {display:block; color:#777; font-weight:bold; padding:6px 12px 0; text-decoration:none; text-shadow:0 1px 0 #f4f4f4;}
+#osx-container .close a:hover {color:#000;}
+#osx-container #osx-modal-data {font-size:12px; padding:6px 12px;}
+#osx-container h2 {margin:10px 0 6px;}
+#osx-container p {margin-bottom:10px;}
+#osx-container span {color:#777;}
+

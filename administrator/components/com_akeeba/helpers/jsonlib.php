@@ -1,5 +1,5 @@
 <?php
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * Akeeba Backup's JSON compatibility layer

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="finder" method="upgrade">
+    <name>plg_finder_srsobipro</name>
+    <author>Prieco S.A.</author>
+    <creationDate>Feb 2012</creationDate>
+    <copyright>Copyright (C) 2012 Prieco S.A. All rights reserved.</copyright>
+    <license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+    <authorEmail>support@prieco.com</authorEmail>
+    <authorUrl>www.prieco.com</authorUrl>
+    <version>1.0</version>
+    <description>This plugin indexes SobiPro Entries.</description>
+    <files>
+        <file plugin="srsobipro">srsobipro.php</file>
+        <filename>index.html</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">en-GB.plg_finder_srsobipro.ini</language>
+        <language tag="en-GB">en-GB.plg_finder_srsobipro.sys.ini</language>
+    </languages>
+    
+        <config>
+        <fields name="params">
+
+            <fieldset name="basic">
+				
+                <field name="catalog_list" type="text"
+                       default="1"
+                       description="PLG_FINDER_SRSOBIPRO_CATALOGLIST_DESC"
+                       label="PLG_FINDER_SRSOBIPRO_CATALOGLIST_LABEL"
+                       size="15"
+				/>				
+				
+                <field name="search_field_list" type="text"
+                       default=""
+                       description="PLG_FINDER_SRSOBIPRO_SEARCHFLDLIST_DESC"
+                       label="PLG_FINDER_SRSOBIPRO_SEARCHFLDLIST_LABEL"
+                       size="15"
+				/>
+
+            </fieldset>			
+            <fieldset name="advanced">				
+                <field name="menu_itemid" type="text"
+                       default=""
+                       description="PLG_FINDER_SRSOBIPRO_MENUITEMID_DESC"
+                       label="PLG_FINDER_SRSOBIPRO_MENUITEMID_LABEL"
+                       size="5"
+				/>
+                <field name="sql_big_selects" type="radio" default="1" label="SQL_BIG_SELECTS" description="Enable SQL_BIG_SELECTS.">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>		
+				
+            </fieldset>
+			
+        </fields>
+    </config>
+</extension>

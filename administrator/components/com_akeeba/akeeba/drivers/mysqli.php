@@ -8,7 +8,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * MySQL Improved (mysqli) database driver for Akeeba Engine
@@ -85,7 +85,11 @@ class AEDriverMysqli extends AEDriverMysql
 
 	public function open()
 	{
-		if(is_object($this->connection)) return;
+		if($this->connected()) {
+			return;
+		} else {
+			$this->close();
+		}
 		
 		// perform a number of fatality checks, then return gracefully
 		if (!function_exists( 'mysqli_connect' )) {
@@ -107,6 +111,8 @@ class AEDriverMysqli extends AEDriverMysql
 		if ($this->selectDatabase && !empty($this->_database)) {
 			$this->select($this->_database);
 		}
+		
+		$this->setUTF();
 	}
 
 	public function close()
@@ -270,7 +276,6 @@ class AEDriverMysqli extends AEDriverMysql
 		{
 			$this->errorNum = (int) mysqli_errno($this->connection);
 			$this->errorMsg = (string) mysqli_error($this->connection) . ' SQL=' . $sql;
-
 			return false;
 		}
 

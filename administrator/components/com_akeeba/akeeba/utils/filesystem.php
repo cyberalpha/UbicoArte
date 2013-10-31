@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * Utility functions related to filesystem objects, e.g. path translation
@@ -107,13 +107,13 @@ class AEUtilFilesystem
 			}
 			
 			$variables = array(
-				'[DATE]' => AEPlatform::getInstance()->get_local_timestamp("%Y%m%d"),
-				'[YEAR]' => AEPlatform::getInstance()->get_local_timestamp("%Y"),
-				'[MONTH]' => AEPlatform::getInstance()->get_local_timestamp("%m"),
-				'[DAY]' => AEPlatform::getInstance()->get_local_timestamp("%d"),
-				'[TIME]' => AEPlatform::getInstance()->get_local_timestamp("%H%M%S"),
-				'[WEEK]' => AEPlatform::getInstance()->get_local_timestamp("%U"),
-				'[WEEKDAY]' => AEPlatform::getInstance()->get_local_timestamp("%A"),
+				'[DATE]' => AEPlatform::getInstance()->get_local_timestamp("Ymd"),
+				'[YEAR]' => AEPlatform::getInstance()->get_local_timestamp("Y"),
+				'[MONTH]' => AEPlatform::getInstance()->get_local_timestamp("m"),
+				'[DAY]' => AEPlatform::getInstance()->get_local_timestamp("d"),
+				'[TIME]' => AEPlatform::getInstance()->get_local_timestamp("His"),
+				'[WEEK]' => AEPlatform::getInstance()->get_local_timestamp("W"),
+				'[WEEKDAY]' => AEPlatform::getInstance()->get_local_timestamp("w"),
 				'[HOST]' => empty($host) ? 'unknown_host' : $host,
 				'[RANDOM]' => md5(microtime()),
 				'[VERSION]'	=> $version,

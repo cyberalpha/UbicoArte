@@ -4,7 +4,7 @@
  * Displays an article id field with a button
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -69,9 +69,9 @@ class JFormFieldNN_Articles extends JFormField
 			if ($this->value) {
 				$db = JFactory::getDBO();
 				$query = $db->getQuery(true);
-				$query->select('c.title')
-					->from('#__content AS c')
-					->where('c.id = ' . (int) $this->value);
+				$query->select('c.title');
+				$query->from('#__content AS c');
+				$query->where('c.id = ' . (int) $this->value);
 				$db->setQuery($query);
 				$val_name = $db->loadResult();
 				$val_name .= ' [' . $this->value . ']';

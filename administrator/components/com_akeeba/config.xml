@@ -20,8 +20,8 @@
 		<field name="frontend_enable" type="radio" default="0"
 			label="CONFIG_FEBENABLE_LABEL"
 			description="CONFIG_FEBENABLE_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="frontend_secret_word" type="password" default="" size="30"
 			label="CONFIG_SECRETWORD_LABEL"
@@ -29,8 +29,8 @@
 		<field name="frontend_email_on_finish" type="radio" default="0"
 			label="CONFIG_FRONTENDEMAIL_LABEL"
 			description ="CONFIG_FRONTENDEMAIL_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="frontend_email_address" type="text" default="" size="50"
 			label="CONFIG_ARBITRARYFEEMAIL_LABEL"
@@ -55,8 +55,8 @@
 		<field name="usesvnsource" type="radio" default="0"
 			label="CONFIG_LIVEUPDATE_USESVN_LABEL"
 			description="CONFIG_LIVEUPDATE_USESVN_DESC">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="update_dlid" type="text" default="" size="30"
 			label="CONFIG_DOWNLOADID_LABEL"
@@ -66,6 +66,12 @@
 			<option value="beta">AKEEBA_STABILITY_BETA</option>
 			<option value="rc">AKEEBA_STABILITY_RC</option>
 			<option value="stable">AKEEBA_STABILITY_STABLE</option>
+		</field>
+		<field name="displayphpwarning" type="radio" default="1"
+			label="COM_AKEEBA_CONFIG_LIVEUPDATE_DISPLAYPHPWARNING_LABEL"
+			description="COM_AKEEBA_CONFIG_LIVEUPDATE_DISPLAYPHPWARNING_DESC">
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 		<field name="lastupdatecheck" type="hidden" default="2009-01-01"
 			label="" />
@@ -79,8 +85,8 @@
 		<field name="useencryption" type="radio" default="1"
 			label="CONFIG_SECURITY_USEENCRYPTION_LABEL"
 			description="CONFIG_SECURITY_USEENCRYPTION_DESCRIPTION">
-			<option value="0">No</option>
-			<option value="1">Yes</option>
+			<option value="0">JNo</option>
+			<option value="1">JYes</option>
 		</field>
 	</fieldset>	
 </config>

@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available Flexicontent Tags / Types
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -47,16 +47,16 @@ class JFormFieldNN_FlexiContent extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getTags()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('t.name as id, t.name')
-			->from('#__flexicontent_tags AS t')
-			->where('t.published = 1')
-			->order('t.name');
+		$query->select('t.name as id, t.name');
+		$query->from('#__flexicontent_tags AS t');
+		$query->where('t.published = 1');
+		$query->order('t.name');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
@@ -66,10 +66,10 @@ class JFormFieldNN_FlexiContent extends JFormField
 	function getTypes()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('t.id, t.name')
-			->from('#__flexicontent_types AS t')
-			->where('t.published = 1')
-			->order('t.name, t.id');
+		$query->select('t.id, t.name');
+		$query->from('#__flexicontent_types AS t');
+		$query->where('t.published = 1');
+		$query->order('t.name, t.id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

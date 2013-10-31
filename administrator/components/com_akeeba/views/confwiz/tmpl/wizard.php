@@ -10,9 +10,8 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
+JHtml::_('behavior.framework');
 ?>
-
-<div id="akeeba-confwiz" style="width: 100%">
 
 <!-- jQuery & jQuery UI detection. Also shows a big, fat warning if they're missing -->
 <div id="nojquerywarning" style="margin: 1em; padding: 1em; background: #ffff00; border: thick solid red; color: black; font-size: 14pt;">
@@ -20,7 +19,7 @@ defined('_JEXEC') or die();
 	<p><?php echo JText::_('AKEEBA_CPANEL_WARN_JQ_L1B'); ?></p>
 	<p><?php echo JText::_('AKEEBA_CPANEL_WARN_JQ_L2'); ?></p>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 	if(typeof akeeba.jQuery == 'function')
 	{
 		if(typeof akeeba.jQuery.ui == 'object')
@@ -31,29 +30,26 @@ defined('_JEXEC') or die();
 	}
 </script>
 
-<div id="backup-progress-pane" class="ui-widget" style="display: none">
-	<div class="ui-state-highlight" style="padding: 0.3em; margin: 0.3em 0.2em; font-weight: bold;">
-			<span class="ui-icon ui-icon-notice" style="float: left;"></span>
+<div id="akeeba-confwiz">
+
+<div id="backup-progress-pane" class="ui-widget" style="x-display: none">
+	<div class="alert alert-info">
 			<?php echo JText::_('AKEEBA_WIZARD_INTROTEXT'); ?>
 	</div>
 	
 	<fieldset id="backup-progress-header">
 		<legend><?php echo JText::_('AKEEEBA_WIZARD_PROGRESS') ?></legend>
 		<div id="backup-progress-content">
-			<div id="backup-steps" class="ui-corner-all">
-				<div id="step-ajax" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_AJAX'); ?></div>
-				<div id="step-minexec" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_MINEXEC'); ?></div>
-				<div id="step-directory" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_DIRECTORY'); ?></div>
-				<div id="step-dbopt" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_DBOPT'); ?></div>
-				<div id="step-maxexec" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_MAXEXEC'); ?></div>
-				<div id="step-splitsize" class="step-pending"><?php echo JText::_('AKEEBA_CONFWIZ_SPLITSIZE'); ?></div>
+			<div id="backup-steps">
+				<div id="step-ajax" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_AJAX'); ?></div>
+				<div id="step-minexec" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_MINEXEC'); ?></div>
+				<div id="step-directory" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_DIRECTORY'); ?></div>
+				<div id="step-dbopt" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_DBOPT'); ?></div>
+				<div id="step-maxexec" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_MAXEXEC'); ?></div>
+				<div id="step-splitsize" class="label"><?php echo JText::_('AKEEBA_CONFWIZ_SPLITSIZE'); ?></div>
 			</div>
-			<div id="backup-status" class="ui-corner-all">
+			<div class="well">
 				<div id="backup-substep"></div>
-			</div>
-			<div id="response-timer" class="ui-corner-all">
-				<div class="color-overlay" style="display: none"></div>
-				<div class="text"></div>
 			</div>
 		</div>
 		<span id="ajax-worker"></span>
@@ -61,43 +57,38 @@ defined('_JEXEC') or die();
 	
 </div>
 
-<div id="error-panel" style="display:none">
-	<fieldset>
-		<legend><?php echo JText::_('AKEEBA_WIZARD_HEADER_FAILED'); ?></legend>
-		<div id="errorframe">
-			<p id="backup-error-message">
-			TEST ERROR MESSAGE
-			</p>
-		</div>
-	</fieldset>
+<div id="error-panel" class="alert alert-error alert-block" style="display:none">
+	<h2 class="alert-heading"><?php echo JText::_('AKEEBA_WIZARD_HEADER_FAILED'); ?></h2>
+	<div id="errorframe">
+		<p id="backup-error-message">
+		TEST ERROR MESSAGE
+		</p>
+	</div>
 </div>
 
 <div id="backup-complete" style="display: none">
-	<fieldset>
-		<legend><?php echo JText::_('AKEEBA_WIZARD_HEADER_FINISHED'); ?></legend>
+	<div class="alert alert-success alert-block">
+		<h2 class="alert-heading"><?php echo JText::_('AKEEBA_WIZARD_HEADER_FINISHED'); ?></h2>
 		<div id="finishedframe">
-			<div style="min-height: 32px">
-				<div class="ak-icon ak-icon-ok" style="float: left; margin: 0 1em 0 0 !important;"></div>
-				<p>
-					<?php echo JText::_('AKEEBA_WIZARD_CONGRATS') ?>
-				</p>
-			</div>
-	
-			<div class="ak-action-button">
-				<div class="ak-icon ak-icon-backup"></div>
-				<button onclick="window.location='<?php echo JURI::base() ?>index.php?option=com_akeeba&view=backup'; return false;"><?php echo JText::_('BACKUP'); ?></button>
-			</div>
-			<div class="ak-action-button">
-				<div class="ak-icon ak-icon-configuration"></div>
-				<button onclick="window.location='<?php echo JURI::base() ?>index.php?option=com_akeeba&view=config'; return false;"><?php echo JText::_('CONFIGURATION'); ?></button>
-			</div>
+			<p>
+				<?php echo JText::_('AKEEBA_WIZARD_CONGRATS') ?>
+			</p>
 		</div>
-	</fieldset>
-</div>
+		<button class="btn btn-primary btn-large" onclick="window.location='<?php echo JURI::base() ?>index.php?option=com_akeeba&view=backup'; return false;">
+			<i class="icon-road icon-white"></i>
+			<?php echo JText::_('BACKUP'); ?>
+		</button>
+		<button class="btn" onclick="window.location='<?php echo JURI::base() ?>index.php?option=com_akeeba&view=config'; return false;">
+			<i class="icon-wrench"></i>
+			<?php echo JText::_('CONFIGURATION'); ?>
+		</button>
+	</div>
 
 </div>
 
-<script type="text/javascript">
+</div>
+
+<script type="text/javascript" language="javascript">
 akeeba_ajax_url = 'index.php?option=com_akeeba&view=confwiz&task=ajax';
 <?php
 	$keys = array('tryajax','tryiframe','cantuseajax','minexectry','cantsaveminexec','saveminexec','cantdetermineminexec',

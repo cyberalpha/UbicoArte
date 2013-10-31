@@ -11,7 +11,7 @@
 defined('_JEXEC') or die();
 
 // JSON API version number
-define('AKEEBA_JSON_API_VERSION', '319');
+define('AKEEBA_JSON_API_VERSION', '320');
 
 /*
  * Short API version history:
@@ -192,7 +192,7 @@ class AkeebaModelJsons extends FOFModel
 		// Store the client-specified key, or use the server key if none specified and the request
 		// came encrypted.
 		$this->password = isset($request->body->key) ? $request->body->key : null;
-		$hasKey = property_exists($request->body, 'key') ? !is_null($request->body->key) : false;
+		$hasKey = (isset($request->body->key) || property_exists($request->body, 'key')) ? !is_null($request->body->key) : false;
 		if(!$hasKey && ($request->encapsulation != self::ENCAPSULATION_RAW) )
 		{
 			$this->password = $this->serverKey();
@@ -304,11 +304,14 @@ class AkeebaModelJsons extends FOFModel
 		require_once JPATH_ROOT.'/administrator/components/com_akeeba/liveupdate/liveupdate.php';
 		$updateInformation = LiveUpdate::getUpdateInformation();
 		
+		$edition = AKEEBA_PRO ? 'pro' : 'core';
+		
 		return (object)array(
 			'api'			=> AKEEBA_JSON_API_VERSION,
 			'component'		=> AKEEBA_VERSION,
 			'date'			=> AKEEBA_DATE,
-			'updateinfo'	=> $updateInformation
+			'edition'		=> $edition,
+			'updateinfo'	=> $updateInformation,
 		);
 	}
 
@@ -361,10 +364,12 @@ class AkeebaModelJsons extends FOFModel
 		if(empty($description))
 		{
 			jimport('joomla.utilities.date');
+			$dateNow = new JDate();
+			/*
 			$user = JFactory::getUser();
 			$userTZ = $user->getParam('timezone',0);
-			$dateNow = new JDate();
 			$dateNow->setOffset($userTZ);
+			*/
 			$description = JText::_('BACKUP_DEFAULT_DESCRIPTION').' '.$dateNow->format(JText::_('DATE_FORMAT_LC2'), true);
 		}
 
@@ -774,7 +779,8 @@ class AkeebaModelJsons extends FOFModel
 		require_once JPATH_COMPONENT_ADMINISTRATOR.'/models/statistics.php';
 
 		$model = new AkeebaModelStatistics();
-		$result = $model->delete((int)$backup_id);
+		$model->setState('id', (int)$backup_id);
+		$result = $model->delete();
 		if(!$result)
 		{
 			$this->status = self::STATUS_ERROR;
@@ -798,7 +804,8 @@ class AkeebaModelJsons extends FOFModel
 		require_once JPATH_COMPONENT_ADMINISTRATOR.'/models/statistics.php';
 
 		$model = new AkeebaModelStatistics();
-		$result = $model->deleteFile((int)$backup_id);
+		$model->setState('id', (int)$backup_id);
+		$result = $model->deleteFile();
 		if(!$result)
 		{
 			$this->status = self::STATUS_ERROR;

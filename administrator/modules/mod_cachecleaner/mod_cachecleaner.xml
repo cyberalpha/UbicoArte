@@ -2,8 +2,8 @@
 <extension version="2.5" type="module" method="upgrade">
 	<name>MOD_CACHECLEANER</name>
 	<description>MOD_CACHECLEANER_DESC</description>
-	<version>3.1.4FREE</version>
-	<creationDate>March 2013</creationDate>
+	<version>3.1.2FREE</version>
+	<creationDate>January 2013</creationDate>
 	<author>NoNumber (Peter van Westen)</author>
 	<authorEmail>peter@nonumber.nl</authorEmail>
 	<authorUrl>http://www.nonumber.nl</authorUrl>

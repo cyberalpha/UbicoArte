@@ -42,18 +42,21 @@ class AkeebaControllerBackup extends FOFController
 		AEUtilTempvars::reset(AKEEBA_BACKUP_ORIGIN);
 
 		$kettenrad = AECoreKettenrad::load(AKEEBA_BACKUP_ORIGIN);
+		$dateNow = new JDate();
+		/*
 		$user = JFactory::getUser();
 		$userTZ = $user->getParam('timezone',0);
-		$dateNow = new JDate();
 		$dateNow->setOffset($userTZ);
+		*/
 		$description = JText::_('BACKUP_DEFAULT_DESCRIPTION').' '.$dateNow->format(JText::_('DATE_FORMAT_LC2'), true);
 		$options = array(
 			'description'	=> $description,
 			'comment'		=> ''
 		);
 		$kettenrad->setup($options);
-		$array = $kettenrad->tick();
-		$array = $kettenrad->tick();
+		$kettenrad->tick();
+		$kettenrad->tick();
+		$array = $kettenrad->getStatusArray();
 		AECoreKettenrad::save(AKEEBA_BACKUP_ORIGIN);
 		
 		if($array['Error'] != '')
@@ -86,7 +89,9 @@ class AkeebaControllerBackup extends FOFController
 		$this->_setProfile();
 
 		$kettenrad = AECoreKettenrad::load(AKEEBA_BACKUP_ORIGIN);
-		$array = $kettenrad->tick();
+		$kettenrad->tick();
+		$array = $kettenrad->getStatusArray();
+		$kettenrad->resetWarnings(); // So as not to have duplicate warnings reports
 		AECoreKettenrad::save(AKEEBA_BACKUP_ORIGIN);
 
 		if($array['Error'] != '')
@@ -96,7 +101,7 @@ class AkeebaControllerBackup extends FOFController
 			flush();
 			JFactory::getApplication()->close();
 		}
-		elseif($array['HasRun'] == false)
+		elseif($array['HasRun'] == 1)
 		{
 			// All done
 			AEFactory::nuke();

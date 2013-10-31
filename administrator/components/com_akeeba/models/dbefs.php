@@ -157,7 +157,7 @@ class AkeebaModelDbefs extends FOFModel
 	 * @param string $filter The name of the filter to apply (directories, skipfiles, skipdirs, files)
 	 * @return array
 	 */
-	public function set($root, $item, $filter)
+	public function setFilter($root, $item, $filter)
 	{
 		if(empty($item)) return array(
 			'success' => false,
@@ -298,7 +298,7 @@ class AkeebaModelDbefs extends FOFModel
 
 			// Set a filter (used by the editor)
 			case 'set':
-				$ret_array = $this->set($action->root, $action->node, $action->filter);
+				$ret_array = $this->setFilter($action->root, $action->node, $action->filter);
 				break;
 
 			// Remove a filter (used by the editor)

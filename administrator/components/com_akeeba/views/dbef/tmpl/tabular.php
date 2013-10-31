@@ -8,30 +8,33 @@
  */
 
 defined('_JEXEC') or die();
-?>
-<div id="akeeba-container" style="width:100%">
 
+JHtml::_('behavior.framework');
+?>
 <div id="dialog" title="<?php echo JText::_('DBFILTER_ERROR_TITLE') ?>">
 </div>
 
-<fieldset>
-	<legend><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?></legend>
-	<?php echo $this->profilename; ?>
-</fieldset>
+<div class="alert alert-info">
+	<strong><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></strong>
+	#<?php echo $this->profileid; ?> <?php echo $this->profilename; ?>
+</div>
 
-<fieldset>
-	<div id="ak_roots_container_tab">
-		<span><?php echo JText::_('DBFILTER_LABEL_ROOTDIR') ?></span>
+<div class="well form-inline">
+	<div>
+		<label><?php echo JText::_('DBFILTER_LABEL_ROOTDIR') ?></label>
 		<span><?php echo $this->root_select; ?></span>
 	</div>
+	<div id="addnewfilter">
+		<label><?php echo JText::_('FSFILTER_LABEL_ADDNEWFILTER') ?></label>
+		<button class="btn" onclick="dbfilter_addnew('tables'); return false;"><?php echo JText::_('DBFILTER_TYPE_TABLES') ?></button>
+		<button class="btn" onclick="dbfilter_addnew('tabledata'); return false;"><?php echo JText::_('DBFILTER_TYPE_TABLEDATA') ?></button>
+	</div>
+</div>
+
+	
+<fieldset>
 	<div id="ak_list_container">
-		<div id="addnewfilter">
-			<?php echo JText::_('FSFILTER_LABEL_ADDNEWFILTER') ?>
-			<button onclick="dbfilter_addnew('tables'); return false;"><?php echo JText::_('DBFILTER_TYPE_TABLES') ?></button>
-			&bull;
-			<button onclick="dbfilter_addnew('tabledata'); return false;"><?php echo JText::_('DBFILTER_TYPE_TABLEDATA') ?></button>
-		</div>
-		<table id="ak_list_table" class="adminlist">
+		<table id="ak_list_table" class="table table-striped">
 			<thead>
 				<tr>
 					<td width="250px"><?php echo JText::_('FILTERS_LABEL_TYPE') ?></td>
@@ -44,7 +47,7 @@ defined('_JEXEC') or die();
 	</div>
 </fieldset>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 /**
  * Callback function for changing the active root in Filesystem Filters
  */
@@ -97,5 +100,3 @@ akeeba.jQuery(document).ready(function($){
 	dbfilter_render_tab(data);
 });
 </script>
-
-</div>

@@ -4,7 +4,7 @@
  * Displays a select box of languages
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -39,7 +39,7 @@ class JFormFieldNN_Languages extends JFormField
 		}
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	private function def($val, $default = '')

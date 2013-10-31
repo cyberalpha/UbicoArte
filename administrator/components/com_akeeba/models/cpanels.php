@@ -65,10 +65,10 @@ class AkeebaModelCpanels extends FOFModel
 		
 		$query = $db->getQuery(true)
 			->select(array(
-				$db->nq('id'),
-				$db->nq('description')
-			))->from($db->nq('#__ak_profiles'))
-			->order($db->nq('id')." ASC");
+				$db->qn('id'),
+				$db->qn('description')
+			))->from($db->qn('#__ak_profiles'))
+			->order($db->qn('id')." ASC");
 		$db->setQuery($query);
 		$rawList = $db->loadAssocList();
 
@@ -125,7 +125,6 @@ class AkeebaModelCpanels extends FOFModel
 		if(empty($list)) return false;
 		$id = $list[0];
 
-		$statmodel->setId($id);
 		$record = AEPlatform::getInstance()->get_statistics($id);
 
 		return ($record['status'] == 'fail');
@@ -162,7 +161,7 @@ class AkeebaModelCpanels extends FOFModel
 		if($parentPerms === false) return false;
 
 		// Fix the parent's permissions if required
-		if($parentPerms != 0755) {
+		if(($parentPerms != 0755) && ($parentPerms != 40755)) {
 			$this->chmod($parent, 0755);
 		} else {
 			if(!$force) return true;
@@ -179,14 +178,16 @@ class AkeebaModelCpanels extends FOFModel
 		$folders = JFolder::folders($parent,'.',3,true);
 		foreach($folders as $folder) {
 			$perms = fileperms($folder);
-			if($perms != 0755) $result &= $this->chmod($folder, 0755);
+			if(($perms != 0755) && ($perms != 40755)) $result &= $this->chmod($folder, 0755);
 		}
 
 		// Loop through files
 		$files = JFolder::files($parent,'.',3,true);
 		foreach($files as $file) {
 			$perms = fileperms($file);
-			if($perms != 0644) $result &= $this->chmod($file, 0644);
+			if(($perms != 0644) && ($perms != 0100644)) {
+				$result &= $this->chmod($file, 0644);
+			}
 		}
 
 		return $result;
@@ -216,10 +217,17 @@ class AkeebaModelCpanels extends FOFModel
 		if ($ftpOptions['enabled'] == 1) {
 			// Connect the FTP client
 			jimport('joomla.client.ftp');
-			$ftp = &JFTP::getInstance(
-				$ftpOptions['host'], $ftpOptions['port'], null,
-				$ftpOptions['user'], $ftpOptions['pass']
-			);
+			if(version_compare(JVERSION,'3.0','ge')) {
+				$ftp = JClientFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array(),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			} else {
+				$ftp = JFTP::getInstance(
+					$ftpOptions['host'], $ftpOptions['port'], array(),
+					$ftpOptions['user'], $ftpOptions['pass']
+				);
+			}
 		}
 
 		if(@chmod($path, $mode))
@@ -231,8 +239,9 @@ class AkeebaModelCpanels extends FOFModel
 			// FTP connector throws an error
 			$ret = $ftp->chmod($path, $mode);
 		} else {
-			return false;
+			$ret = false;
 		}
+		return $ret;
 	}
 
 	/**
@@ -267,16 +276,16 @@ class AkeebaModelCpanels extends FOFModel
 		
 		// Loop all profiles and decrypt their settings
 		$profilesModel = FOFModel::getTmpInstance('Profiles','AkeebaModel');
-		$profiles = $profilesModel->getItemsList(true);
+		$profiles = $profilesModel->getList(true);
 		$db = $this->getDBO();
 		foreach($profiles as $profile)
 		{
 			$id = $profile->id;
 			$config = AEUtilSecuresettings::decryptSettings($profile->configuration, $key);
 			$sql = $db->getQuery(true)
-				->update($db->nq('#__ak_profiles'))
-				->set($db->nq('configuration').' = '.$db->q($config))
-				->where($db->nq('id').' = '.	$db->q($id));
+				->update($db->qn('#__ak_profiles'))
+				->set($db->qn('configuration').' = '.$db->q($config))
+				->where($db->qn('id').' = '.	$db->q($id));
 			$db->setQuery($sql);
 			$db->query();
 		}
@@ -292,16 +301,16 @@ class AkeebaModelCpanels extends FOFModel
 		
 		// Loop all profiles and encrypt their settings
 		$profilesModel = FOFModel::getTmpInstance('Profiles','AkeebaModel');
-		$profiles = $profilesModel->getItemsList(true);
+		$profiles = $profilesModel->getList(true);
 		$db = $this->getDBO();
 		if(!empty($profiles)) foreach($profiles as $profile)
 		{
 			$id = $profile->id;
 			$config = AEUtilSecuresettings::encryptSettings($profile->configuration, $key);
 			$sql = $db->getQuery(true)
-				->update($db->nq('#__ak_profiles'))
-				->set($db->nq('configuration').' = '.$db->q($config))
-				->where($db->nq('id').' = '.	$db->q($id));
+				->update($db->qn('#__ak_profiles'))
+				->set($db->qn('configuration').' = '.$db->q($config))
+				->where($db->qn('id').' = '.	$db->q($id));
 			$db->setQuery($sql);
 			$db->query();
 		}
@@ -356,10 +365,10 @@ class AkeebaModelCpanels extends FOFModel
 		$db = JFactory::getDBO();
 		$data = $params->toString();
 		$sql = $db->getQuery(true)
-			->update($db->nq('#__extensions'))
-			->set($db->nq('params').' = '.$db->q($data))
-			->where($db->nq('element').' = '.$db->q('com_akeeba'))
-			->where($db->nq('type').' = '.$db->q('component'));
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('element').' = '.$db->q('com_akeeba'))
+			->where($db->qn('type').' = '.$db->q('component'));
 		$db->setQuery($sql);
 		$db->query();
 	}
@@ -386,21 +395,21 @@ class AkeebaModelCpanels extends FOFModel
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
 			->select('update_site_id')
-			->from($db->nq('#__update_sites_extensions'))
-			->where($db->nq('extension_id').' = '.$db->q($component->id));
+			->from($db->qn('#__update_sites_extensions'))
+			->where($db->qn('extension_id').' = '.$db->q($component->id));
 		$db->setQuery($query);
 		$updateSite = $db->loadResult();
 		
 		if($updateSite) {
 			$query = $db->getQuery(true)
-				->delete($db->nq('#__update_sites'))
-				->where($db->nq('update_site_id').' = '.$db->q($updateSite));
+				->delete($db->qn('#__update_sites'))
+				->where($db->qn('update_site_id').' = '.$db->q($updateSite));
 			$db->setQuery($query);
 			$db->query();
 			
 			$query = $db->getQuery(true)
-				->delete($db->nq('#__update_sites_extensions'))
-				->where($db->nq('update_site_id').' = '.$db->q($updateSite));
+				->delete($db->qn('#__update_sites_extensions'))
+				->where($db->qn('update_site_id').' = '.$db->q($updateSite));
 			$db->setQuery($query);
 			$db->query();
 		}
@@ -408,20 +417,21 @@ class AkeebaModelCpanels extends FOFModel
 		// Deactivate the update site for FOF
 		$query = $db->getQuery(true)
 			->select('update_site_id')
-			->where($db->nq('location').' = '.$db->q('http://cdn.akeebabackup.com/updates/libraries/fof'));
+			->from($db->qn('#__update_sites'))
+			->where($db->qn('location').' = '.$db->q('http://cdn.akeebabackup.com/updates/libraries/fof'));
 		$db->setQuery($query);
 		$updateSite = $db->loadResult();
 		
 		if($updateSite) {
 			$query = $db->getQuery(true)
-				->delete($db->nq('#__update_sites'))
-				->where($db->nq('update_site_id').' = '.$db->q($updateSite));
+				->delete($db->qn('#__update_sites'))
+				->where($db->qn('update_site_id').' = '.$db->q($updateSite));
 			$db->setQuery($query);
 			$db->query();
 			
 			$query = $db->getQuery(true)
-				->delete($db->nq('#__update_sites_extensions'))
-				->where($db->nq('update_site_id').' = '.$db->q($updateSite));
+				->delete($db->qn('#__update_sites_extensions'))
+				->where($db->qn('update_site_id').' = '.$db->q($updateSite));
 			$db->setQuery($query);
 			$db->query();
 		}
@@ -458,7 +468,11 @@ class AkeebaModelCpanels extends FOFModel
 			$update_url = 'https://www.akeebabackup.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=6';
 			jimport('joomla.application.component.helper');
 			$params = JComponentHelper::getParams('com_akeeba');
-			$dlid = $params->getValue('update_dlid','');
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$dlid = $params->get('update_dlid','');
+			} else {
+				$dlid = $params->getValue('update_dlid','');
+			}
 			if(!preg_match('/^[0-9a-f]{32}$/i', $dlid)) {
 				$ret = false;
 				$dlid = '';
@@ -479,16 +493,16 @@ class AkeebaModelCpanels extends FOFModel
 		// Get the update site record
 		$query = $db->getQuery(true)
 			->select(array(
-			$db->nq('us').'.*',
+			$db->qn('us').'.*',
 		))->from(
-			$db->nq('#__update_sites_extensions').' AS '.$db->nq('map')
+			$db->qn('#__update_sites_extensions').' AS '.$db->qn('map')
 		)->innerJoin(
-			$db->nq('#__update_sites').' AS '.$db->nq('us').' ON ('.
-			$db->nq('us').'.'.$db->nq('update_site_id').' = '.
-				$db->nq('map').'.'.$db->nq('update_site_id').')'
+			$db->qn('#__update_sites').' AS '.$db->qn('us').' ON ('.
+			$db->qn('us').'.'.$db->qn('update_site_id').' = '.
+				$db->qn('map').'.'.$db->qn('update_site_id').')'
 		)
 		->where(
-			$db->nq('map').'.'.$db->nq('extension_id').' = '.$db->q($extensionID)
+			$db->qn('map').'.'.$db->qn('extension_id').' = '.$db->q($extensionID)
 		);
 		$db->setQuery($query);
 		$update_site = $db->loadObject();		
@@ -523,8 +537,8 @@ class AkeebaModelCpanels extends FOFModel
 			case 'update':
 				// Remove old update site
 				$query = $db->getQuery(true)
-					->delete($db->nq('#__update_sites'))
-					->where($db->nq('name') .' = '. $db->q('Akeeba Backup updates'));
+					->delete($db->qn('#__update_sites'))
+					->where($db->qn('name') .' = '. $db->q('Akeeba Backup updates'));
 				$db->setQuery($query);
 				$db->query();
 				// Create new update site
@@ -540,8 +554,8 @@ class AkeebaModelCpanels extends FOFModel
 				$usID = $db->insertid();
 				// Delete existing #__update_sites_extensions records
 				$query = $db->getQuery(true)
-					->delete($db->nq('#__update_sites_extensions'))
-					->where($db->nq('extension_id') .' = '. $db->q($extensionID));
+					->delete($db->qn('#__update_sites_extensions'))
+					->where($db->qn('extension_id') .' = '. $db->q($extensionID));
 				$db->setQuery($query);
 				$db->query();
 				// Create new #__update_sites_extensions record
@@ -555,14 +569,14 @@ class AkeebaModelCpanels extends FOFModel
 			case 'delete':
 				// Remove update sites
 				$query = $db->getQuery(true)
-					->delete($db->nq('#__update_sites'))
-					->where($db->nq('update_site_id') .' = '. $db->q($update_site->update_site_id));
+					->delete($db->qn('#__update_sites'))
+					->where($db->qn('update_site_id') .' = '. $db->q($update_site->update_site_id));
 				$db->setQuery($query);
 				$db->query();
 				// Delete existing #__update_sites_extensions records
 				$query = $db->getQuery(true)
-					->delete($db->nq('#__update_sites_extensions'))
-					->where($db->nq('extension_id') .' = '. $db->q($extensionID));
+					->delete($db->qn('#__update_sites_extensions'))
+					->where($db->qn('extension_id') .' = '. $db->q($extensionID));
 				$db->setQuery($query);
 				$db->query();
 				break;
@@ -571,8 +585,8 @@ class AkeebaModelCpanels extends FOFModel
 		// Do I have to purge updates?
 		if($purgeUpdates) {
 			$query = $db->getQuery(true)
-				->delete($db->nq('#__updates'))
-				->where($db->nq('element').' = '.$db->q('com_akeeba'));
+				->delete($db->qn('#__updates'))
+				->where($db->qn('element').' = '.$db->q('com_akeeba'));
 			$db->setQuery($query);
 			$db->query();
 		}

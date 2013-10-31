@@ -1,6 +1,6 @@
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -210,3 +210,11 @@ function $$_ (els) {
     });
     return els_;
 }
+
+$(document).addEvent('domready', function() {
+	$$('[data-dismiss="alert"]').each(function(el) {
+		el.addEvent('click', function() {
+			Joomla.removeMessages();
+		});
+	});
+});

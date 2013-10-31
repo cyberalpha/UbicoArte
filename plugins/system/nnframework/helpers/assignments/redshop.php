@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: RedShop
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -20,8 +20,8 @@ class NNFrameworkAssignmentsRedShop
 {
 	function init(&$parent)
 	{
-		$parent->params->item_id = JFactory::getApplication()->input->getInt('pid', 0);
-		$parent->params->category_id = JFactory::getApplication()->input->getInt('cid', 0);
+		$parent->params->item_id = JFactory::getApplication()->input->getInt('pid');
+		$parent->params->category_id = JFactory::getApplication()->input->getInt('cid');
 		$parent->params->id = ($parent->params->item_id) ? $parent->params->item_id : $parent->params->category_id;
 	}
 
@@ -52,9 +52,9 @@ class NNFrameworkAssignmentsRedShop
 			$cats = $parent->params->category_id;
 		} else if ($parent->params->item_id) {
 			$query = $parent->db->getQuery(true);
-			$query->select('x.category_id')
-				->from('#__redshop_product_category_xref AS x')
-				->where('x.product_id = ' . (int) $parent->params->item_id);
+			$query->select('x.category_id');
+			$query->from('#__redshop_product_category_xref AS x');
+			$query->where('x.product_id = ' . (int) $parent->params->item_id);
 			$parent->db->setQuery($query);
 			$cats = $parent->db->loadColumn();
 		}

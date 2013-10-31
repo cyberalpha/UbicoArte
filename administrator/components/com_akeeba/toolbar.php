@@ -99,10 +99,11 @@ class AkeebaToolbar extends FOFToolbar
 				break;
 		}
 		
-		JToolBarHelper::back('AKEEBA_CONTROLPANEL', 'index.php?option=com_akeeba');
 		JToolBarHelper::spacer();
 		JToolBarHelper::deleteList();
 		JToolBarHelper::custom( 'deletefiles', 'delete.png', 'delete_f2.png', JText::_('STATS_LABEL_DELETEFILES'), true );
+		JToolBarHelper::spacer();
+		JToolBarHelper::back('AKEEBA_CONTROLPANEL', 'index.php?option=com_akeeba');
 		
 		//$this->_renderDefaultSubmenus('buadmin');
 	}
@@ -237,6 +238,13 @@ class AkeebaToolbar extends FOFToolbar
 		JToolBarHelper::spacer();
 	}
 	
+	public function onSchedules()
+	{
+		// Set the toolbar title
+		JToolBarHelper::title(JText::_('AKEEBA').':: <small>'.JText::_('AKEEBA_SCHEDULE').'</small>','akeeba');
+		JToolBarHelper::back('AKEEBA_CONTROLPANEL', 'index.php?option=com_akeeba');
+	}
+	
 	private function _renderDefaultSubmenus($active = '')
 	{
 		$submenus = array(
@@ -249,7 +257,7 @@ class AkeebaToolbar extends FOFToolbar
 		
 		foreach($submenus as $view => $key) {
 			$link = JURI::base().'index.php?option='.$this->component.'&view='.$view;
-			JSubMenuHelper::addEntry(JText::_($key), $link, $view == $active);
+			$this->appendLink(JText::_($key), $link, $view == $active);
 		}
 	}
 }

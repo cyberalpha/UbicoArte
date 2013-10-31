@@ -8,6 +8,16 @@
  * @version $Id$
  **/
 
+/**
+ * Setup (required for Joomla! 3)
+ */
+if(typeof(akeeba) == 'undefined') {
+	var akeeba = {};
+}
+if(typeof(akeeba.jQuery) == 'undefined') {
+	akeeba.jQuery = jQuery.noConflict();
+}
+
 /** @var Root URI for theme files */
 var akeeba_ui_theme_root = "";
 
@@ -361,11 +371,13 @@ function parse_config_gui_data(data, rootnode)
 			group_id++;
 			
 			// Create a fieldset container
-			var container = $( document.createElement('fieldset') );
-			container.appendTo( rootnode );
+			var container = $( document.createElement('div') );
+			container
+				.addClass('well')
+				.appendTo( rootnode );
 
 			// Create a group header
-			var header = $( document.createElement('legend') );
+			var header = $( document.createElement('h4') );
 			header.attr('id', 'auigrp_'+rootnode.attr('id')+'_'+group_id);
 			header.html(headertext);
 			header.appendTo(container);
@@ -378,37 +390,28 @@ function parse_config_gui_data(data, rootnode)
 				if( (defdata['type'] != 'hidden') && (defdata['type'] != 'none') )
 				{
 					// Option row DIV
-					var row_div = $(document.createElement('div')).addClass('akeeba-ui-optionrow');
+					var row_div = $(document.createElement('div')).addClass('akeeba-ui-optionrow control-group');
 					row_div.appendTo(container);
 					
 					// Create label
 					var label = $(document.createElement('label'));
-					label.attr('for', current_id);
-					label.html( defdata['title'] );
-					label.tooltip({
-						top: 24,
-						left: 0,
-						track: false,
-						delay: 0,
-						showURL: false,
-						opacity: 1,
-						fixPNG: true,
-						fade: 0,
-						extraClass: 'ui-dialog ui-corner-all',
-						bodyHandler: function() {
-							var title = $(this).html();
-							var description = defdata['description'];
-							var html = '<div class="tooltip-arrow-up"></div>';
-							html += '<h3><div class="ui-icon ui-icon-info"></div><span>'+title+'</span></h3>';
-							html += '<div>'+description+'</div>';
-							return html;
-						}
-					});
-					if(defdata['bold']) label.addClass( 'akeeba_bold_label' );
+					label.addClass('control-label')
+						.attr('for', current_id)
+						.html( defdata['title'] )
+						;
+					if(defdata['description']) {
+						label
+							.attr('rel', 'popover')
+							.attr('data-original-title', defdata['title'])
+							.attr('data-content', defdata['description'])
+					}
+					if(defdata['bold']) label.css('font-weight','bold');
 					label.appendTo( row_div );
 				}
 				
 				// Create GUI representation based on type
+				var controlWrapper = $(document.createElement('div')).addClass('controls');
+				
 				switch( defdata['type'] )
 				{
 					// A do-not-display field
@@ -437,7 +440,8 @@ function parse_config_gui_data(data, rootnode)
 					case 'checkandhide':
 						// Container for selection & button
 						var span = $(document.createElement('span'));
-						span.appendTo( row_div );
+						span.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 
 						var hiddenfield = $(document.createElement('input')).attr({
 							type:		'hidden',
@@ -475,7 +479,8 @@ function parse_config_gui_data(data, rootnode)
 							option.appendTo( editor );
 						});
 
-						editor.appendTo( row_div );
+						editor.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 
 						break;				
 				
@@ -487,11 +492,9 @@ function parse_config_gui_data(data, rootnode)
 						// Container for engine parameters, initially hidden
 						var engine_config_container = $(document.createElement('div')).attr({
 							id:			config_key+'_config'
-						}).addClass('ui-helper-hidden').appendTo( container );
-						
-						// Container for selection & button
-						var span = $(document.createElement('span'));
-						span.appendTo( row_div );
+						})
+							.addClass('ui-helper-hidden well')
+							.appendTo( controlWrapper );
 						
 						// Create the select element
 						var editor = $(document.createElement('select')).attr({
@@ -529,6 +532,7 @@ function parse_config_gui_data(data, rootnode)
 								.find('legend:first')
 								.after(
 									$(document.createElement('p'))
+									.addClass('alert alert-info')
 									.html(enginedef.information.description)
 								);
 							// Reapply changed values
@@ -547,15 +551,26 @@ function parse_config_gui_data(data, rootnode)
 								}
 							});
 						});
-						editor.appendTo( span );
 						
 						// Add a configuration show/hide button
-						var button = $(document.createElement('button')).html(akeeba_translations['UI-CONFIG']);
+						var button = $(document.createElement('button'))
+							.html(akeeba_translations['UI-CONFIG'])
+							.addClass('btn btn-mini');
+						var icon = $(document.createElement('i'))
+							.addClass('icon-wrench')
+							.prependTo(button);
 						button.bind('click', function(e){
 							engine_config_container.toggleClass('ui-helper-hidden');
 							e.preventDefault();
 						});
-						button.appendTo( span );
+						
+						var spacerSpan = $(document.createElement('span')).html('&nbsp;');
+
+						button.prependTo( controlWrapper );
+						spacerSpan.prependTo( controlWrapper );
+						editor.prependTo( controlWrapper );
+						
+						controlWrapper.appendTo( row_div );
 						
 						// Populate config container with the default engine data
 						if(akeeba_engines[engine_type][defdata['default']] != null)
@@ -595,17 +610,28 @@ function parse_config_gui_data(data, rootnode)
 							value:		defdata['default']
 						});
 
-						var button = $(document.createElement('button')).html(akeeba_translations['UI-BROWSE']);
+						var button = $(document.createElement('button'))
+							.attr('title',akeeba_translations['UI-BROWSE'])
+							.html('&nbsp;')
+							.addClass('btn');
+							
+						var icon = $(document.createElement('i'))
+							.addClass('icon-folder-open')
+							.prependTo(button);
 
 						button.bind('click',function(event){
 							event.preventDefault();
 							if( akeeba_browser_hook != null ) akeeba_browser_hook( editor.val(), editor );
 						});
 						
-						var span = $(document.createElement('span'));
+						var span = $(document.createElement('span')).addClass('input-append');
+						
 						editor.appendTo( span );
 						button.appendTo( span );
-						span.appendTo(row_div);
+						
+						span.appendTo( controlWrapper )
+						
+						controlWrapper.appendTo( row_div );
 						break;
 						
 					// A text box with a button
@@ -624,7 +650,9 @@ function parse_config_gui_data(data, rootnode)
 						}
 						
 						//var button = $(document.createElement('button')).addClass('ui-state-default').html(akeeba_translations[defdata['buttontitle']]);
-						var button = $(document.createElement('button')).html(akeeba_translations[defdata['buttontitle']]);
+						var button = $(document.createElement('button'))
+							.html(akeeba_translations[defdata['buttontitle']])
+							.addClass('btn');
 						button.bind('click',function(event){
 							event.preventDefault();
 							var hook = defdata['hook'];
@@ -633,10 +661,12 @@ function parse_config_gui_data(data, rootnode)
 							} catch(err) {}
 						});
 						
-						var span = $(document.createElement('span'));
+						var span = $(document.createElement('span')).addClass('input-append');
 						editor.appendTo( span );
 						button.appendTo( span );
-						span.appendTo(row_div);
+						
+						span.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;						
 						
 					// A drop-down list
@@ -656,7 +686,8 @@ function parse_config_gui_data(data, rootnode)
 							option.appendTo( editor );
 						});
 						
-						editor.appendTo( row_div );
+						editor.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;
 						
 					// A simple single-line, unvalidated text box
@@ -668,7 +699,8 @@ function parse_config_gui_data(data, rootnode)
 							size:		'40',
 							value:		defdata['default']
 						});
-						editor.appendTo( row_div );
+						editor.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;
 
 					// A simple single-line, unvalidated password box
@@ -680,7 +712,8 @@ function parse_config_gui_data(data, rootnode)
 							size:		'40',
 							value:		defdata['default']
 						});
-						editor.appendTo( row_div );
+						editor.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;
 
 					case 'integer':
@@ -695,7 +728,9 @@ function parse_config_gui_data(data, rootnode)
 							.attr('type', 'text')
 							.attr('size', '10')
 							.attr('id',config_key+'_custom')
-							.css('display','none');
+							.css('display','none')
+							.css('margin-left', '6px')
+							.addClass('input-mini');
 						custom.blur(function(){
 							var value = parseFloat(custom.val());
 							value = value * defdata['scale'];
@@ -712,7 +747,7 @@ function parse_config_gui_data(data, rootnode)
 						var dropdown = $(document.createElement('select')).attr({
 							id:			config_key+'_dropdown',
 							name:		config_key+'_dropdown'
-						});
+						}).addClass('input-small');
 						// Create and append options
 						var enumvalues = defdata['shortcuts'].split("|");
 						var quantizer = defdata['scale'];
@@ -742,24 +777,38 @@ function parse_config_gui_data(data, rootnode)
 									.val( (defdata['default']/defdata['scale']).toFixed(2) )
 									.show()
 									.focus();
+								custom.next().addClass('add-on');
 							} else {
 								hidden_input.val(value);
 								custom.hide();
+								custom.next().removeClass('add-on');
 							}
 						});
 						// Label
 						var uom = defdata['uom'];
-						if( typeof(uom) != 'string' ) {
+						if( (typeof(uom) != 'string') || empty(uom) ) {
 							uom = '';
+							
+							dropdown.appendTo(controlWrapper);
+							custom.appendTo(controlWrapper);
 						} else {
-							uom = ' '+uom;
+							var inputAppendWrapper = $(document.createElement('div'))
+								.addClass('input-append');
+							var label = $(document.createElement('span')).
+								text(' '+uom);
+							if(!isPresetOption) {
+								label.addClass('add-on');
+							}
+							dropdown.appendTo(inputAppendWrapper);
+							custom.appendTo(inputAppendWrapper);
+							label.appendTo(inputAppendWrapper);
+							inputAppendWrapper.appendTo(controlWrapper);
 						}
-						var label = $(document.createElement('span')).text(uom);
+						
 
-						hidden_input.appendTo(row_div);
-						dropdown.appendTo(row_div);
-						custom.appendTo(row_div);
-						label.appendTo(row_div);
+						hidden_input.appendTo(controlWrapper);
+						
+						controlWrapper.appendTo( row_div );
 						
 						break;
 					
@@ -776,12 +825,14 @@ function parse_config_gui_data(data, rootnode)
 						// Create a checkbox
 						var editor = $(document.createElement('input')).attr({
 							name:			current_id,
+							id:				current_id,
 							type:			'checkbox',
 							value:			1
 						});
 						if( defdata['default'] != 0 ) editor.attr('checked','checked');
 						editor.appendTo( wrap_div );
-						wrap_div.appendTo( row_div );
+						wrap_div.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;
 						
 					// Button with a custom hook function
@@ -789,7 +840,9 @@ function parse_config_gui_data(data, rootnode)
 						// Create the button
 						var hook = defdata['hook'];
 						var labeltext = label.html();
-						var editor = $(document.createElement('button')).attr('id', current_id).html(labeltext);
+						var editor = $(document.createElement('button'))
+							.attr('id', current_id).html(labeltext)
+							.addClass('btn');
 						label.html('&nbsp;');
 						editor.bind('click', function(e){
 							e.preventDefault();
@@ -797,7 +850,8 @@ function parse_config_gui_data(data, rootnode)
 								eval(hook+'()');
 							} catch(err) {}
 						});
-						editor.appendTo( row_div );
+						editor.appendTo( controlWrapper );
+						controlWrapper.appendTo( row_div );
 						break;
 					
 					// An extension is being used
@@ -865,28 +919,27 @@ function reset_timeout_bar()
 function render_backup_steps(active_step)
 {
 	(function($){
-		var normal_class = 'step-complete';
-		if( active_step == '' ) normal_class = 'step-pending';
+		var normal_class = 'label-success';
+		if( active_step == '' ) normal_class = '';
 	
 		$('#backup-steps').html('');
 		$.each(akeeba_domains, function(counter, element){
 			var step = $(document.createElement('div'))
+				.addClass('label')
 				.html(element[1])
 				.data('domain',element[0])
 				.appendTo('#backup-steps');
 	
 			if(step.data('domain') == active_step )
 			{
-				normal_class = 'step-pending';
-				this_class = 'step-active';
+				normal_class = '';
+				this_class = 'label-info';
 			}
 			else
 			{
 				this_class = normal_class;
 			}
-			step.attr({
-				'class': this_class
-			});
+			step.addClass(this_class);
 		});			
 	})(akeeba.jQuery);
 }
@@ -947,10 +1000,9 @@ function backup_step(data)
 	(function($){
 		// Update percentage display
 		var percentageText = data.Progress + '%';
-		$('#backup-percentage div.text').html(percentageText);
-		$('#backup-percentage div.color-overlay').css({
-			'width':			data.Progress+'%',
-			'background-color':	'green'
+		//$('#backup-percentage div.text').html(percentageText);
+		$('#backup-percentage div.bar').css({
+			'width':			data.Progress+'%'
 		});
 		
 		// Update step/substep display
@@ -959,6 +1011,7 @@ function backup_step(data)
 		// Do we have warnings?
 		if( data.Warnings.length > 0 )
 		{
+			$('#backup-percentage').addClass('progress-warning');
 			$.each(data.Warnings, function(i, warning){
 				var newDiv = $(document.createElement('div'))
 					.html(warning)
@@ -1207,6 +1260,7 @@ function fsfilter_render(data)
 		var akcrumbs = $('#ak_crumbs');
 		akcrumbs.html('');
 		$.each(crumbsdata, function(counter, def){
+			var myLi = $(document.createElement('li'))
 			$(document.createElement('a'))
 				.attr('href','javascript:')
 				.html(def[0])
@@ -1232,8 +1286,13 @@ function fsfilter_render(data)
 					new_data.node = def[3];
 					fsfilter_load(new_data);
 				})
-				.appendTo(akcrumbs);
-			if(counter < (crumbsdata.length-1) ) akcrumbs.append(' / ');
+				.appendTo(myLi);
+			$(document.createElement('span'))
+				.addClass('divider')
+				.text('/')
+				.appendTo(myLi);
+			myLi.appendTo(akcrumbs);
+			//if(counter < (crumbsdata.length-1) ) akcrumbs.append(' / ');
 		});
 		
 		// ----- Render the subdirectories
@@ -1243,24 +1302,24 @@ function fsfilter_render(data)
 		{
 			// The parent directory element
 			var uielement = $(document.createElement('div'))
-			.addClass('folder-container');
+				.addClass('folder-container');
 			uielement
-			.append($(document.createElement('span')).addClass('folder-padding'))
-			.append($(document.createElement('span')).addClass('folder-padding'))
-			.append($(document.createElement('span')).addClass('folder-padding'))
-			.append(
-				$(document.createElement('span'))
-				.addClass('folder-name folder-up')
-				.html('('+akcrumbs.find('a:last').prev().html()+')')
-				.prepend(
+				.append($(document.createElement('span')).addClass('folder-padding'))
+				.append($(document.createElement('span')).addClass('folder-padding'))
+				.append($(document.createElement('span')).addClass('folder-padding'))
+				.append(
 					$(document.createElement('span'))
-					.addClass('ui-icon ui-icon-arrowreturnthick-1-w')
+					.addClass('folder-name folder-up')
+					.html('('+akcrumbs.find('li:last').prev().find('a').html()+')')
+					.prepend(
+						$(document.createElement('span'))
+						.addClass('ui-icon ui-icon-arrowreturnthick-1-w')
+					)
+					.click(function(){
+						akcrumbs.find('li:last').prev().find('a').click();
+					})
 				)
-				.click(function(){
-					akcrumbs.find('a:last').prev().click();
-				})
-			)
-			.appendTo(akfolders);
+				.appendTo(akfolders);
 		}
 		$.each(data.folders, function(folder, def){
 			var uielement = $(document.createElement('div'))

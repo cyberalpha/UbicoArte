@@ -4,7 +4,7 @@
  * @package		Joomla.Administrator
  * @subpackage	mod_kc_admin_quickicons
  * @copyright	Copyright (C) 2005 - 2011 Open Source Matters, Inc. All rights reserved.
- * @copyright	Copyright (C) 2010 - 2011 Keashly.ca Consulting
+ * @copyright	Copyright (C) 2010 - 2013 Keashly.ca Consulting
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 

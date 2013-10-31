@@ -23,8 +23,6 @@ class AkeebaViewProfiles extends FOFViewHtml
 		// Add a spacer, a help button and show the template
 		JToolBarHelper::spacer();
 
-		AkeebaHelperIncludes::includeMedia(false);
-
 		parent::display($tpl);
 	}
 

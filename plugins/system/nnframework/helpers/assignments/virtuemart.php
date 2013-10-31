@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: VirtueMart
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -20,8 +20,8 @@ class NNFrameworkAssignmentsVirtueMart
 {
 	function init(&$parent)
 	{
-		$parent->params->item_id = JFactory::getApplication()->input->getInt('virtuemart_product_id', 0);
-		$parent->params->category_id = JFactory::getApplication()->input->getString('virtuemart_category_id', '');
+		$parent->params->item_id = JFactory::getApplication()->input->getInt('virtuemart_product_id');
+		$parent->params->category_id = JFactory::getApplication()->input->getString('virtuemart_category_id');
 		$parent->params->id = ($parent->params->item_id) ? $parent->params->item_id : $parent->params->category_id;
 	}
 
@@ -46,18 +46,18 @@ class NNFrameworkAssignmentsVirtueMart
 		$cats = array();
 		if ($parent->params->view == 'productdetails' && $parent->params->item_id) {
 			$query = $parent->db->getQuery(true);
-			$query->select('x.virtuemart_category_id')
-				->from('#__virtuemart_product_categories AS x')
-				->where('x.virtuemart_product_id = ' . (int) $parent->params->item_id);
+			$query->select('x.virtuemart_category_id');
+			$query->from('#__virtuemart_product_categories AS x');
+			$query->where('x.virtuemart_product_id = ' . (int) $parent->params->item_id);
 			$parent->db->setQuery($query);
 			$cats = $parent->db->loadColumn();
 		} else if ($parent->params->category_id) {
 			$cats = $parent->params->category_id;
 			if (!is_numeric($cats)) {
 				$query = $parent->db->getQuery(true);
-				$query->select('config')
-					->from('#__virtuemart_configs')
-					->where('virtuemart_config_id = 1');
+				$query->select('config');
+				$query->from('#__virtuemart_configs');
+				$query->where('virtuemart_config_id = 1');
 				$parent->db->setQuery($query);
 				$config = $parent->db->loadResult();
 				$lang = substr($config, strpos($config, 'vmlang='));
@@ -69,9 +69,9 @@ class NNFrameworkAssignmentsVirtueMart
 				}
 
 				$query = $parent->db->getQuery(true);
-				$query->select('l.virtuemart_category_id')
-					->from('#__virtuemart_categories_' . $lang . ' AS l')
-					->where('l.slug = ' . $parent->db->quote($cats));
+				$query->select('l.virtuemart_category_id');
+				$query->from('#__virtuemart_categories_' . $lang . ' AS l');
+				$query->where('l.slug = ' . $parent->db->quote($cats));
 				$parent->db->setQuery($query);
 				$cats = $parent->db->loadResult();
 			}

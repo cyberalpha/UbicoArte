@@ -8,34 +8,36 @@
  */
 
 defined('_JEXEC') or die();
-?>
-<div id="akeeba-container" style="width:100%">
 
+JHtml::_('behavior.framework');
+?>
 <div id="dialog" title="<?php echo JText::_('FSFILTER_ERROR_TITLE') ?>">
 </div>
 
-<fieldset>
-	<legend><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></legend>
+<div class="alert alert-info">
+	<strong><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></strong>
 	#<?php echo $this->profileid; ?> <?php echo $this->profilename; ?>
-	&nbsp;&bull;&nbsp;
-	<strong>
-	<a href="index.php?option=com_akeeba&view=fsfilter&task=tabular"><?php echo JText::_('FILTERS_LABEL_VIEWALL')?></a>
-	</strong>
-</fieldset>
+</div>
 
-<fieldset>
-	<div id="ak_roots_container">
-		<span><?php echo JText::_('FSFILTER_LABEL_ROOTDIR') ?></span>
+<div class="form-inline well">
+	<div>
+		<label><?php echo JText::_('FSFILTER_LABEL_ROOTDIR') ?></label>
 		<span><?php echo $this->root_select; ?></span>
-		&nbsp;&bull;&nbsp;
-		<button onclick="fsfilter_nuke(); return false;"><?php echo JText::_('FSFILTER_LABEL_NUKEFILTERS'); ?></button>
+		<button class="btn btn-danger" onclick="fsfilter_nuke(); return false;">
+			<i class="icon-fire icon-white"></i>
+			<?php echo JText::_('FSFILTER_LABEL_NUKEFILTERS'); ?>
+		</button>
+		<a class="btn btn-small" href="index.php?option=com_akeeba&view=fsfilter&task=tabular">
+			<i class="icon-list"></i>
+			<?php echo JText::_('FILTERS_LABEL_VIEWALL')?>
+		</a>
 	</div>
-	<div id="ak_crumbs_container">
-		<div id="ak_crumbs_label"><?php echo JText::_('FSFILTER_LABEL_CURDIR'); ?></div>
-		<div id="ak_crumbs"></div>
-	</div>
+</div>
 	
-</fieldset>
+<div id="ak_crumbs_container" class="row-fluid">
+	<ul id="ak_crumbs" class="breadcrumb"></ul>
+</div>
+
 
 <div id="ak_main_container">
 	<fieldset id="ak_folder_container">
@@ -49,7 +51,7 @@ defined('_JEXEC') or die();
 	</fieldset>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 /**
  * Callback function for changing the active root in Filesystem Filters
  */
@@ -106,5 +108,3 @@ akeeba.jQuery(document).ready(function($){
 	fsfilter_render(data);
 });
 </script>
-
-</div>

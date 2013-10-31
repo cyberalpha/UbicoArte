@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: HikaShop
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -57,9 +57,9 @@ class NNFrameworkAssignmentsHikaShop
 			$cats = $parent->params->id;
 		} else if ($parent->params->id) {
 			$query = $parent->db->getQuery(true);
-			$query->select('c.category_id')
-				->from('#__hikashop_product_category AS c')
-				->where('c.product_id = ' . (int) $parent->params->id);
+			$query->select('c.category_id');
+			$query->from('#__hikashop_product_category AS c');
+			$query->where('c.product_id = ' . (int) $parent->params->id);
 			$parent->db->setQuery($query);
 			$cats = $parent->db->loadColumn();
 		}

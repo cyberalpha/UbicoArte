@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * A utility class to return a database connection object
@@ -35,7 +35,7 @@ class AECoreDatabase extends AEAbstractObject
 		{
 			if (!empty($instances[$signature]))
 			{
-				$db =& $instances[$signature];
+				$db = $instances[$signature];
 				$db = null;
 				unset($instances[$signature]);
 			}
@@ -69,9 +69,7 @@ class AECoreDatabase extends AEAbstractObject
 				if(substr($driver,0,2) != 'AE') $driver = 'AEDriver'.ucfirst($driver);
 			}
 
-			$instance	= new $driver($options);
-
-			$instances[$signature] = & $instance;
+			$instances[$signature] = new $driver($options);
 		}
 
 		return $instances[$signature];

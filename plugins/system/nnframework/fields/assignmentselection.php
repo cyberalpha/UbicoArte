@@ -4,7 +4,7 @@
  * Displays Assignment Selection radio options
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -36,7 +36,6 @@ class JFormFieldNN_AssignmentSelection extends JFormField
 		$label = $this->def('label');
 		$param_name = $this->def('name');
 		$noshow = $this->def('noshow', 0);
-		$showclose = $this->def('showclose', 0);
 
 		$html = array();
 
@@ -54,11 +53,7 @@ class JFormFieldNN_AssignmentSelection extends JFormField
 			} else if ($this->value === 2) {
 				$class .= ' nn_panel_exclude';
 			}
-			$html[] = '<div class="' . $class . '">';
-			if ($showclose && JFactory::getUser()->authorise('core.admin')) {
-				$html[] = '<button type="button" class="nn_close nn_remove_assignment">&times;</button>';
-			}
-			$html[] = '<label class="nn_block nn_title" for="cb_' . $param_name . '">';
+			$html[] = '<div class="' . $class . '"><label class="nn_block nn_title" for="cb_' . $param_name . '">';
 			$html[] = '<input id="cb_' . $param_name . '" type="checkbox" class="checkbox" ' . ($this->value ? 'checked="checked"' : '') . ' onchange="nnScripts.setRadio(\'' . $param_name . '\', this.checked);">';
 			$html[] = $label;
 			$html[] = '<div style="clear: both;"></div>';

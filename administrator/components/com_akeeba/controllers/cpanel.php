@@ -17,7 +17,9 @@ defined('_JEXEC') or die();
 class AkeebaControllerCpanel extends FOFController
 {
 	public function execute($task) {
-		if($task != 'switchprofile') $task = 'browse';
+		if(!in_array($task, array('switchprofile','disablephpwarning'))) {
+			$task = 'browse';
+		}
 		parent::execute($task);
 	}
 	
@@ -96,5 +98,48 @@ class AkeebaControllerCpanel extends FOFController
 		$this->setRedirect($url, JText::_('PANEL_PROFILE_SWITCH_OK'));
 	}
 
+	public function disablephpwarning()
+	{
+		// CSRF prevention
+		if($this->csrfProtection) {
+			$this->_csrfProtection();
+		}
 
+		// Fetch the component parameters
+		$db = JFactory::getDbo();
+		$sql = $db->getQuery(true)
+			->select($db->qn('params'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type').' = '.$db->q('component'))
+			->where($db->qn('element').' = '.$db->q('com_akeeba'));
+		$db->setQuery($sql);
+		$rawparams = $db->loadResult();
+		$params = new JRegistry();
+		$params->loadString($rawparams, 'JSON');
+
+		// Set the displayphpwarning parameter to 0
+		$params->set('displayphpwarning', 0);
+
+		// Save the component parameters
+		$data = $params->toString('JSON');
+		$sql = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('params').' = '.$db->q($data))
+			->where($db->qn('type').' = '.$db->q('component'))
+			->where($db->qn('element').' = '.$db->q('com_akeeba'));
+
+		$db->setQuery($sql);
+		$db->query();
+		
+		// Redirect back to the control panel
+		$url = '';
+		$returnurl = FOFInput::getBase64('returnurl', '', $this->input);
+		if(!empty($returnurl)) {
+			$url = base64_decode($returnurl);
+		}
+		if(empty($url)) {
+			$url = JURI::base().'index.php?option=com_akeeba';
+		}
+		$this->setRedirect($url);
+	}
 }

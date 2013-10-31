@@ -14,6 +14,11 @@ defined('_JEXEC') or die();
  */
 class AkeebaModelBackups extends FOFModel
 {
+	/**
+	 * Starts or step a backup process
+	 * 
+	 * @return array An Akeeba Engine return array 
+	 */
 	public function runBackup()
 	{
 		$ret_array = array();
@@ -170,8 +175,8 @@ class AkeebaModelBackups extends FOFModel
 		jimport('joomla.filesystem.file');
 		$filename = JPATH_COMPONENT_ADMINISTRATOR.'/assets/srpdefs/'.$extname.'.xml';
 		if(JFile::exists($filename)) {
-			$xml = JFactory::getXMLParser('simple');
-			if($xml->loadFile($filename)) {
+			$xml = new SimpleXMLElement($filename, LIBXML_NONET, true);
+			if($xml instanceof SimpleXMLElement) {
 				$extraConfig = $this->parseRestorePointXML($xml->document);
 				if($extraConfig !== false) $this->mergeSRPConfig($config, $extraConfig);
 			}
@@ -180,10 +185,10 @@ class AkeebaModelBackups extends FOFModel
 		
 		// Parse the extension's manifest file and look for a <restorepoint> tag
 		if(!empty($info['xmlfile'])) {
-			$xml = JFactory::getXMLParser('simple');
-			if($xml->loadFile($info['xmlfile'])) {
-				$restorepoint = $xml->document->getElementByPath('restorepoint');
-				if($restorepoint) {
+			$xml = new SimpleXMLElement($info['xmlfile'], LIBXML_NONET, true);
+			if($xml instanceof SimpleXMLElement) {
+				$restorepoint = $xml->restorepoint;
+				if(count($restorepoint)) {
 					$extraConfig = $this->parseRestorePointXML($restorepoint);
 					if($extraConfig !== false) $this->mergeSRPConfig($config, $extraConfig);
 				}
@@ -195,103 +200,95 @@ class AkeebaModelBackups extends FOFModel
 		return $config;
 	}
 	
-	private function parseRestorePointXML($xml)
+	/**
+	 * Parses the Restore Point definition XML
+	 * @param SimpleXMLElement $xml
+	 * @return boolean|array False if there is no restore point data set, or a list of SRP overrides
+	 */
+	private function parseRestorePointXML(SimpleXMLElement $xml)
 	{
-		if(!count($xml->children())) return false;
+		if(!count($xml)) return false;
 		
 		$ret = array();
 		
 		// 1. Group name -- core.filters.srp.group
-		$group = $xml->getElementByPath('group');
-		if($group) {
-			$ret['core.filters.srp.group'] = $group->data();
+		if(count($xml->group)) {
+			$ret['core.filters.srp.group'] = (string)($xml->group);
 		}
 		
 		// 2. Custom dirs -- core.filters.srp.customdirs
-		$customdirs = $xml->getElementByPath('customdirs');
-		if($customdirs) {
+		$customdirs = $xml->customdirs;
+		if(count($customdirs)) {
 			$stack = array();
-			if(count($customdirs->children())) {
-				$children = $customdirs->children();
-				foreach($children as $child) {
-					if($child->name() == 'dir') {
-						$stack[] = $child->data();
-					}
+			$children = $customdirs->children();
+			foreach($children as $child) {
+				if($child->getName() == 'dir') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.customdirs'] = $stack;
 		}
 		
 		// 3. Extra prefixes -- core.filters.srp.extraprefixes
-		$extraprefixes = $xml->getElementByPath('extraprefixes');
-		if($extraprefixes) {
+		$extraprefixes = $xml->extraprefixes;
+		if(count($extraprefixes)) {
 			$stack = array();
-			if(count($extraprefixes->children())) {
-				$children = $extraprefixes->children();
-				foreach($children as $child) {
-					if($child->name() == 'prefix') {
-						$stack[] = $child->data();
-					}
+			$children = $extraprefixes->children();
+			foreach($children as $child) {
+				if($child->getName() == 'prefix') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.extraprefixes'] = $stack;
 		}
 		
 		// 4. Custom tables -- core.filters.srp.customtables
-		$customtables = $xml->getElementByPath('customtables');
-		if($customtables) {
+		$customtables = $xml->customtables;
+		if(count($customtables)) {
 			$stack = array();
-			if(count($customtables->children())) {
-				$children = $customtables->children();
-				foreach($children as $child) {
-					if($child->name() == 'table') {
-						$stack[] = $child->data();
-					}
+			$children = $customtables->children();
+			foreach($children as $child) {
+				if($child->getName() == 'table') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.customtables'] = $stack;
 		}
 		
 		// 5. Skip tables -- core.filters.srp.skiptables
-		$skiptables = $xml->getElementByPath('skiptables');
-		if($skiptables) {
+		$skiptables = $xml->skiptables;
+		if(count($skiptables)) {
 			$stack = array();
-			if(count($skiptables->children())) {
-				$children = $skiptables->children();
-				foreach($children as $child) {
-					if($child->name() == 'table') {
-						$stack[] = $child->data();
-					}
+			$children = $skiptables->children();
+			foreach($children as $child) {
+				if($child->getName() == 'table') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.skiptables'] = $stack;
 		}
 		
 		// 6. Language files -- core.filters.srp.langfiles
-		$langfiles = $xml->getElementByPath('langfiles');
-		if($langfiles) {
+		$langfiles = $xml->langfiles;
+		if(count($langfiles)) {
 			$stack = array();
-			if(count($langfiles->children())) {
-				$children = $langfiles->children();
-				foreach($children as $child) {
-					if($child->name() == 'lang') {
-						$stack[] = $child->data();
-					}
+			$children = $langfiles->children();
+			foreach($children as $child) {
+				if($child->getName() == 'lang') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.langfiles'] = $stack;
 		}
 		
 		// 7. Custom files -- core.filters.srp.customfiles
-		$customfiles = $xml->getElementByPath('customfiles');
-		if($customfiles) {
+		$customfiles = $xml->customfiles;
+		if(count($customfiles)) {
 			$stack = array();
-			if(count($customfiles->children())) {
-				$children = $customfiles->children();
-				foreach($children as $child) {
-					if($child->name() == 'file') {
-						$stack[] = $child->data();
-					}
+			$children = $customfiles->children();
+			foreach($children as $child) {
+				if($child->getName() == 'file') {
+					$stack[] = (string)$child;
 				}
 			}
 			if(!empty($stack)) $ret['core.filters.srp.customfiles'] = $stack;

@@ -4,7 +4,7 @@
  * Displays a list of components with check boxes
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -39,7 +39,7 @@ class JFormFieldNN_Components extends JFormField
 		}
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, 1);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, 1);
 	}
 
 	function getComponents($frontend = 1, $admin = 1)
@@ -50,13 +50,13 @@ class JFormFieldNN_Components extends JFormField
 		$db = JFactory::getDBO();
 
 		$query = $db->getQuery(true);
-		$query->select('e.name, e.element')
-			->from('#__extensions AS e')
-			->where('e.name != ""')
-			->where('e.element != ""')
-			->where('e.type = ' . $db->quote('component'))
-			->group('e.element')
-			->order('e.element, e.name');
+		$query->select('e.name, e.element');
+		$query->from('#__extensions AS e');
+		$query->where('e.name != ""');
+		$query->where('e.element != ""');
+		$query->where('e.type = ' . $db->quote('component'));
+		$query->group('e.element');
+		$query->order('e.element, e.name');
 		$db->setQuery($query);
 		$components = $db->loadObjectList();
 

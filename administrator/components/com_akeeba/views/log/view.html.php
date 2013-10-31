@@ -18,9 +18,6 @@ class AkeebaViewLog extends FOFViewHtml
 {
 	public function onBrowse($tpl = null)
 	{
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JURI::base().'../media/com_akeeba/theme/akeebaui.css?'.AKEEBAMEDIATAG);
-
 		// Add live help
 		AkeebaHelperIncludes::addHelp('log');
 
@@ -41,8 +38,6 @@ class AkeebaViewLog extends FOFViewHtml
 		$pmodel->setId($profileid);
 		$profile_data = $pmodel->getItem();
 		$this->assign('profilename', $profile_data->description);
-
-		AkeebaHelperIncludes::includeMedia(false);
 
 		return true;
 	}

@@ -10,9 +10,6 @@
 // Protect from unauthorized access
 defined('_JEXEC') or die();
 
-// Load framework base classes
-jimport('joomla.application.component.controller');
-
 /**
  * Folder bowser controller
  *
@@ -41,8 +38,10 @@ class AkeebaControllerBrowser extends FOFController
 		
 		parent::display();
 		
+		/*
 		@ob_end_flush();
 		flush();
 		JFactory::getApplication()->close();
+		*/
 	}
 }

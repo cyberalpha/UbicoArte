@@ -20,14 +20,17 @@ class AEUtilComconfig
 		$db = AEFactory::getDatabase();
 		
 		$sql = $db->getQuery(true)
-			->select($db->nq('params'))
-			->from($db->nq('#__extensions'))
-			->where($db->nq('element')." = ".$db->q('com_akeeba'));
+			->select($db->qn('params'))
+			->from($db->qn('#__extensions'))
+			->where($db->qn('element')." = ".$db->q('com_akeeba'));
 		$db->setQuery($sql);
 		$config_ini  = $db->loadResult();
 
 		// OK, Joomla! 1.6 stores values JSON-encoded so, what do I do? Right!
 		$config_ini = json_decode($config_ini, true);
+		if(is_null($config_ini) || empty($config_ini)) {
+			$config_ini = array();
+		}
 		return $config_ini;
 	}
 

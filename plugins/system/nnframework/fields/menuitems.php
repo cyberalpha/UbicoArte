@@ -4,7 +4,7 @@
  * Display a menuitem field with a button
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -35,19 +35,19 @@ class JFormFieldNN_MenuItems extends JFormField
 
 		// load the list of menu types
 		$query = $db->getQuery(true);
-		$query->select('m.menutype, m.title')
-			->from('#__menu_types AS m')
-			->order('m.title');
+		$query->select('m.menutype, m.title');
+		$query->from('#__menu_types AS m');
+		$query->order('m.title');
 		$db->setQuery($query);
 		$menuTypes = $db->loadObjectList();
 
 		// load the list of menu items
 		$query = $db->getQuery(true);
-		$query->select('m.id, m.parent_id, m.title, m.alias, m.menutype, m.type, m.published, m.home')
-			->select('m.title AS name')
-			->from('#__menu AS m')
-			->where('m.published != -2')
-			->order('m.menutype, m.parent_id, m.lft, m.id');
+		$query->select('m.id, m.parent_id, m.title, m.alias, m.menutype, m.type, m.published, m.home');
+		$query->select('m.title AS name');
+		$query->from('#__menu AS m');
+		$query->where('m.published != -2');
+		$query->order('m.menutype, m.parent_id, m.lft, m.id');
 		$db->setQuery($query);
 		$items = $db->loadObjectList();
 
@@ -94,7 +94,7 @@ class JFormFieldNN_MenuItems extends JFormField
 					$item =& $groupedList[$type->menutype][$i];
 
 					//If menutype is changed but item is not saved yet, use the new type in the list
-					if (JFactory::getApplication()->input->getString('option', '') == 'com_menus') {
+					if (JFactory::getApplication()->input->getString('option') == 'com_menus') {
 						$cid = JFactory::getApplication()->input->get('cid', array(0), 'array');
 						JArrayHelper::toInteger($cid);
 						$currentItemId = $cid['0'];
@@ -157,7 +157,7 @@ class JFormFieldNN_MenuItems extends JFormField
 			return $html;
 		} else {
 			require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-			return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+			return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 		}
 	}
 

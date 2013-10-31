@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: HomePage
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -61,7 +61,7 @@ class NNFrameworkAssignmentsHomePage
 	{
 		$pass = 0;
 
-		$uri = JURI::getInstance();
+		$uri = JFactory::getURI();
 
 		if ($addlang) {
 			$sef = $uri->getVar('lang');

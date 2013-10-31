@@ -1,7 +1,7 @@
 <?php
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -400,8 +400,8 @@ class T3Head extends JObject
             }
 
             foreach ($required_optimize_list as $required_optimize) {
-                $data = T3Head::compressjs(@JFile::read($required_optimize['url0']), $required_optimize['url1']);
-		@JFile::write($required_optimize['cfile'], $data);
+                $data = T3Head::compressjs(@JFile::read($required_optimize['url0']), $required_optimize['url1']) . ';';
+                @JFile::write($required_optimize['cfile'], $data);
             }
         }
 

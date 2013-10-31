@@ -26,6 +26,11 @@ class AkeebaControllerConfig extends FOFController
 		}
 	}
 
+	public function add()
+	{
+		$this->display(false);
+	}
+	
 	/**
 	 * Handle the apply task which saves settings and shows the editor again
 	 *
@@ -38,7 +43,11 @@ class AkeebaControllerConfig extends FOFController
 		}
 		
 		// Get the var array from the request
-		$data = FOFInput::getArray('var', array(), $this->input, 4);
+		if($this->input instanceof FOFInput) {
+			$data = $this->input->get('var', array(), 'array', 4);
+		} else {
+			$data = FOFInput::getArray('var', array(), $this->input, 4);
+		}
 		
 		$model = $this->getThisModel();
 		$model->setState('engineconfig', $data);
@@ -116,7 +125,11 @@ class AkeebaControllerConfig extends FOFController
 	{
 		$model = $this->getThisModel();
 		$model->setState('engine', FOFInput::getVar('engine', '', $this->input));
-		$model->setState('params', FOFInput::getArray('params', array(), $this->input, 2));
+		if($this->input instanceof FOFInput) {
+			$model->setState('params', $this->input->get('params', array(), 'array', 2));
+		} else {
+			$model->setState('params', FOFInput::getArray('params', array(), $this->input, 2));
+		}
 		
 		@ob_end_clean();
 		$model->dpeOuthOpen();
@@ -133,7 +146,11 @@ class AkeebaControllerConfig extends FOFController
 		$model = $this->getThisModel();
 		$model->setState('engine', FOFInput::getVar('engine', '', $this->input));
 		$model->setState('method', FOFInput::getVar('method', '', $this->input));
-		$model->setState('params', FOFInput::getArray('params', array(), $this->input, 2));
+		if($this->input instanceof FOFInput) {
+			$model->setState('params', $this->input->get('params', array(), 'array', 2));
+		} else {
+			$model->setState('params', FOFInput::getArray('params', array(), $this->input, 2));
+		}
 		
 		@ob_end_clean();
 		echo '###'.json_encode( $model->dpeCustomAPICall() ).'###';

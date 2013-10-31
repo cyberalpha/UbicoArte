@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: Content
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -24,13 +24,8 @@ class NNFrameworkAssignmentsContent
 		if (!in_array($parent->params->option, $components)) {
 			return $parent->pass(0, $assignment);
 		}
-		if($parent->params->view == 'category' && $parent->params->layout == 'blog') {
-			$view = 'categoryblog';
-		} else {
-			$view = $parent->params->view;
-		}
 
-		return $parent->passSimple($view, $selection, $assignment);
+		return $parent->passSimple($parent->params->view, $selection, $assignment);
 	}
 
 	function passCategories(&$parent, &$params, $selection = array(), $assignment = 'all', $article = 0)
@@ -103,7 +98,7 @@ class NNFrameworkAssignmentsContent
 					if ($pass && $params->inc_children == 2) {
 						$pass = 0;
 					} else if (!$pass && $params->inc_children) {
-						$parentids = self::getParentIds($parent, $catid);
+						$parentids = NNFrameworkAssignmentsContent::getParentIds($parent, $catid);
 						$parentids = array_diff($parentids, array('1'));
 						foreach ($parentids as $id) {
 							if (in_array($id, $selection)) {

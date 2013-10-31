@@ -1,7 +1,7 @@
 <?php
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -1022,8 +1022,7 @@ class JAT3_AdminUtil
             JHTML::stylesheet($path. 'element/assets/css/japaramhelper.css');
 
             //add compatible j3.0
-            $javersion = new JVersion();
-            if($javersion->isCompatible('3.0') > 0){
+            if(version_compare(JVERSION, '3.0', 'ge')){
                 JHTML::stylesheet($path. 'admin/assets/css/jat3.ex.css');
             }
         }

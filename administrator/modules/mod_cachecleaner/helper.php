@@ -3,7 +3,7 @@
  * Module Helper File
  *
  * @package         Cache Cleaner
- * @version         3.1.4
+ * @version         3.1.2
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -52,8 +52,8 @@ class modCacheCleaner
 			var cachecleaner_msg_failure = '" . addslashes(html_entity_decode(JText::_('CC_CACHE_COULD_NOT_BE_CLEANED'))) . "';";
 		JFactory::getDocument()->addScriptDeclaration($script);
 
-		JHtml::script('cachecleaner/script.min.js', false, true);
-		JHtml::stylesheet('cachecleaner/style.min.css', false, true);
+		JHtml::script('cachecleaner/script.js', false, true);
+		JHtml::stylesheet('cachecleaner/style.css', false, true);
 
 		$text_ini = strtoupper(str_replace(' ', '_', $this->params->icon_text));
 		$text = JText::_($text_ini);

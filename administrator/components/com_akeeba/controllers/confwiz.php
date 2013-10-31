@@ -24,6 +24,12 @@ class AkeebaControllerConfwiz extends FOFController
 			return JError::raiseWarning(403, JText::_('JERROR_ALERTNOAUTHOR'));
 			$this->redirect();
 		}
+		$this->modelName = 'AkeebaModelConfwiz';
+	}
+	
+	public function add()
+	{
+		$this->display(false);
 	}
 	
 	public function ajax()

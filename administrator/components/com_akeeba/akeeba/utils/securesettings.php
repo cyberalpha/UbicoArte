@@ -8,7 +8,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * Implements encrypted settings handling features
@@ -30,11 +30,9 @@ class AEUtilSecuresettings
 			include_once $filename;
 		}
 
-		if(!defined('AKEEBA_SERVERKEY')) {
-			define('AKEEBA_SERVERKEY', base64_encode(''));	
-		}
-		
-		return base64_decode(AKEEBA_SERVERKEY);
+		if(defined('AKEEBA_SERVERKEY')) return base64_decode(AKEEBA_SERVERKEY);
+
+		return '';
 	}
 	
 	/**

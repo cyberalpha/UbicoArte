@@ -25,11 +25,6 @@ interface AEPlatformInterface
 	public function isThisPlatform();
 	
 	/**
-	 * Registers Akeeba Engine's autoloader with the current platform
-	 */
-	public function register_autoloader();
-	
-	/**
 	 * Saves the current configuration to the database table
 	 * @param	int		$profile_id	The profile where to save the configuration to, defaults to current profile
 	 * @return	bool	True if everything was saved properly

@@ -38,7 +38,7 @@ $min_enableBuilder = true;
  * will have to load extra code to guess. Some examples below:
  */
 // $min_cachePath = 'c:\\WINDOWS\\Temp';
-$min_cachePath = '/var/www/UbicoArte/cache/zt-assets/';
+$min_cachePath = '/var/www/Direccionarte/cache/zt-assets/';
 // $min_cachePath = preg_replace('/^\\d+;/', '', session_save_path());
 
 
@@ -52,7 +52,7 @@ $min_cachePath = '/var/www/UbicoArte/cache/zt-assets/';
  * If /min/ is directly inside your document root, just uncomment the 
  * second line. The third line might work on some Apache servers.
  */
-$min_documentRoot = '/var/www/UbicoArte/';
+$min_documentRoot = '/var/www/Direccionarte/';
 //$min_documentRoot = substr(__FILE__, 0, strlen(__FILE__) - 15);
 //$min_documentRoot = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 

@@ -4,7 +4,7 @@
  * Does all the magic!
  *
  * @package         Cache Cleaner
- * @version         3.1.4
+ * @version         3.1.2
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -51,8 +51,8 @@ class plgSystemCacheCleaner extends JPlugin
 		// return if NoNumber Framework plugin is not installed
 		if (!JFile::exists(JPATH_PLUGINS . '/system/nnframework/nnframework.php')) {
 			if (JFactory::getApplication()->isAdmin() && JFactory::getApplication()->input->get('option') != 'com_login') {
-				$msg = JText::_('CC_NONUMBER_FRAMEWORK_NOT_INSTALLED')
-					. ' ' . JText::sprintf('CC_EXTENSION_CAN_NOT_FUNCTION', JText::_('CACHE_CLEANER'));
+				$msg = JText::_('CC_NONUMBER_FRAMEWORK_NOT_INSTALLED');
+				$msg .= ' ' . JText::sprintf('CC_EXTENSION_CAN_NOT_FUNCTION', JText::_('CACHE_CLEANER'));
 				$mq = JFactory::getApplication()->getMessageQueue();
 				foreach ($mq as $m) {
 					if ($m['message'] == $msg) {

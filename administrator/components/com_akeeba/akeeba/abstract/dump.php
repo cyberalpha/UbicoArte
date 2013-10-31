@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 abstract class AEAbstractDump extends AEAbstractPart
 {
@@ -109,9 +109,9 @@ abstract class AEAbstractDump extends AEAbstractPart
 	 */
 	protected function getBackupFilePaths( $partNumber = 0 )
 	{
-		AEUtilLogger::WriteLog(_AE_LOG_DEBUG, 'XXX '.__CLASS__." :: Getting temporary file");
+		AEUtilLogger::WriteLog(_AE_LOG_DEBUG, __CLASS__." :: Getting temporary file");
 		$this->tempFile = AEUtilTempfiles::registerTempFile( dechex(crc32(microtime())).'.sql' );
-		AEUtilLogger::WriteLog(_AE_LOG_DEBUG, 'XXX '.__CLASS__." :: Temporary file is {$this->tempFile}");
+		AEUtilLogger::WriteLog(_AE_LOG_DEBUG, __CLASS__." :: Temporary file is {$this->tempFile}");
 		// Get the base name of the dump file
 		$partNumber = intval($partNumber);
 		$baseName = $this->dumpFile;
@@ -629,13 +629,16 @@ abstract class AEAbstractDump extends AEAbstractPart
 		if( $error = $db->getError() )
 		{
 			$this->setError(__CLASS__.' :: Database Error: '.$error);
-			return false;
+			$false = false;
+			return $false;
 		}
 
 		if( $db->getErrorNum() > 0 )
 		{
-			$this->setError(__CLASS__.' :: Database Error: '.$db->getErrorMsg());
-			return false;
+			$error = $db->getErrorMsg();
+			$this->setError(__CLASS__.' :: Database Error: '.$error);
+			$false = false;
+			return $false;
 		}
 
 		return $db;

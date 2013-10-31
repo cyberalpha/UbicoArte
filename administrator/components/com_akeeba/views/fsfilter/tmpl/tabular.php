@@ -8,34 +8,34 @@
  */
 
 defined('_JEXEC') or die();
-?>
-<div id="akeeba-container" style="width:100%">
 
+JHtml::_('behavior.framework');
+?>
 <div id="dialog" title="<?php echo JText::_('FSFILTER_ERROR_TITLE') ?>">
 </div>
 
-<fieldset>
-	<legend><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></legend>
+<div class="alert alert-info">
+	<strong><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></strong>
 	#<?php echo $this->profileid; ?> <?php echo $this->profilename; ?>
-</fieldset>
+</div>
 
-<fieldset id="ak_roots_container_tab">
+<div class="well form-inline">
 	<div>
-		<span><?php echo JText::_('FSFILTER_LABEL_ROOTDIR') ?></span>
+		<label><?php echo JText::_('FSFILTER_LABEL_ROOTDIR') ?></label>
 		<span><?php echo $this->root_select; ?></span>
 	</div>
+	<div id="addnewfilter">
+		<?php echo JText::_('FSFILTER_LABEL_ADDNEWFILTER') ?>
+		<button class="btn" onclick="fsfilter_addnew('directories'); return false;"><?php echo JText::_('FSFILTER_TYPE_DIRECTORIES') ?></button>
+		<button class="btn" onclick="fsfilter_addnew('skipfiles'); return false;"><?php echo JText::_('FSFILTER_TYPE_SKIPFILES') ?></button>
+		<button class="btn" onclick="fsfilter_addnew('skipdirs'); return false;"><?php echo JText::_('FSFILTER_TYPE_SKIPDIRS') ?></button>
+		<button class="btn" onclick="fsfilter_addnew('files'); return false;"><?php echo JText::_('FSFILTER_TYPE_FILES') ?></button>
+	</div>
+</div>
+	
+<fieldset id="ak_roots_container_tab">
 	<div id="ak_list_container">
-		<div id="addnewfilter">
-			<?php echo JText::_('FSFILTER_LABEL_ADDNEWFILTER') ?>
-			<button onclick="fsfilter_addnew('directories'); return false;"><?php echo JText::_('FSFILTER_TYPE_DIRECTORIES') ?></button>
-			&bull;
-			<button onclick="fsfilter_addnew('skipfiles'); return false;"><?php echo JText::_('FSFILTER_TYPE_SKIPFILES') ?></button>
-			&bull;
-			<button onclick="fsfilter_addnew('skipdirs'); return false;"><?php echo JText::_('FSFILTER_TYPE_SKIPDIRS') ?></button>
-			&bull;
-			<button onclick="fsfilter_addnew('files'); return false;"><?php echo JText::_('FSFILTER_TYPE_FILES') ?></button>
-		</div>
-		<table id="ak_list_table" class="adminlist">
+		<table id="ak_list_table" class="table table-striped">
 			<thead>
 				<tr>
 					<td width="250px"><?php echo JText::_('FILTERS_LABEL_TYPE') ?></td>
@@ -48,7 +48,7 @@ defined('_JEXEC') or die();
 	</div>
 </fieldset>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 /**
  * Callback function for changing the active root in Filesystem Filters
  */
@@ -101,5 +101,3 @@ akeeba.jQuery(document).ready(function($){
 	fsfilter_render_tab(data);
 });
 </script>
-
-</div>

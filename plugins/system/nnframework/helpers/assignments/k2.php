@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: K2
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -52,9 +52,9 @@ class NNFrameworkAssignmentsK2
 				case 'item':
 				default:
 					$query = $parent->db->getQuery(true);
-					$query->select('i.catid')
-						->from('#__k2_items AS i')
-						->where('i.id = ' . (int) $parent->params->id);
+					$query->select('i.catid');
+					$query->from('#__k2_items AS i');
+					$query->where('i.id = ' . (int) $parent->params->id);
 					$parent->db->setQuery($query);
 					$cats = $parent->db->loadResult();
 					break;
@@ -82,7 +82,7 @@ class NNFrameworkAssignmentsK2
 			return $parent->pass(0, $assignment);
 		}
 
-		$tag = trim(JFactory::getApplication()->input->getString('tag', ''));
+		$tag = trim(JFactory::getApplication()->input->getString('tag'));
 		$pass = (
 			($params->inc_tags && $tag != '')
 				|| ($params->inc_items && $parent->params->view == 'item')
@@ -93,14 +93,14 @@ class NNFrameworkAssignmentsK2
 		}
 
 		if ($params->inc_tags && $tag != '') {
-			$tags = array(trim(JFactory::getApplication()->input->getString('tag', '')));
+			$tags = array(trim(JFactory::getApplication()->input->getString('tag')));
 		} else {
 			$query = $parent->db->getQuery(true);
-			$query->select('t.name')
-				->from('#__k2_tags_xref AS x')
-				->join('LEFT', '#__k2_tags AS t ON t.id = x.tagID')
-				->where('x.itemID = ' . (int) $parent->params->id)
-				->where('t.published = 1');
+			$query->select('t.name');
+			$query->from('#__k2_tags_xref AS x');
+			$query->join('LEFT', '#__k2_tags AS t ON t.id = x.tagID');
+			$query->where('x.itemID = ' . (int) $parent->params->id);
+			$query->where('t.published = 1');
 			$parent->db->setQuery($query);
 			$tags = $parent->db->loadColumn();
 		}

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="search" method="upgrade">
+    <name>Search - SobiPro Search Plugin+ (Plus)</name>
+    <creationDate>August 2011</creationDate>
+
+	<author>Extly.com</author>
+	<authorEmail>support@extly.com</authorEmail>
+	<authorUrl>http://www.extly.com</authorUrl>
+	<copyright>Copyright (C) 2007 - 2012 Prieco, S.A. All rights reserved.</copyright>
+	<license>GNU/GPLv3 www.gnu.org/licenses/gpl-3.0.html</license>
+
+    <version>3.2.0</version>
+    <description>Joomla Search for SobiPro Component + Multi-Section + Full Text Search. 
+	<![CDATA[<a target="_blank" href="http://www.prieco.com/en/extensions/sobipro/sobipro-search-plugin-plus.html">Check the online documentation.</a>]]>
+    </description>
+    <files>
+        <filename plugin="prsobiproplus">prsobiproplus.php</filename>
+        <filename plugin="prsobiproplus">prsobiproplus_indexer.php</filename>
+        <filename plugin="prsobiproplus">prsobiproplus_cronjob.php</filename>
+        <filename>index.html</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">en-GB.plg_search_prsobiproplus.ini</language>
+        <language tag="en-GB">en-GB.plg_search_prsobiproplus.sys.ini</language>
+    </languages>
+    
+    <config>
+        <fields name="params">
+
+            <fieldset name="basic">
+				
+                <field name="title" type="text"
+                       default="Change the Title"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_TITLE_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_TITLE_LABEL"
+                       size="15"
+				/>
+				
+                <field name="catalog_list" type="sql"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPROPLUS_CATALOGLIST_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_CATALOGLIST_LABEL"
+                       size="7"
+                       query="SELECT id, CONCAT(name, ' (', id, ')') name FROM #__sobipro_object WHERE oType='section' AND state=1 ORDER BY name"
+                       key_field="id" value_field="name"
+					   multiple="true"
+				/>
+				
+                <field name="search_field_list" type="sql"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPRO_FIELD_SEARCHFLDLIST_DESC"
+                       label="PLG_SEARCH_PRSOBIPRO_FIELD_SEARCHFLDLIST_LABEL"
+                       size="7"
+                       query="SELECT f.fid, CONCAT(s.name, ' - ', f.nid, ' (', f.fid, ')') as name FROM #__sobipro_field f JOIN #__sobipro_object s ON f.section=s.id WHERE enabled=1 ORDER BY s.name,f.position"
+                       key_field="fid" value_field="name"
+					   multiple="true"
+				/>
+				
+                <field name="search_username" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_USERNAME_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_USERNAME_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>
+				
+                <field name="search_name" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_NAME_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_NAME_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>				
+
+                <field name="search_limit" type="text"
+                       default="50"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_LIMIT_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_LIMIT_LABEL"
+                       size="5"
+				/>		
+				
+                <field name="randomize" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_RANDOMIZE_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_RANDOMIZE_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>		
+
+                <field name="allow_empty" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_ALLOWEMPTY_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_ALLOWEMPTY_LABEL">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+                                                				
+            </fieldset>			
+            <fieldset name="advanced">	
+
+                <field name="scheduled_indexer" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_SCHEDULED_INDEXER_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_SCHEDULED_INDEXER_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>	
+
+                <field name="menu_itemid" type="menuitem"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPROPLUS_MENUITEMID_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_MENUITEMID_LABEL"
+                       size="7"
+				>
+					<option value="">-- None --</option>
+                </field>
+
+                <field name="custom_field_names" type="sql"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPRO_FIELDNAMES_DESC"
+                       label="PLG_SEARCH_PRSOBIPRO_FIELDNAMES_LABEL"
+                       size="7"
+                       query="SELECT f.fid, CONCAT(s.name, ' - ', f.nid, ' (', f.fid, ')') as name FROM #__sobipro_field f JOIN #__sobipro_object s ON f.section=s.id WHERE enabled=1 AND f.fieldType='inbox' ORDER BY s.name,f.position"
+                       key_field="fid" value_field="name"
+					   multiple="true">
+				</field>
+
+                <field name="desc_list" type="sql"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPROPLUS_DESCLIST_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_DESCLIST_LABEL"
+                       size="7"
+                       query="SELECT f.fid, CONCAT(s.name, ' - ', f.nid, ' (', f.fid, ')') as name FROM #__sobipro_field f JOIN #__sobipro_object s ON f.section=s.id WHERE enabled=1 AND (f.fieldType='inbox' OR f.fieldType='textarea') ORDER BY s.name,f.position"
+                       key_field="fid" value_field="name"
+					   multiple="true">
+				</field>
+                                
+                <field name="search_category_list" type="sql"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPRO_SEARCHCTGLIST_DESC"
+                       label="PLG_SEARCH_PRSOBIPRO_SEARCHCTGLIST_LABEL"
+                       size="7"
+                       query="SELECT c.id id, CONCAT(s.name, ' - ', c.name, ' (', c.id, ')') name FROM #__sobipro_object c, #__sobipro_object s,  #__prsobiproplus_tree t
+                                              WHERE s.oType='section' AND s.state=1 
+                                                AND c.oType = 'category' AND c.state=1
+												AND c.id = t.id AND s.id=t.section
+                                              ORDER BY s.name, t.lft"
+                       key_field="id" value_field="name"
+					   multiple="true">
+				</field>
+                
+                <field name="allow_guest_entries" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_GUESTENTRIES_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_GUESTENTRIES_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>				
+
+                <field name="only_approved" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_ONLYAPPROVED_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_ONLYAPPROVED_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>
+
+                <field name="ft_mode" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_FT_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_FT_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>				
+				
+                <field name="ft_mode_qe" type="radio"
+                       default="0"
+                       description="PLG_SEARCH_PRSOBIPROPLUS_FTQE_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_FTQE_LABEL">
+                    <option value="0">PLG_SEARCH_PRSOBIPROPLUS_NO</option>
+                    <option value="1">PLG_SEARCH_PRSOBIPROPLUS_YES</option>
+                </field>
+
+                <!-- field name="interval" type="text"
+default="15"
+description="PLG_SEARCH_PRSOBIPROPLUS_INTERVAL_DESC"
+label="PLG_SEARCH_PRSOBIPROPLUS_INTERVAL_LABEL"
+size="10"
+            				-->
+				
+                <field name="sql_big_selects" type="radio" default="1" label="SQL_BIG_SELECTS" description="Enable SQL_BIG_SELECTS.">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>		
+				
+                <field name="order_query" type="text"
+                       default=""
+                       description="PLG_SEARCH_PRSOBIPROPLUS_ORDERQUERY_DESC"
+                       label="PLG_SEARCH_PRSOBIPROPLUS_ORDERQUERY_LABEL"
+                       size="25"
+				/>
+
+                <field name="debug" type="radio" default="0" label="Debug" description="Flag to enable debug messages.">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </field>
+				
+            </fieldset>
+			
+        </fields>
+    </config>
+</install>

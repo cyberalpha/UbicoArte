@@ -11,6 +11,24 @@ defined('_JEXEC') or die();
 
 class AkeebaDispatcher extends FOFDispatcher
 {
+	public function onBeforeDispatch() {
+		$result = parent::onBeforeDispatch();
+		
+		if($result) {
+			// Load Akeeba Strapper
+			include_once JPATH_ROOT.'/media/akeeba_strapper/strapper.php';
+			AkeebaStrapper::$tag = AKEEBAMEDIATAG;
+			AkeebaStrapper::bootstrap();
+			AkeebaStrapper::jQueryUI();
+			AkeebaStrapper::addJSfile('media://com_akeeba/js/gui-helpers.js');
+			AkeebaStrapper::addJSfile('media://com_akeeba/js/akeebaui.js');
+			AkeebaStrapper::addJSfile('media://com_akeeba/plugins/js/akeebaui.js');
+			AkeebaStrapper::addCSSfile('media://com_akeeba/theme/akeebaui.css');
+		}
+		
+		return $result;
+	}
+	
 	public function dispatch() {
 		// Merge the language overrides
 		$paths = array(JPATH_ROOT, JPATH_ADMINISTRATOR);
@@ -25,9 +43,9 @@ class AkeebaDispatcher extends FOFDispatcher
 		$jlang->load($this->component.'.override', $paths[1], 'en-GB', true);
 		$jlang->load($this->component.'.override', $paths[1], null, true);
 		// Live Update translation
-		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', 'en-GB', true);
-		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', $jlang->getDefault(), true);
-		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.DS.'liveupdate', null, true);
+		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate', 'en-GB', true);
+		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate', $jlang->getDefault(), true);
+		$jlang->load('liveupdate', JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate', null, true);
 
 		// Timezone fix; avoids errors printed out by PHP 5.3.3+ (thanks Yannick!)
 		if(function_exists('date_default_timezone_get') && function_exists('date_default_timezone_set')) {

@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available categories / items
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -37,17 +37,17 @@ class JFormFieldNN_Content extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__categories AS c')
-			->where('c.parent_id > 0')
-			->where('c.published > -1')
-			->where('c.extension = ' . $this->db->quote('com_content'));
+		$query->select('COUNT(*)');
+		$query->from('#__categories AS c');
+		$query->where('c.parent_id > 0');
+		$query->where('c.published > -1');
+		$query->where('c.extension = ' . $this->db->quote('com_content'));
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -68,12 +68,12 @@ class JFormFieldNN_Content extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('c.id, c.title, c.level, c.published')
-			->from('#__categories AS c')
-			->where('c.parent_id > 0')
-			->where('c.published > -1')
-			->where('c.extension = ' . $this->db->quote('com_content'))
-			->order('c.lft');
+		$query->select('c.id, c.title, c.level, c.published');
+		$query->from('#__categories AS c');
+		$query->where('c.parent_id > 0');
+		$query->where('c.published > -1');
+		$query->where('c.extension = ' . $this->db->quote('com_content'));
+		$query->order('c.lft');
 
 		$this->db->setQuery($query);
 		$items = $this->db->loadObjectList();
@@ -91,9 +91,9 @@ class JFormFieldNN_Content extends JFormField
 	function getItems()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__content AS i')
-			->where('i.access > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__content AS i');
+		$query->where('i.access > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -102,11 +102,11 @@ class JFormFieldNN_Content extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('i.id, i.title as name, c.title as cat, i.access as published')
-			->from('#__content AS i')
-			->join('LEFT', '#__categories AS c ON c.id = i.catid')
-			->where('i.access > -1')
-			->order('i.title, i.ordering, i.id');
+		$query->select('i.id, i.title as name, c.title as cat, i.access as published');
+		$query->from('#__content AS i');
+		$query->join('LEFT', '#__categories AS c ON c.id = i.catid');
+		$query->where('i.access > -1');
+		$query->order('i.title, i.ordering, i.id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

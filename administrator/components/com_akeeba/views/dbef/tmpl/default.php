@@ -9,34 +9,37 @@
 
 defined('_JEXEC') or die();
 
+JHtml::_('behavior.framework');
 ?>
-<div id="akeeba-container" style="width:100%">
-
 <div id="dialog" title="<?php echo JText::_('DBFILTER_ERROR_TITLE') ?>">
 </div>
 
-<fieldset>
-	<legend><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?>: #<?php echo $this->profileid; ?></legend>
-	<?php echo $this->profilename; ?>
-</fieldset>
+<div class="alert alert-info">
+	<strong><?php echo JText::_('CPANEL_PROFILE_TITLE'); ?></strong>
+	#<?php echo $this->profileid; ?> <?php echo $this->profilename; ?>
+</div>
 
-<fieldset>
-		<legend><?php echo JText::_('DBFILTER_LABEL_ROOTDIR') ?></legend>
+<div class="form-inline well">
+	<div>
+		<label><?php echo JText::_('DBFILTER_LABEL_ROOTDIR') ?></label>
 		<?php echo $this->root_select; ?>
-
-		&nbsp;&bull;&nbsp;
-		
-		<button onclick="dbfilter_exclude_noncms(); return false;"><?php echo JText::_('DBFILTER_LABEL_EXCLUDENONCORE'); ?></button>
-		<button onclick="dbfilter_nuke(); return false;"><?php echo JText::_('DBFILTER_LABEL_NUKEFILTERS'); ?></button>
-		
-</fieldset>
+		<button class="btn btn-success" onclick="dbfilter_exclude_noncms(); return false;">
+			<i class="icon-flag icon-white"></i>
+			<?php echo JText::_('DBFILTER_LABEL_EXCLUDENONCORE'); ?>
+		</button>
+		<button class="btn btn-danger" onclick="dbfilter_nuke(); return false;">
+			<i class="icon-fire icon-white"></i>
+			<?php echo JText::_('DBFILTER_LABEL_NUKEFILTERS'); ?>
+		</button>
+	</div>	
+</div>
 
 <fieldset>
 	<legend><?php echo JText::_('DBFILTER_LABEL_TABLES'); ?></legend>
 	<div id="tables"></div>
 </fieldset>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 /**
  * Callback function for changing the active root in Database Table filters
  */
@@ -100,5 +103,3 @@ akeeba.jQuery(document).ready(function($){
 	dbfilter_render(data);
 });
 </script>
-
-</div>

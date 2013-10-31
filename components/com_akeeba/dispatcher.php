@@ -81,6 +81,10 @@ class AkeebaDispatcher extends FOFDispatcher
 			{
 				require_once JPATH_COMPONENT_ADMINISTRATOR.'/helpers/jsonlib.php';
 			}
+			
+			// Load Akeeba Strapper
+			include_once JPATH_ROOT.'/media/akeeba_strapper/strapper.php';
+			AkeebaStrapper::bootstrap();
 		}
 		
 		return $result;

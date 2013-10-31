@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="content">
+	<name>googleDirections - To Here</name>
+	<author>kksou</author>
+	<creationDate>Nov 2011</creationDate>
+	<copyright>(C) kksou.com. All Rights Reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>support@kksou.com</authorEmail>
+	<authorUrl>www.kksou.com/php-gtk2/</authorUrl>
+	<version>2.58</version>
+	<description>This plugin is an extension of the googleDirections plugin. You specify a designated place to be the destination, and let the user enter the adddress he or she is coming from. Google will then provide the driving or walking directions from the user-specified address to your designated place.</description>
+	<files>
+		<filename plugin="googleDirections_tohere">googleDirections_tohere.php</filename>
+		<filename>googleDirections_tohere.ver</filename>
+		<filename>googleDirections_tohere.lib.php</filename>
+		<filename>googleDirections_tohere.css</filename>
+	</files>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+
+			<field name="api_key" type="text"
+				description="Google Maps API key"
+				label="Google Maps API key"
+				size="48"
+			/>
+
+			<field name="width" type="text"
+				label="Default width"
+				default="400"
+				description="Default width for the Google Maps"
+				size="4"
+			/>
+
+			<field name="height" type="text"
+				label="Default height"
+				description="Default height for the Google Maps"
+				default="480"
+				size="4"
+			/>
+
+			<field name="zoom" type="text"
+				label="Default zoom"
+				default="15"
+				description="Default zoom level for the Google Maps"
+				size="2"
+			/>
+
+			<field name="dir_width" type="text"
+				label="Default directions width"
+				default="275"
+				description="Default width for the directions"
+				size="4"
+			/>
+
+			<field name="header_map" type="text"
+				label="Label for Map"
+				default="Map"
+				description="Label to be displayed above the map"
+				size="48"
+			/>
+
+			<field name="header_dir" type="text"
+				label="Label for Directions"
+				default="Directions"
+				description="Label to be displayed above the Directions"
+				size="48"
+			/>
+
+			<field name="map_on_right"
+				type="radio"
+				default="0"
+				description="Display the map on right and directions on left"
+				label="Display Map on Right">
+				<option value="1">Yes</option>
+				<option value="0">No</option>
+			</field>
+
+			<field name="label_coming_from" type="text"
+				label="Label - Coming from"
+				default="Coming from"
+				description="Label - Coming from"
+				size="48"
+			/>
+
+			<field name="label_get_directions" type="text"
+				label="Label - Get Directions"
+				default="Get Directions"
+				description="Label for the button Get Directions"
+				size="48"
+			/>
+
+			<field name="addr_input_size" type="text"
+				label="Size for address input"
+				default="42"
+				description="Default size for input of address"
+				size="4"
+			/>
+
+			</fieldset>
+		</fields>
+	</config>
+
+</extension>

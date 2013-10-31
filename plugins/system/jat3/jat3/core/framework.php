@@ -1,7 +1,7 @@
 <?php
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -31,6 +31,10 @@ class T3Framework extends jObject
         t3import('core.cache');
         t3import('core.head');
         t3import('core.hook');
+
+		if(version_compare(JVERSION, '3.0', 'ge')){
+			t3import('core.joomla.form.field');
+		}
         // Remove JDocumentHTML for compatible J1.6 & J1.7
         // if (!class_exists ('JDocumentHTML', false)) t3import ('core.joomla.documenthtml');
         if (! class_exists('JView', false)) t3import('core.joomla.view');
@@ -142,9 +146,8 @@ class T3Framework extends jObject
     {
         $doc = JFactory::getDocument();
         $t3  = T3Template::getInstance($doc);
-        $javersion = new JVersion;
-
-        if($javersion->isCompatible('3.0') >= 0){
+        
+        if(version_compare(JVERSION, '3.0', 'ge')){
             JHtml::_('behavior.framework', true);
         }
         

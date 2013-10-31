@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 // @todo Remove me!
 // Large file threshold (default: 10Mb)
@@ -155,8 +155,13 @@ ENDVCONTENT;
 		$this->remove_path_prefix = $dir_definition[0]; // Remove absolute path to directory when storing the file
 		if(is_null($dir_definition[1]))
 		{
+			
 			$this->path_prefix = ''; // No added path for main site
-			$this->root = '[SITEROOT]';
+			if(empty($dir_definition[0])) {
+				$this->root = '[SITEROOT]';
+			} else {
+				$this->root = $dir_definition[0];
+			}
 		}
 		else
 		{
@@ -301,7 +306,7 @@ ENDVCONTENT;
 	 *
 	 * @return bool True if more work has to be done, false if the dirextory stack is empty
 	 */
-	private function scan_directory( )
+	private function scan_directory()
 	{
 		// Are we supposed to scan for more files?
 		if( $this->done_scanning ) return true;
@@ -329,18 +334,34 @@ ENDVCONTENT;
 		$engine = AEFactory::getScanEngine();
 
 		// Break directory components
+		if(AEFactory::getConfiguration()->get('akeeba.platform.override_root',0)) {
+			$siteroot = AEFactory::getConfiguration()->get('akeeba.platform.newroot', '[SITEROOT]');
+		} else {
+			$siteroot = '[SITEROOT]';
+		}
 		$root = $this->root;
-		$translated_root = AEUtilFilesystem::TranslateWinPath($this->root);
-		if($this->root == '[SITEROOT]') {
-			$translated_root = AEUtilFilesystem::TranslateWinPath(AEPlatform::getInstance()->get_site_root());
+		if($this->root == $siteroot) {
+			$translated_root = AEUtilFilesystem::translateStockDirs($siteroot, true);
 		} else {
 			$translated_root = $this->remove_path_prefix;
 		}
 		$dir = AEUtilFilesystem::TrimTrailingSlash($this->current_directory);
-		if(substr($dir,0,strlen($translated_root)) == $translated_root)
+		
+		if(strtoupper(substr(PHP_OS,0,3)) == 'WIN') {
+			$translated_root = AEUtilFilesystem::TranslateWinPath($translated_root);
+			$dir = AEUtilFilesystem::TranslateWinPath($dir);
+		}
+		
+		if(substr($dir,0,strlen($translated_root)) == $translated_root) {
 			$dir = substr($dir,strlen($translated_root));
+		} elseif(in_array(substr($translated_root,-1),array('/','\\'))) {
+			$new_translated_root = rtrim($translated_root,'/\\');
+			if(substr($dir,0,strlen($new_translated_root)) == $new_translated_root) {
+				$dir = substr($dir,strlen($new_translated_root));
+			}
+		}
 		if(substr($dir,0,1) == '/') $dir = substr($dir,1);
-
+		
 		// get a filters instance
 		$filters = AEFactory::getFilters();
 
@@ -348,8 +369,8 @@ ENDVCONTENT;
 		if(!$this->done_subdir_scanning)
 		{
 			// Apply DEF (directory exclusion filters)
-			//if (in_array( $this->current_directory, $this->_ExcludeDirs )) {
-			if($filters->isFiltered($dir, $root, 'dir', 'all') ) {
+			// Note: the !empty($dir) prevents the site's root from being filtered out
+			if($filters->isFiltered($dir, $root, 'dir', 'all') && !empty($dir) ) {
 				AEUtilLogger::WriteLog(_AE_LOG_INFO, "Skipping directory ".$this->current_directory);
 				$this->done_subdir_scanning = true;
 				$this->done_file_scanning = true;
@@ -357,7 +378,6 @@ ENDVCONTENT;
 			}
 
 			// Apply Skip Contained Directories Filters
-			//if (in_array( $this->current_directory, $this->_skipContainedDirectories )) {
 			if($filters->isFiltered($dir, $root, 'dir', 'children') ) {
 				AEUtilLogger::WriteLog(_AE_LOG_INFO, "Skipping subdirectories of directory ".$this->current_directory);
 				$this->done_subdir_scanning = true;

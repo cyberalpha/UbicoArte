@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 $buttons = KC_Admin_QuickIconHelper::getButtons( $params );
 ?>
-<div id="<?php echo $params->get('moduleclass_sfx'); ?>">
+<div id="cpanel<?php echo $params->get('moduleclass_sfx'); ?>" class="kc_admin_quickicons_cpanel<?php echo $params->get('moduleclass_sfx'); ?>">
 <?php
 foreach ($buttons as $button):
 	echo KC_Admin_QuickIconHelper::button($button);

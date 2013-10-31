@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * Writes messages to the backup log file
@@ -120,8 +120,10 @@ class AEUtilLogger
 
 		if( ($configuredLoglevel >= $level) && ($configuredLoglevel != 0))
 		{
-			$message = str_replace( $site_root_untranslated, "<root>", $message );
-			$message = str_replace( $site_root, "<root>", $message );
+			if(!defined('AKEEBADEBUG')) {
+				$message = str_replace( $site_root_untranslated, "<root>", $message );
+				$message = str_replace( $site_root, "<root>", $message );
+			}
 			$message = str_replace( "\n", ' \n ', $message );
 			switch( $level )
 			{

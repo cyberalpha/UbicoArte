@@ -17,6 +17,7 @@ $images = json_decode(isset($this->item->images) ? $this->item->images : null);
 $urls = json_decode(isset($this->item->urls) ? $this->item->urls : null);
 $canEdit	= $this->item->params->get('access-edit');
 $user		= JFactory::getUser();
+JHtml::_('behavior.caption');
 
 ?>
 <div class="item-page<?php echo $this->pageclass_sfx?> clearfix">
@@ -176,6 +177,12 @@ if (!empty($this->item->pagination) AND $this->item->pagination AND !$this->item
 ?>
 
 	<?php echo $this->item->text; ?>
+
+	<?php if ($params->get('show_tags', 1) && !empty($this->item->tags)) : ?>
+		<?php $this->item->tagLayout = new JLayoutFile('joomla.content.tags'); ?>
+
+		<?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
+	<?php endif; ?>
 	
 <?php
 if (!empty($this->item->pagination) AND $this->item->pagination AND $this->item->paginationposition AND!$this->item->paginationrelative):

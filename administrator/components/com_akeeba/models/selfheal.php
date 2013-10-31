@@ -55,13 +55,6 @@ CREATE TABLE IF NOT EXISTS `#__ak_stats` (
   PRIMARY KEY  (`id`)
 ) DEFAULT CHARACTER SET utf8;
 ENDSQL;
-		$schemata['#__ak_acl'] = <<<ENDSQL
-CREATE TABLE IF NOT EXISTS `#__ak_acl` (
-	`user_id` BIGINT(20) UNSIGNED NOT NULL,
-	`permissions` MEDIUMTEXT,
-	PRIMARY KEY (`user_id`)
-) DEFAULT CHARACTER SET utf8;
-ENDSQL;
 		$schemata['#__ak_storage'] = <<<ENDSQL
 CREATE TABLE IF NOT EXISTS `#__ak_storage` (
 	`tag` VARCHAR(255) NOT NULL,
@@ -89,7 +82,7 @@ ENDSQL;
 			if(!$this->runSQL($this->schemata['#__ak_profiles'])) return false;
 			if(!$this->runSQL($this->schemata['default_profile'])) return false;
 		}
-		foreach(array('#__ak_stats','#__ak_acl','#__ak_storage') as $table) {
+		foreach(array('#__ak_stats','#__ak_storage') as $table) {
 			if(!$this->tableExists($table)) {
 				if(!$this->runSQL($this->schemata[$table])) return false;
 			}
@@ -185,9 +178,9 @@ ENDSQL;
 		$db = JFactory::getDBO();
 		
 		// First, try using DESCRIBE (preferred method)
-		$db->setQuery('DESCRIBE '.$db->nameQuote($table));
+		$db->setQuery('DESCRIBE '.$db->qn($table));
 		try {
-			$columns = $db->loadResultArray(0);
+			$columns = $db->loadColumn(0);
 		} catch(DatabaseException $e) {
 			$columns = null;
 		}
@@ -197,14 +190,14 @@ ENDSQL;
 		}
 		
 		// DESCRIBE failed. Try the hard way...
-		$db->setQuery('SHOW CREATE TABLE '.$db->nameQuote($table));
+		$db->setQuery('SHOW CREATE TABLE '.$db->qn($table));
 		try {
-			$creates = $db->loadResultArray(1);
+			$creates = $db->loadColumn(1);
 		} catch(DatabaseException $e) {
 			return false;
 		}
 		$create = $creates[0];
-		$search = $db->nameQuote($column);
+		$search = $db->qn($column);
 		
 		return strpos($search, $create) !== false;
 	}
@@ -218,7 +211,7 @@ ENDSQL;
 	private function tableExists($table)
 	{
 		$db = JFactory::getDBO();
-		return $this->runSQL('SELECT COUNT(*) FROM '.$db->nameQuote($table));
+		return $this->runSQL('SELECT COUNT(*) FROM '.$db->qn($table));
 	}
 	
 	private function isMySQL()

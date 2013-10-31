@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available K2 categories / tags / items
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -47,15 +47,15 @@ class JFormFieldNN_K2 extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__k2_categories AS c')
-			->where('c.published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__k2_categories AS c');
+		$query->where('c.published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -67,9 +67,9 @@ class JFormFieldNN_K2 extends JFormField
 		$show_ignore = $this->def('show_ignore');
 
 		$query = $this->db->getQuery(true);
-		$query->select('c.id, c.parent AS parent_id, c.name AS title, c.published')
-			->from('#__k2_categories AS c')
-			->where('c.published > -1');
+		$query->select('c.id, c.parent AS parent_id, c.name AS title, c.published');
+		$query->from('#__k2_categories AS c');
+		$query->where('c.published > -1');
 		if (!$get_categories) {
 			$query->where('c.parent = 0');
 		}
@@ -114,10 +114,10 @@ class JFormFieldNN_K2 extends JFormField
 	function getTags()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('t.name')
-			->from('#__k2_tags AS t')
-			->where('t.published = 1')
-			->order('t.name');
+		$query->select('t.name');
+		$query->from('#__k2_tags AS t');
+		$query->where('t.published = 1');
+		$query->order('t.name');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
@@ -133,9 +133,9 @@ class JFormFieldNN_K2 extends JFormField
 	function getItems()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__k2_items AS i')
-			->where('i.published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__k2_items AS i');
+		$query->where('i.published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -144,11 +144,11 @@ class JFormFieldNN_K2 extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('i.id, i.title as name, c.name as cat, i.published')
-			->from('#__k2_items AS i')
-			->join('LEFT', '#__k2_categories AS c ON c.id = i.catid')
-			->where('i.published > -1')
-			->order('i.title, i.ordering, i.id');
+		$query->select('i.id, i.title as name, c.name as cat, i.published');
+		$query->from('#__k2_items AS i');
+		$query->join('LEFT', '#__k2_categories AS c ON c.id = i.catid');
+		$query->where('i.published > -1');
+		$query->order('i.title, i.ordering, i.id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers');
+JHtml::_('behavior.caption');
 ?>
 <div class="categories-list<?php echo $this->pageclass_sfx;?> clearfix">
 <?php if ($this->params->get('show_page_heading', 1)) : ?>

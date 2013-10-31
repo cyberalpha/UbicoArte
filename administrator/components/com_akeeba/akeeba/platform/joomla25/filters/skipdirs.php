@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * Subdirectories exclusion filter. Excludes temporary, cache and backup output
@@ -27,7 +27,11 @@ class AEFilterPlatformSkipdirs extends AEAbstractFilter
 		// We take advantage of the filter class magic to inject our custom filters
 		$configuration = AEFactory::getConfiguration();
 		$jreg = JFactory::getConfig();
-		$tmpdir = $jreg->getValue('config.tmp_path');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$tmpdir = $jreg->get('tmp_path');
+		} else {
+			$tmpdir = $jreg->getValue('config.tmp_path');
+		}
 		
 		// Get the site's root
 		if($configuration->get('akeeba.platform.override_root',0)) {

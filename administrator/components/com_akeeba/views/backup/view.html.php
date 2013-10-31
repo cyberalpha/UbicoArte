@@ -27,7 +27,11 @@ class AkeebaViewBackup extends FOFViewHtml
 		// Determine default description
 		jimport('joomla.utilities.date');
 		$jregistry = JFactory::getConfig();
-		$tzDefault = $jregistry->getValue('config.offset');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$tzDefault = $jregistry->get('offset');
+		} else {
+			$tzDefault = $jregistry->getValue('config.offset');
+		}
 		$user = JFactory::getUser();
 		$tz = $user->getParam('timezone', $tzDefault);
 		$dateNow = new JDate('now', $tz);
@@ -105,9 +109,6 @@ class AkeebaViewBackup extends FOFViewHtml
 		
 		// Pass on state information pertaining to SRP
 		$this->assign('srpinfo',	$model->getState('srpinfo'));
-
-		// Add references to CSS and JS files
-		AkeebaHelperIncludes::includeMedia(false);
 
 		// Add live help
 		AkeebaHelperIncludes::addHelp('backup');

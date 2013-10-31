@@ -15,8 +15,14 @@ defined('_JEXEC') or die();
  */
 class AkeebaViewCpanel extends FOFViewHtml
 {	
+	protected function onBrowse($tpl = null) {
+		// Used in FOF 2.0, where this actually works as expected
+		$this->onAdd($tpl);
+	}
+
 	protected function onAdd($tpl = null)
 	{
+		// Used in FOF 1.x where the behaviour was kinda clunky
 		$model = $this->getModel();
 
 		$selfhealModel = FOFModel::getTmpInstance('Selfheal','AkeebaModel');
@@ -52,9 +58,6 @@ class AkeebaViewCpanel extends FOFViewHtml
 			// Add live help
 			AkeebaHelperIncludes::addHelp('cpanel');
 		}
-		
-		// Add references to CSS and JS files
-		AkeebaHelperIncludes::includeMedia(false);
 		
 		return $this->onDisplay($tpl);
 	}

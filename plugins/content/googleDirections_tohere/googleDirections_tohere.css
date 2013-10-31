@@ -1,0 +1,22 @@
+table.googleDirections_tohere td {
+    font-family: Verdana, Arial, sans serif;
+    font-size: 11px;
+    margin: 2px;
+}
+table.googleDirections_tohere th {
+    background-color:#EEEEEE;
+}
+
+table.googleDirections_tohere img {
+    color: #000000;
+}
+
+table.googleDirections_tohere button {
+    font-family: Verdana, Arial, sans serif;
+    font-size: 11px;
+}
+
+table.googleDirections_tohere input {
+    font-family: Verdana, Arial, sans serif;
+    font-size: 11px;
+}

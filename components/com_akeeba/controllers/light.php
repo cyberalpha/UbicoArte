@@ -75,10 +75,12 @@ class AkeebaControllerLight extends FOFController
 			AEUtilTempvars::reset(AKEEBA_BACKUP_ORIGIN);
 
 			$kettenrad = AECoreKettenrad::load(AKEEBA_BACKUP_ORIGIN);
+			$dateNow = new JDate();
+			/*
 			$user = JFactory::getUser();
 			$userTZ = $user->getParam('timezone',0);
-			$dateNow = new JDate();
 			$dateNow->setOffset($userTZ);
+			*/
 			$description = JText::_('BACKUP_DEFAULT_DESCRIPTION').' '.$dateNow->format(JText::_('DATE_FORMAT_LC2'), true);
 			$options = array(
 				'description'	=> $description,

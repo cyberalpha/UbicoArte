@@ -4,7 +4,7 @@
  * Does all the magic!
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -46,7 +46,7 @@ class plgSystemNNFramework extends JPlugin
 
 		$template = JFactory::getApplication()->getTemplate();
 		if ($template == 'adminpraise3') {
-			JHtml::stylesheet('nnframework/ap3.min.css', false, true);
+			JHtml::stylesheet('nnframework/ap3.css', false, true);
 		}
 		if (in_array(
 			JFactory::getApplication()->input->get('option'),
@@ -65,7 +65,7 @@ class plgSystemNNFramework extends JPlugin
 
 	function onAfterRoute()
 	{
-		if (!JFactory::getApplication()->input->getInt('nn_qp', 0)) {
+		if (!JFactory::getApplication()->input->getInt('nn_qp')) {
 			return;
 		}
 

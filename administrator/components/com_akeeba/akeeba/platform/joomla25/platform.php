@@ -9,7 +9,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 if(!defined('DS')) {
 	define('DS',DIRECTORY_SEPARATOR); // Still required by Joomla! :(
@@ -40,32 +40,12 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		// Check if JFactory exists
 		if(!class_exists('JFactory')) return false;
 		// Check if JApplication exists
-		if(!class_exists('JApplication')) return false;
+		$appExists = class_exists('JApplication');
+		$appExists = $appExists || class_exists('JCli');
+		$appExists = $appExists || class_exists('JApplicationCli');
+		if(!$appExists) return false;
 		
 		return version_compare(JVERSION, '2.5.0', 'ge');
-	}
-	
-	
-	/**
-	 * Registers Akeeba's class autoloader with Joomla!
-	 */
-	public function register_autoloader()
-	{
-		// Try to register AEAutoloader with SPL, or fall back to making use of JLoader
-		// Obviously, performance is better with SPL, but not all systems support it.
-		if( function_exists('spl_autoload_register') )
-		{
-			// Joomla! is using its own autoloader function which has to be registered first...
-			if(function_exists('__autoload')) spl_autoload_register('__autoload');
-			// ...and then register ourselves.
-			spl_autoload_register('AEAutoloader');
-		}
-		else
-		{
-			// Guys, it's 2011 at the time of this writing. If you have a host which
-			// doesn't support SPL yet, SWITCH HOSTS!
-			throw new Exception('Akeeba Backup REQUIRES the SPL extension to be loaded and activated',500);
-		}
 	}
 
 	/**
@@ -79,7 +59,11 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		if(empty($stock_directories))
 		{
 			$jreg = JFactory::getConfig();
-			$tmpdir = $jreg->getValue('config.tmp_path');
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$tmpdir = $jreg->get('tmp_path');
+			} else {
+				$tmpdir = $jreg->getValue('config.tmp_path');
+			}
 			$stock_directories['[SITEROOT]'] = $this->get_site_root();
 			$stock_directories['[ROOTPARENT]'] = @realpath($this->get_site_root().'/..');
 			$stock_directories['[SITETMP]'] = $tmpdir;
@@ -203,7 +187,11 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 	{
 		jimport('joomla.utilities.date');
 		$jdate = new JDate($date);
-		return $jdate->toMySQL();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			return $jdate->toSql();
+		} else {
+			return $jdate->toMySQL();
+		}
 	}
 
 	/**
@@ -217,13 +205,16 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		jimport('joomla.utilities.date');
 
 		$jregistry = JFactory::getConfig();
-		$tzDefault = $jregistry->getValue('config.offset');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$tzDefault = $jregistry->get('offset');
+		} else {
+			$tzDefault = $jregistry->getValue('config.offset');
+		}
 		$user = JFactory::getUser();
 		$tz = $user->getParam('timezone', $tzDefault);
 		
-		$dateNow = new JDate('now',$tz);
-		
-		return $dateNow->toFormat($format);
+		$dateNow = new JDate('now', $tz);
+		return $dateNow->format($format, true);
 	}
 	
 
@@ -235,7 +226,16 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 	{
 		if(!array_key_exists('REQUEST_METHOD', $_SERVER)) {
 			// Running under CLI
-			require_once JPATH_ROOT.'/libraries/joomla/environment/uri.php';
+			if(!class_exists('JURI', true)) {
+				$filename = JPATH_ROOT.'/libraries/joomla/environment/uri.php';
+				if(file_exists($filename)) {
+					// Joomla! 2.5
+					require_once $filename;
+				} else {
+					// Joomla! 3.x (and later?)
+					require_once JPATH_ROOT.'/libraries/joomla/uri/uri.php';
+				}
+			}
 			$url = AEPlatform::getInstance()->get_platform_configuration_option('siteurl','');
 			$oURI = new JURI($url);
 		} else {
@@ -248,7 +248,11 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 	public function get_site_name()
 	{
 		$jconfig = JFactory::getConfig();
-		return $jconfig->getvalue('config.sitename','');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			return $jconfig->get('sitename','');
+		} else {
+			return $jconfig->getValue('config.sitename','');
+		}
 	}
 
 	/**
@@ -259,7 +263,11 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 	public function get_default_database_driver( $use_platform = true )
 	{
 		$jconfig = JFactory::getConfig();
-		$driver = $jconfig->getValue('config.dbtype');
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$driver = $jconfig->get('dbtype');
+		} else {
+			$driver = $jconfig->getValue('config.dbtype');
+		}
 
 		// Let's see what driver Joomla! uses...
 		if( $use_platform )
@@ -339,13 +347,23 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		if(empty($options))
 		{
 			$conf = JFactory::getConfig();
-			$options = array(
-				'host'		=> $conf->getValue('config.host'),
-				'user'		=> $conf->getValue('config.user'),
-				'password'	=> $conf->getValue('config.password'),
-				'database'	=> $conf->getValue('config.db'),
-				'prefix'	=> $conf->getValue('config.dbprefix')
-			);
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$options = array(
+					'host'		=> $conf->get('host'),
+					'user'		=> $conf->get('user'),
+					'password'	=> $conf->get('password'),
+					'database'	=> $conf->get('db'),
+					'prefix'	=> $conf->get('dbprefix')
+				);
+			} else {
+				$options = array(
+					'host'		=> $conf->getValue('config.host'),
+					'user'		=> $conf->getValue('config.user'),
+					'password'	=> $conf->getValue('config.password'),
+					'database'	=> $conf->getValue('config.db'),
+					'prefix'	=> $conf->getValue('config.dbprefix')
+				);
+			}
 		}
 
 		return $options;
@@ -376,7 +394,7 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		if(!defined('AKEEBA_DATE')) {
 			jimport('joomla.utilities.date');
 			$date = new JDate();
-			define( "AKEEBA_DATE", $date->toFormat('%Y-%m-%d') );
+			define( "AKEEBA_DATE", $date->format('Y-m-d') );
 		}
 	}
 
@@ -437,15 +455,15 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select(array(
-				$db->nq('u').'.'.$db->nq('name'),
-				$db->nq('u').'.'.$db->nq('email'),
+				$db->qn('u').'.'.$db->qn('name'),
+				$db->qn('u').'.'.$db->qn('email'),
 			))
-			->from($db->nq('#__users').' AS '.$db->nq('u'))
+			->from($db->qn('#__users').' AS '.$db->qn('u'))
 			->join(
-				'INNER', $db->nq('#__user_usergroup_map').' AS '.$db->nq('m').' ON ('.
-				$db->nq('m').'.'.$db->nq('user_id').' = '.$db->nq('u').'.'.$db->nq('id').')'
+				'INNER', $db->qn('#__user_usergroup_map').' AS '.$db->qn('m').' ON ('.
+				$db->qn('m').'.'.$db->qn('user_id').' = '.$db->qn('u').'.'.$db->qn('id').')'
 			)
-			->where($db->nq('m').'.'.$db->nq('group_id').' = '.$db->q('8'));
+			->where($db->qn('m').'.'.$db->qn('group_id').' = '.$db->q('8'));
 		$db->setQuery($query);
 		$superAdmins = $db->loadAssocList();
 
@@ -548,8 +566,8 @@ class AEPlatformJoomla25 extends AEPlatformAbstract
 		if($result instanceof JException)
 		{
 			AEUtilLogger::WriteLog(_AE_LOG_WARNING,"Could not email $to:");
-			AEUtilLogger::WriteLog(_AE_LOG_WARNING,$result->message);
-			$ret = $result->message;
+			AEUtilLogger::WriteLog(_AE_LOG_WARNING,$result->getMessage());
+			$ret = $result->getMessage();
 			unset($result);
 			unset($mailer);
 			return $ret;

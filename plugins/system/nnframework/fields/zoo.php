@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available ZOO categories
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -47,15 +47,15 @@ class JFormFieldNN_ZOO extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__zoo_category AS c')
-			->where('c.published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__zoo_category AS c');
+		$query->where('c.published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -75,19 +75,19 @@ class JFormFieldNN_ZOO extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('a.id, a.name')
-			->from('#__zoo_application AS a')
-			->order('a.name, a.id');
+		$query->select('a.id, a.name');
+		$query->from('#__zoo_application AS a');
+		$query->order('a.name, a.id');
 		$this->db->setQuery($query);
 		$apps = $this->db->loadObjectList();
 
 		foreach ($apps as $i => $app) {
 			$query = $this->db->getQuery(true);
-			$query->select('c.id, c.parent AS parent_id, c.name AS title, c.published')
-				->from('#__zoo_category AS c')
-				->where('c.published > -1')
-				->where('c.application_id = ' . (int) $app->id)
-				->order('c.ordering, c.name');
+			$query->select('c.id, c.parent AS parent_id, c.name AS title, c.published');
+			$query->from('#__zoo_category AS c');
+			$query->where('c.published > -1');
+			$query->where('c.application_id = ' . (int) $app->id);
+			$query->order('c.ordering, c.name');
 			$this->db->setQuery($query);
 			$items = $this->db->loadObjectList();
 
@@ -127,9 +127,9 @@ class JFormFieldNN_ZOO extends JFormField
 	function getItems()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__zoo_item AS i')
-			->where('i.state > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__zoo_item AS i');
+		$query->where('i.state > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -138,11 +138,11 @@ class JFormFieldNN_ZOO extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('i.id, i.name, a.name as app, i.state as published')
-			->from('#__zoo_item AS i')
-			->join('LEFT', '#__zoo_application AS a ON a.id = i.application_id')
-			->where('i.state > -1')
-			->order('i.name, i.priority, i.id');
+		$query->select('i.id, i.name, a.name as app, i.state as published');
+		$query->from('#__zoo_item AS i');
+		$query->join('LEFT', '#__zoo_application AS a ON a.id = i.application_id');
+		$query->where('i.state > -1');
+		$query->order('i.name, i.priority, i.id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

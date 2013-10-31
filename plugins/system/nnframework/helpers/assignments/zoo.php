@@ -3,7 +3,7 @@
  * NoNumber Framework Helper File: Assignments: ZOO
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -31,7 +31,7 @@ class NNFrameworkAssignmentsZOO
 				$parent->params->idname = 'category_id';
 				break;
 		}
-		$parent->params->id = JFactory::getApplication()->input->getInt($parent->params->idname, 0);
+		$parent->params->id = JFactory::getApplication()->input->getInt($parent->params->idname);
 	}
 
 	function passPageTypes(&$parent, &$params, $selection = array(), $assignment = 'all')
@@ -81,9 +81,9 @@ class NNFrameworkAssignmentsZOO
 					}
 					if ($cats['0']) {
 						$query = $parent->db->getQuery(true);
-						$query->select('c.application_id')
-							->from('#__zoo_category AS c')
-							->where('c.id = ' . (int) $cats['0']);
+						$query->select('c.application_id');
+						$query->from('#__zoo_category AS c');
+						$query->where('c.id = ' . (int) $cats['0']);
 						$parent->db->setQuery($query);
 						if ($parent->db->loadResult()) {
 							$cats[] = 'app' . $parent->db->loadResult();
@@ -98,17 +98,17 @@ class NNFrameworkAssignmentsZOO
 					}
 					if ($id) {
 						$query = $parent->db->getQuery(true);
-						$query->select('c.category_id')
-							->from('#__zoo_category_item AS c')
-							->where('c.item_id = ' . (int) $id)
-							->where('c.category_id != 0');
+						$query->select('c.category_id');
+						$query->from('#__zoo_category_item AS c');
+						$query->where('c.item_id = ' . (int) $id);
+						$query->where('c.category_id != 0');
 						$parent->db->setQuery($query);
 						$cats = $parent->db->loadColumn();
 
 						$query = $parent->db->getQuery(true);
-						$query->select('i.application_id')
-							->from('#__zoo_item AS i')
-							->where('i.id = ' . (int) $id);
+						$query->select('i.application_id');
+						$query->from('#__zoo_item AS i');
+						$query->where('i.id = ' . (int) $id);
 						$parent->db->setQuery($query);
 						$cats[] = 'app' . $parent->db->loadResult();
 					}
@@ -157,18 +157,18 @@ class NNFrameworkAssignmentsZOO
 				break;
 			} else {
 				$query = $parent->db->getQuery(true);
-				$query->select('c.parent')
-					->from('#__zoo_category AS c')
-					->where('c.id = ' . (int) $id);
+				$query->select('c.parent');
+				$query->from('#__zoo_category AS c');
+				$query->where('c.id = ' . (int) $id);
 				$parent->db->setQuery($query);
 				$pid = $parent->db->loadResult();
 				if ($pid) {
 					$parent_ids[] = $pid;
 				} else {
 					$query = $parent->db->getQuery(true);
-					$query->select('c.application_id')
-						->from('#__zoo_category AS c')
-						->where('c.id = ' . (int) $id);
+					$query->select('c.application_id');
+					$query->from('#__zoo_category AS c');
+					$query->where('c.id = ' . (int) $id);
 					$parent->db->setQuery($query);
 					$app = $parent->db->loadResult();
 					if ($app) {

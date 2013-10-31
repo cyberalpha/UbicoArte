@@ -142,6 +142,11 @@ $canEdit	= $this->item->params->get('access-edit');
 
 <?php echo $this->item->introtext; ?>
 
+<?php if ($this->params->get('show_tags', 1) && !empty($this->item->tags)) : ?>
+	<?php $this->item->tagLayout = new JLayoutFile('joomla.content.tags'); ?>
+	<?php echo $this->item->tagLayout->render($this->item->tags->itemTags); ?>
+<?php endif; ?>
+
 <?php if ($params->get('show_readmore') && $this->item->readmore) :
 	if ($params->get('access-view')) :
 		$link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid));
@@ -170,7 +175,7 @@ $canEdit	= $this->item->params->get('access-edit');
 						echo JText::_('COM_CONTENT_READ_MORE');
 						echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
 					endif; ?></a>
-		</p>
+					</p>
 <?php endif; ?>
 
 <?php if ($this->item->state == 0) : ?>

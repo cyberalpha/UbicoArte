@@ -1,7 +1,7 @@
 <?php
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -32,6 +32,21 @@ var numberTab = '<?php echo $numbertab?>';
 var requesting = false;
 var helpUrl = '<?php echo $helpurl?>';
 window.addEvent('load', function (e){
+
+	//fix Joomla v3.1.4 chosen
+	if(typeof jQuery != 'undefined' && jQuery.fn.chosen){
+		jQuery('select.chzn-done').each(function(){
+			var chosen = jQuery(this).data('chosen');
+			if(chosen && chosen.destroy) {
+				chosen.destroy();
+			} else {
+				jQuery(this)
+					.removeClass('chzn-done').show()
+					.next().remove();
+			}
+		});
+	}
+
 	jatabs = new JATabs('ja-tabswrap', {
 		numbtab : numberTab,
 		animType : 'animNone',

@@ -8,7 +8,7 @@
  */
 
 // Protection against direct access
-defined('AKEEBAENGINE') or die('Restricted access');
+defined('AKEEBAENGINE') or die();
 
 /**
  * MySQL classic driver for Akeeba Engine
@@ -76,12 +76,16 @@ class AEDriverMysql extends AEAbstractDriver
 		$this->_database = $database;
 		$this->selectDatabase = $select;
 		
-		if(!is_resource($this->connection)) $this->open();
+		if(!is_resource($this->connection) || is_null($this->connection)) $this->open();
 	}
 
 	public function open()
 	{
-		if(is_resource($this->connection)) return;
+		if($this->connected()) {
+			return;
+		} else {
+			$this->close();
+		}
 		
 		// perform a number of fatality checks, then return gracefully
 		if (!function_exists( 'mysql_connect' )) {
@@ -106,6 +110,8 @@ class AEDriverMysql extends AEAbstractDriver
 		{
 			$this->select($this->_database);
 		}
+		
+		$this->setUTF();
 	}
 
 	public function close()
@@ -114,7 +120,7 @@ class AEDriverMysql extends AEAbstractDriver
 		if (is_resource($this->cursor)) {
 			mysql_free_result($this->cursor);
 		}
-		if (is_resource($this->connection)) {
+		if (is_resource($this->connection) || !is_null($this->connection)) {
 			$return = mysql_close($this->connection);
 		}
 		$this->connection = null;
@@ -582,7 +588,11 @@ class AEDriverMysql extends AEAbstractDriver
 
 		$sql = "SHOW TABLES";
 		$this->setQuery($sql);
-		$all_tables = $this->loadResultArray();
+		if(version_compare(JVERSION, '3.0', 'ge')) {
+			$all_tables = $this->loadColumn();
+		} else {
+			$all_tables = $this->loadResultArray();
+		}
 
 		if(!empty($all_tables))
 		{
@@ -667,7 +677,7 @@ class AEDriverMysql extends AEAbstractDriver
 		$enable_entities = $registry->get('engine.dump.native.advanced_entitites', true);
 		if ($enable_entities) {
 			// 1. Stored procedures
-			$sql = "SHOW PROCEDURE STATUS WHERE ".$this->nameQuote('Db') ."=".$this->Quote($this->_database);
+			$sql = "SHOW PROCEDURE STATUS WHERE ".$this->quoteName('Db') ."=".$this->Quote($this->_database);
 			$this->setQuery( $sql );
 			$all_entries = $this->loadAssocList();
 			if(count($all_entries)) {
@@ -681,9 +691,13 @@ class AEDriverMysql extends AEAbstractDriver
 			}
 
 			// 2. Stored functions
-			$sql = "SHOW FUNCTION STATUS WHERE ".$this->nameQuote('Db') ."=".$this->Quote($this->_database);
+			$sql = "SHOW FUNCTION STATUS WHERE ".$this->quoteName('Db') ."=".$this->Quote($this->_database);
 			$this->setQuery( $sql );
-			$all_entries = $this->loadResultArray(1);
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$all_entries = $this->loadColumn(1);
+			} else {
+				$all_entries = $this->loadResultArray(1);
+			}
 			// If we have filters, make sure the tables pass the filtering
 			if(is_array($all_entries))
 			if(count($all_entries))
@@ -696,7 +710,11 @@ class AEDriverMysql extends AEAbstractDriver
 			// 3. Triggers
 			$sql = "SHOW TRIGGERS";
 			$this->setQuery( $sql );
-			$all_entries = $this->loadResultArray();
+			if(version_compare(JVERSION, '3.0', 'ge')) {
+				$all_entries = $this->loadColumn();
+			} else {
+				$all_entries = $this->loadResultArray();
+			}
 			// If we have filters, make sure the tables pass the filtering
 			if(is_array($all_entries))
 			if(count($all_entries))

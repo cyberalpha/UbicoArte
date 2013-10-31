@@ -40,13 +40,7 @@ class AkeebaControllerBuadmin extends FOFController
 		$session = JFactory::getSession();
 		switch($task) {
 			case 'add':
-				$this->task = 'browse';
-				break;
-			
 			case 'default':
-				$this->task = 'browse';
-				break;
-			
 			case 'browse':
 				$session->set('buadmin.task', 'default', 'akeeba');
 				$this->task = 'browse';
@@ -88,6 +82,12 @@ class AkeebaControllerBuadmin extends FOFController
 		
 		$part = FOFInput::getInt('part', -1, $this->input);
 
+		if($this->input instanceof FOFInput) {
+			$cid = $this->input->get('cid', array(), 'array');
+		} else {
+			$cid = FOFInput::getArray('cid', array(), $this->input);
+		}
+		
 		if(empty($id))
 		{
 			if(is_array($cid) && !empty($cid))
@@ -214,7 +214,11 @@ class AkeebaControllerBuadmin extends FOFController
 			$this->_csrfProtection();
 		}
 
-		$cid = FOFInput::getArray('cid', array(), $this->input);
+		if($this->input instanceof FOFInput) {
+			$cid = $this->input->get('cid', array(), 'array');
+		} else {
+			$cid = FOFInput::getArray('cid', array(), $this->input);
+		}
 		$id = FOFInput::getInt('id', 0, $this->input);
 		if(empty($id))
 		{
@@ -259,7 +263,11 @@ class AkeebaControllerBuadmin extends FOFController
 			$this->_csrfProtection();
 		}
 		
-		$cid = FOFInput::getArray('cid', array(), $this->input);
+		if($this->input instanceof FOFInput) {
+			$cid = $this->input->get('cid', array(), 'array');
+		} else {
+			$cid = FOFInput::getArray('cid', array(), $this->input);
+		}
 		$id = FOFInput::getInt('id', 0, $this->input);
 		$session = JFactory::getSession();
 		$task = $session->get('buadmin.task', 'browse', 'akeeba');
@@ -305,7 +313,8 @@ class AkeebaControllerBuadmin extends FOFController
 		}
 
 		$model = $this->getThisModel();
-		return $model->delete($id);
+		$model->setState('id', $id);
+		return $model->delete();
 	}
 
 	/**
@@ -324,7 +333,8 @@ class AkeebaControllerBuadmin extends FOFController
 		}
 
 		$model = $this->getModel('statistics');
-		return $model->deleteFile($id);
+		$model->setState('id', $id);
+		return $model->deleteFile();
 	}
 
 	public function onBeforeEdit() {
@@ -384,7 +394,12 @@ class AkeebaControllerBuadmin extends FOFController
 		}
 		
 		$id = null;
-		$cid = FOFInput::getArray('cid', array(), $this->input);
+		if($this->input instanceof FOFInput) {
+			$cid = $this->input->get('cid', array(), 'array');
+		} else {
+			$cid = FOFInput::getArray('cid', array(), $this->input);
+		}
+		
 		if(!empty($cid))
 		{
 			$id = intval($cid[0]);

@@ -1,6 +1,6 @@
 /**
  * ------------------------------------------------------------------------
- * JA T3v2 System Plugin for J25 & J30
+ * JA T3v2 System Plugin for J25 & J31
  * ------------------------------------------------------------------------
  * Copyright (C) 2004-2011 J.O.O.M Solutions Co., Ltd. All Rights Reserved.
  * @license - GNU/GPL, http://www.gnu.org/licenses/gpl.html
@@ -37,7 +37,7 @@ fieldset.adminform fieldset.radio label, fieldset.panelform fieldset.radio label
 	filter: alpha(opacity=100) !important;
 }
 
-#details.active
+#details.active,
 #assignment.active {
 	background: #fff !important;
 }
@@ -332,7 +332,6 @@ body div.ja-popup-positions,
 body div.ja-popup-profiles,
 body div.ja-popup-themes, 
 body div.ja-popup-pageids {
- {
 	position: absolute; 
 	z-index: 1000; 
 	display: none;
@@ -350,4 +349,18 @@ div.ja-popup-pageids .jp-inner {
 	margin-bottom: 50px;
 	overflow: hidden;
 	padding: 0;
+}
+
+div.ja-popup-positions, div.ja-popup-themes, div.ja-popup-pageids {
+  border: none !important;
+}
+
+ul.ja-popup-themes li.parent {
+  width: 194px !important;
+
+}
+
+div.ja-popup-themes .jp-inner {
+  margin-bottom: 50px !important; 
+  border: solid 1px #ddd !important;
 }

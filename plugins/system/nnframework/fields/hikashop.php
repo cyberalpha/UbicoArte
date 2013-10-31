@@ -4,7 +4,7 @@
  * Displays a multiselectbox of available HikaShop categories / products
  *
  * @package         NoNumber Framework
- * @version         13.3.9
+ * @version         13.1.4
  *
  * @author          Peter van Westen <peter@nonumber.nl>
  * @link            http://www.nonumber.nl
@@ -46,15 +46,15 @@ class JFormFieldNN_HikaShop extends JFormField
 		$multiple = $this->def('multiple');
 
 		require_once JPATH_PLUGINS . '/system/nnframework/helpers/html.php';
-		return nnHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return nnHTML::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__hikashop_category AS c')
-			->where('c.category_published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__hikashop_category AS c');
+		$query->where('c.category_published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -65,18 +65,18 @@ class JFormFieldNN_HikaShop extends JFormField
 		$show_ignore = $this->def('show_ignore');
 
 		$query = $this->db->getQuery(true);
-		$query->select('c.category_id')
-			->from('#__hikashop_category AS c')
-			->where('c.category_type = ' . $this->db->quote('root'));
+		$query->select('c.category_id');
+		$query->from('#__hikashop_category AS c');
+		$query->where('c.category_type = ' . $this->db->quote('root'));
 		$this->db->setQuery($query);
 		$root = $this->db->loadResult();
 
 		$query = $this->db->getQuery(true);
-		$query->select('c.category_id as id, c.category_parent_id AS parent_id, c.category_name AS title, c.category_published as published')
-			->from('#__hikashop_category AS c')
-			->where('c.category_published > -1')
-			->where('c.category_type = ' . $this->db->quote('product'))
-			->order('c.category_ordering, c.category_name');
+		$query->select('c.category_id as id, c.category_parent_id AS parent_id, c.category_name AS title, c.category_published as published');
+		$query->from('#__hikashop_category AS c');
+		$query->where('c.category_published > -1');
+		$query->where('c.category_type = ' . $this->db->quote('product'));
+		$query->order('c.category_ordering, c.category_name');
 		$this->db->setQuery($query);
 		$items = $this->db->loadObjectList();
 
@@ -115,9 +115,9 @@ class JFormFieldNN_HikaShop extends JFormField
 	function getProducts()
 	{
 		$query = $this->db->getQuery(true);
-		$query->select('COUNT(*)')
-			->from('#__hikashop_product AS p')
-			->where('p.product_published > -1');
+		$query->select('COUNT(*)');
+		$query->from('#__hikashop_product AS p');
+		$query->where('p.product_published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -126,12 +126,12 @@ class JFormFieldNN_HikaShop extends JFormField
 		}
 
 		$query = $this->db->getQuery(true);
-		$query->select('p.product_id as id, p.product_name AS name, c.category_name AS cat, p.product_published AS published')
-			->from('#__hikashop_product AS p')
-			->join('LEFT', '#__hikashop_product_category AS x ON x.product_id = p.product_id')
-			->join('LEFT', '#__hikashop_category AS c ON c.category_id = x.category_id')
-			->where('p.product_published > -1')
-			->order('p.product_name, p.product_id');
+		$query->select('p.product_id as id, p.product_name AS name, c.category_name AS cat, p.product_published AS published');
+		$query->from('#__hikashop_product AS p');
+		$query->join('LEFT', '#__hikashop_product_category AS x ON x.product_id = p.product_id');
+		$query->join('LEFT', '#__hikashop_category AS c ON c.category_id = x.category_id');
+		$query->where('p.product_published > -1');
+		$query->order('p.product_name, p.product_id');
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 

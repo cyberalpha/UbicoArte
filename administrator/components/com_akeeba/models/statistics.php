@@ -9,8 +9,6 @@
  */
 defined('_JEXEC') or die();
 
-jimport('joomla.application.component.model');
-
 /**
  * Akeeba statistics model class
  * used for all requirements of backup statistics in JP
@@ -165,33 +163,41 @@ class AkeebaModelStatistics extends FOFModel
 	{
 		$db = $this->getDBO();
 		$query = $db->getQuery(true)
-			->select('MAX('.$db->nq('id').')')
-			->from($db->nq('#__ak_stats'))
-			->where($db->nq('origin') .' != '.$db->q('restorepoint'));
+			->select('MAX('.$db->qn('id').')')
+			->from($db->qn('#__ak_stats'))
+			->where($db->qn('origin') .' != '.$db->q('restorepoint'));
 		$db->setQuery($query);
 		$id = $db->loadResult();
 
 		$backup_types = AEUtilScripting::loadScripting();
 
-		if(empty($id)) return '<p>'.JText::_('BACKUP_STATUS_NONE').'</p>';
+		if(empty($id)) return '<p class="label">'.JText::_('BACKUP_STATUS_NONE').'</p>';
 
 		$record = AEPlatform::getInstance()->get_statistics($id);
 
 		jimport('joomla.utilities.date');
 
+		$statusClass="";
 		switch($record['status'])
 		{
 			case 'run':
 				$status = JText::_('STATS_LABEL_STATUS_PENDING');
+				$statusClass="label-warning";
 				break;
 
 			case 'fail':
 				$status = JText::_('STATS_LABEL_STATUS_FAIL');
+				$statusClass="label-important";
 				break;
 
 			case 'complete':
 				$status = JText::_('STATS_LABEL_STATUS_OK');
+				$statusClass="label-success";
 				break;
+			
+			default:
+				$status = '';
+				$statusClass='';
 		}
 
 		switch($record['origin'])
@@ -224,10 +230,10 @@ class AkeebaModelStatistics extends FOFModel
 
 		$startTime = new JDate($record['backupstart']);
 
-		$html = '<table>';
+		$html = '<table class="table table-striped">';
 		$html .= '<tr><td>'.JText::_('STATS_LABEL_START').'</td><td>'.$startTime->format(JText::_('DATE_FORMAT_LC4'), true).'</td></tr>';
 		$html .= '<tr><td>'.JText::_('STATS_LABEL_DESCRIPTION').'</td><td>'.$record['description'].'</td></tr>';
-		$html .= '<tr><td>'.JText::_('STATS_LABEL_STATUS').'</td><td>'.$status.'</td></tr>';
+		$html .= '<tr><td>'.JText::_('STATS_LABEL_STATUS').'</td><td><span class="label '.$statusClass.'">'.$status.'</span></td></tr>';
 		$html .= '<tr><td>'.JText::_('STATS_LABEL_ORIGIN').'</td><td>'.$origin.'</td></tr>';
 		$html .= '<tr><td>'.JText::_('STATS_LABEL_TYPE').'</td><td>'.$type.'</td></tr>';
 		$html .= '</table>';
@@ -240,10 +246,12 @@ class AkeebaModelStatistics extends FOFModel
 	 * @param	int		$id		Backup record whose files we have to delete
 	 * @return bool True on success
 	 */
-	public function delete($id)
+	public function delete()
 	{
 		$db = $this->getDBO();
 
+		$id = $this->getState('id', 0);
+		
 		if( (!is_numeric($id)) || ($id <= 0) )
 		{
 			$this->setError(JText::_('STATS_ERROR_INVALIDID'));
@@ -263,13 +271,14 @@ class AkeebaModelStatistics extends FOFModel
 
 	/**
 	 * Delete the backup file of the stats record whose ID is set in the model
-	 * @param	int		$id		Backup record whose files we have to delete
 	 * @return bool True on success
 	 */
-	public function deleteFile($id)
+	public function deleteFile()
 	{
 		$db = $this->getDBO();
 
+		$id = $this->getState('id', 0);
+		
 		if( (!is_numeric($id)) || ($id <= 0) )
 		{
 			$this->setError(JText::_('STATS_ERROR_INVALIDID'));

@@ -34,6 +34,11 @@ class AkeebaControllerBackup extends FOFController
 		parent::execute($task);
 	}
 
+	public function add()
+	{
+		$this->display(false);
+	}
+
 	/**
 	 * Default task; shows the initial page where the user selects a profile
 	 * and enters description and comment
@@ -50,10 +55,7 @@ class AkeebaControllerBackup extends FOFController
 			$newProfile = FOFInput::getInt('profileid', -10, $this->input);
 			if(is_numeric($newProfile) && ($newProfile > 0))
 			{
-				// CSRF prevention
-				if(!FOFInput::getVar(JFactory::getSession()->getToken(), false, $this->input)) {
-					JError::raiseError('403', JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
-				}
+				$this->_csrfProtection();
 
 				$session = JFactory::getSession();
 				$session->set('profile', $newProfile, 'akeeba');
@@ -66,17 +68,32 @@ class AkeebaControllerBackup extends FOFController
 			$model->setState('profile',		FOFInput::getInt('profileid', -10, $this->input));
 			$model->setState('ajax',		FOFInput::getCmd('ajax', '', $this->input));
 			$model->setState('autostart',	FOFInput::getInt('autostart', 0, $this->input));
-			$srpinfo = array(
-				'tag'				=> FOFInput::getCmd('tag', 'backend', $this->input),
-				'type'				=> FOFInput::getCmd('type', '', $this->input),
-				'name'				=> FOFInput::getCmd('name', '', $this->input),
-				'group'				=> FOFInput::getCmd('group', '', $this->input),
-				'customdirs'		=> FOFInput::getArray('customdirs', array(), $this->input, 2),
-				'extraprefixes'		=> FOFInput::getArray('extraprefixes', array(), $this->input, 2),
-				'customtables'		=> FOFInput::getArray('customtables', array(), $this->input, 2),
-				'skiptables'		=> FOFInput::getArray('skiptables', array(), $this->input, 2),
-				'xmlname'			=> FOFInput::getString('xmlname','', $this->input)
-			);
+			if($this->input instanceof FOFInput) {
+				$srpinfo = array(
+					'tag'				=> $this->input->getCmd('tag', 'backend'),
+					'type'				=> $this->input->getCmd('type', ''),
+					'name'				=> $this->input->getCmd('name', ''),
+					'group'				=> $this->input->getCmd('group', ''),
+					'customdirs'		=> $this->input->get('customdirs', array(), 'array', 2),
+					'extraprefixes'		=> $this->input->get('extraprefixes', array(), 'array', 2),
+					'customtables'		=> $this->input->get('customtables', array(), 'array', 2),
+					'skiptables'		=> $this->input->get('skiptables', array(), 'array', 2),
+					'xmlname'			=> $this->input->getString('xmlname','')
+				);
+			} else {
+				$srpinfo = array(
+					'tag'				=> FOFInput::getCmd('tag', 'backend', $this->input),
+					'type'				=> FOFInput::getCmd('type', '', $this->input),
+					'name'				=> FOFInput::getCmd('name', '', $this->input),
+					'group'				=> FOFInput::getCmd('group', '', $this->input),
+					'customdirs'		=> FOFInput::getArray('customdirs', array(), $this->input, 2),
+					'extraprefixes'		=> FOFInput::getArray('extraprefixes', array(), $this->input, 2),
+					'customtables'		=> FOFInput::getArray('customtables', array(), $this->input, 2),
+					'skiptables'		=> FOFInput::getArray('skiptables', array(), $this->input, 2),
+					'xmlname'			=> FOFInput::getString('xmlname','', $this->input)
+				);
+			}
+				
 			$model->setState('srpinfo',	$srpinfo);
 			
 			$description = FOFInput::getString('description', null, $this->input, 2);
@@ -108,13 +125,23 @@ class AkeebaControllerBackup extends FOFController
 		$model->setState('type',		strtolower(FOFInput::getCmd('type', '', $this->input)));
 		$model->setState('name',		strtolower(FOFInput::getCmd('name', '', $this->input)));
 		$model->setState('group',		strtolower(FOFInput::getCmd('group', '', $this->input)));
-		$model->setState('customdirs',	FOFInput::getArray('customdirs', array(),$this->input ,2));
-		$model->setState('customfiles',	FOFInput::getArray('customfiles', array(),$this->input ,2));
-		$model->setState('extraprefixes',FOFInput::getArray('extraprefixes', array(),$this->input ,2));
-		$model->setState('customtables',FOFInput::getArray('customtables', array(),$this->input ,2));
-		$model->setState('skiptables',	FOFInput::getArray('skiptables', array(),$this->input ,2));
-		$model->setState('langfiles',	FOFInput::getArray('langfiles', array(),$this->input ,2));
-		$model->setState('xmlname',		FOFInput::getString('xmlname', '', $this->input));
+		if($this->input instanceof FOFInput) {
+			$model->setState('customdirs',	$this->input->get('customdirs', array(),'array' ,2));
+			$model->setState('customfiles',	$this->input->get('customfiles', array(),'array' ,2));
+			$model->setState('extraprefixes',$this->input->get('extraprefixes', array(),'array' ,2));
+			$model->setState('customtables',$this->input->get('customtables', array(),'array' ,2));
+			$model->setState('skiptables',	$this->input->get('skiptables', array(),'array' ,2));
+			$model->setState('langfiles',	$this->input->get('langfiles', array(),'array' ,2));
+			$model->setState('xmlname',		$this->input->getString('xmlname', ''));
+		} else {
+			$model->setState('customdirs',	FOFInput::getArray('customdirs', array(),$this->input ,2));
+			$model->setState('customfiles',	FOFInput::getArray('customfiles', array(),$this->input ,2));
+			$model->setState('extraprefixes',FOFInput::getArray('extraprefixes', array(),$this->input ,2));
+			$model->setState('customtables',FOFInput::getArray('customtables', array(),$this->input ,2));
+			$model->setState('skiptables',	FOFInput::getArray('skiptables', array(),$this->input ,2));
+			$model->setState('langfiles',	FOFInput::getArray('langfiles', array(),$this->input ,2));
+			$model->setState('xmlname',		FOFInput::getString('xmlname', '', $this->input));
+		}
 		
 		define('AKEEBA_BACKUP_ORIGIN', FOFInput::getCmd('tag', 'backend', $this->input));
 		

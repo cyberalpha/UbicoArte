@@ -73,15 +73,15 @@ class AkeebaHelperStatus extends JObject
 
 		if($status && empty($quirks))
 		{
-			$html = '<p class="ok ui-state-normal">'.JText::_('STATUS_OK').'</p>';
+			$html = '<p class="alert alert-success">'.JText::_('STATUS_OK').'</p>';
 		}
 		elseif($status && !empty($quirks))
 		{
-			$html = '<p class="statuswarning ui-state-highlight">'.JText::_('STATUS_WARNING').'</p>';
+			$html = '<p class="alert">'.JText::_('STATUS_WARNING').'</p>';
 		}
 		else
 		{
-			$html = '<p class="notok ui-state-error">'.JText::_('STATUS_ERROR').'</p>';
+			$html = '<p class="alert alert-error">'.JText::_('STATUS_ERROR').'</p>';
 		}
 		return $html;
 	}
